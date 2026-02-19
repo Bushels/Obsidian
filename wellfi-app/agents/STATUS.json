@@ -1,0 +1,74 @@
+{
+  "project": "wellfi-app",
+  "last_updated": "2025-02-19T04:00:00Z",
+  "sessions": {
+    "1": {
+      "status": "completed",
+      "agents": {
+        "agent-db": "completed",
+        "agent-scaffold": "completed"
+      },
+      "started_at": "2025-02-19T00:00:00Z",
+      "completed_at": "2025-02-19T00:00:00Z"
+    },
+    "2": {
+      "status": "completed",
+      "gate_requires": ["1"],
+      "agents": {
+        "agent-map": "completed",
+        "agent-hooks": "completed"
+      },
+      "started_at": "2025-02-19T01:00:00Z",
+      "completed_at": "2025-02-19T01:00:00Z"
+    },
+    "3": {
+      "status": "completed",
+      "gate_requires": ["1", "2"],
+      "agents": {
+        "agent-pump-change": "completed",
+        "agent-wellfi": "completed",
+        "agent-integrate": "completed"
+      },
+      "started_at": "2025-02-19T02:00:00Z",
+      "completed_at": "2025-02-19T02:00:00Z"
+    },
+    "4": {
+      "status": "completed",
+      "gate_requires": ["1", "2", "3"],
+      "agents": {
+        "agent-notifications": "completed",
+        "agent-polish-ui": "completed",
+        "agent-polish-mobile": "completed"
+      },
+      "started_at": "2025-02-19T03:00:00Z",
+      "completed_at": "2025-02-19T04:00:00Z"
+    }
+  },
+  "frozen_files": [
+    "src/types.ts",
+    "src/lib/supabase.ts"
+  ],
+  "supabase": {
+    "project_id": "opxptteradsvptjyxxfr",
+    "url": "https://opxptteradsvptjyxxfr.supabase.co",
+    "region": "ca-central-1",
+    "wells_seeded": 211,
+    "edge_functions": ["notify-pump-change"]
+  },
+  "notes": "ALL 4 SESSIONS COMPLETE. Session 4: Edge Function notify-pump-change deployed via MCP (ACTIVE). agent-polish-ui created RiskBadge, MonthsBar, SparkLine, LoadingMap, EmptyState + CSS animations. agent-polish-mobile added mobile responsive layout (bottom sheet panels, filter FAB, loading states), wired UI primitives into RightPanel, increased mobile tap targets. Build passes with zero TS errors.",
+  "session_5": {
+    "label": "Innovation + Perfection",
+    "status": "in_progress",
+    "gate_requires": ["1", "2", "3", "4"],
+    "agents": {
+      "agent-innovation-p0": "completed"
+    },
+    "started_at": "2026-02-18T00:00:00Z",
+    "p0_completed": {
+      "code_splitting": "2502KB single chunk → 8 optimized chunks (login ~510KB initial)",
+      "map_fly_to": "Sidebar/list clicks trigger smooth map.flyTo animation",
+      "command_palette": "Cmd+K instant well search with fuzzy matching, keyboard nav, recent wells",
+      "keyboard_shortcuts": "Escape closes panels, ArrowUp/Down cycles wells with fly-to"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+# Common ignores
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Project specific
+.claude/
+wellfi-app/node_modules/
+wellfi-app/dist/
+wellfi-app/.env
+nul

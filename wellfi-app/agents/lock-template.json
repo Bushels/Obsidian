@@ -1,0 +1,15 @@
+{
+  "_comment": "Copy this template when writing your lock file. File goes in agents/locks/{agent-id}.lock",
+  "agent": "REPLACE_WITH_AGENT_ID",
+  "label": "REPLACE_WITH_AGENT_LABEL",
+  "session": 0,
+  "precedence": 1,
+  "started_at": "REPLACE_WITH_ISO_TIMESTAMP",
+  "status": "active",
+  "owns": [
+    "list every file you will write here"
+  ],
+  "files_written": [],
+  "notes": "",
+  "_status_values": ["active", "completed", "failed"]
+}

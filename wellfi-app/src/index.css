@@ -1,0 +1,259 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Mapbox GL overrides for dark theme */
+.mapboxgl-ctrl-attrib {
+  font-size: 10px !important;
+}
+
+/* Mapbox GL overrides */
+.mapboxgl-map { font-family: 'Inter', -apple-system, sans-serif; }
+
+/* WellFi halo pulse animation (CSS-based, no JS needed) */
+@keyframes wellfi-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+.wellfi-pulse { animation: wellfi-pulse 2s ease-in-out infinite; }
+
+/* Smooth panel transitions */
+.panel-slide-in { animation: slideInRight 0.25s ease-out; }
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Mobile map touch improvements */
+@media (max-width: 768px) {
+  .mapboxgl-ctrl-group { margin: 8px !important; }
+}
+
+/* Loading skeleton shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Mobile bottom-sheet slide-up */
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.animate-slide-up { animation: slideUp 0.3s ease-out; }
+
+/* Mobile bottom sheet drag handle */
+.drag-handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: #4B5563;
+  margin: 8px auto;
+}
+
+/* Mobile safe area */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   WellFi Login — Deep Earth Operations Aesthetic
+   ═══════════════════════════════════════════════════════════════ */
+
+.font-syne { font-family: 'Syne', system-ui, sans-serif; }
+
+/* ── Ambient mesh gradient ───────────────────────────────────── */
+.login-mesh {
+  background:
+    radial-gradient(ellipse 80% 60% at 25% 40%, rgba(0,212,255,0.055) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 70% at 72% 22%, rgba(6,95,120,0.045) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 55% 78%, rgba(0,130,180,0.03) 0%, transparent 50%);
+}
+
+/* ── Geological contour line flow ────────────────────────────── */
+.login-contour {
+  animation: login-contour-flow 14s linear infinite;
+}
+
+@keyframes login-contour-flow {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -44; }
+}
+
+/* ── Coordinate grid overlay ─────────────────────────────────── */
+.login-grid {
+  background-image:
+    linear-gradient(rgba(0,212,255,0.013) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.013) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+/* ── Radar scan line ─────────────────────────────────────────── */
+.login-scan {
+  background: linear-gradient(90deg, transparent 10%, rgba(0,212,255,0.07) 50%, transparent 90%);
+  animation: login-scan-sweep 8s ease-in-out infinite;
+}
+
+@keyframes login-scan-sweep {
+  0%, 100% { transform: translateY(-50vh); opacity: 0; }
+  8%       { opacity: 1; }
+  92%      { opacity: 1; }
+  50%      { transform: translateY(50vh); }
+}
+
+/* ── Sonar / seismic ring expansion ──────────────────────────── */
+.login-sonar {
+  animation: login-sonar-expand 9s ease-out infinite;
+}
+
+@keyframes login-sonar-expand {
+  0%   { transform: scale(0.1); opacity: 0.45; }
+  100% { transform: scale(3.5); opacity: 0; }
+}
+
+/* ── Cyan text glow ──────────────────────────────────────────── */
+.login-glow {
+  text-shadow:
+    0 0 30px rgba(0,212,255,0.35),
+    0 0 60px rgba(0,212,255,0.15),
+    0 0 100px rgba(0,212,255,0.05);
+}
+
+/* ── Form card breathing glow ────────────────────────────────── */
+.login-card-glow {
+  box-shadow:
+    0 0 0 1px rgba(0,212,255,0.06),
+    0 0 40px -10px rgba(0,212,255,0.08),
+    0 0 80px -20px rgba(0,212,255,0.04);
+  animation: login-card-breathe 5s ease-in-out infinite;
+}
+
+@keyframes login-card-breathe {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(0,212,255,0.06),
+      0 0 40px -10px rgba(0,212,255,0.08),
+      0 0 80px -20px rgba(0,212,255,0.04);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(0,212,255,0.12),
+      0 0 50px -10px rgba(0,212,255,0.13),
+      0 0 100px -20px rgba(0,212,255,0.07);
+  }
+}
+
+/* ── Live indicator pulse ────────────────────────────────────── */
+.login-pulse-dot {
+  animation: login-dot-pulse 2s ease-in-out infinite;
+}
+
+@keyframes login-dot-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
+  50%      { box-shadow: 0 0 0 5px rgba(16,185,129,0); }
+}
+
+/* ── Button shimmer during auth ──────────────────────────────── */
+.login-btn-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(0,212,255,0.08), transparent);
+  animation: login-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes login-shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}

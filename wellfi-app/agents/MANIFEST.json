@@ -1,0 +1,251 @@
+{
+  "project": "wellfi-app",
+  "version": "1.0.0",
+  "sessions": {
+    "1": {
+      "label": "Foundation",
+      "gate": [],
+      "run_mode": "parallel",
+      "agents": ["agent-db", "agent-scaffold"],
+      "completion_required_before": ["2", "3", "4"]
+    },
+    "2": {
+      "label": "Core Map + Data Layer",
+      "gate": ["1"],
+      "run_mode": "parallel",
+      "agents": ["agent-map", "agent-hooks"],
+      "completion_required_before": ["3", "4"]
+    },
+    "3": {
+      "label": "Engineer Data Entry",
+      "gate": ["1", "2"],
+      "run_mode": "parallel",
+      "agents": ["agent-pump-change", "agent-wellfi"],
+      "completion_required_before": ["4"]
+    },
+    "4": {
+      "label": "Notifications + Polish",
+      "gate": ["1", "2", "3"],
+      "run_mode": "parallel",
+      "agents": ["agent-notifications", "agent-polish"]
+    }
+  },
+  "agents": {
+    "agent-db": {
+      "id": "agent-db",
+      "label": "Database & Schema",
+      "session": 1,
+      "precedence": 1,
+      "owns": [
+        "supabase/migrations/**",
+        "supabase/seed.py",
+        "supabase/.env.example"
+      ],
+      "reads": [
+        "combined_data.json",
+        "agents/MANIFEST.json",
+        "agents/STATUS.json"
+      ],
+      "frozen_after_session": false,
+      "lock_file": "agents/locks/agent-db.lock"
+    },
+    "agent-scaffold": {
+      "id": "agent-scaffold",
+      "label": "Project Scaffold & Auth",
+      "session": 1,
+      "precedence": 2,
+      "owns": [
+        "src/types.ts",
+        "src/lib/supabase.ts",
+        "src/pages/LoginPage.tsx",
+        "src/pages/MapPage.tsx",
+        "src/App.tsx",
+        "src/main.tsx",
+        "src/index.css",
+        "tailwind.config.ts",
+        "vite.config.ts",
+        "tsconfig.json",
+        "package.json",
+        "index.html",
+        ".env.example",
+        ".gitignore"
+      ],
+      "reads": [
+        "agents/MANIFEST.json",
+        "agents/STATUS.json"
+      ],
+      "frozen_after_session": false,
+      "frozen_files_produced": [
+        "src/types.ts",
+        "src/lib/supabase.ts"
+      ],
+      "lock_file": "agents/locks/agent-scaffold.lock"
+    },
+    "agent-map": {
+      "id": "agent-map",
+      "label": "Mapbox Map Component",
+      "session": 2,
+      "precedence": 1,
+      "owns": [
+        "src/components/map/WellMap.tsx",
+        "src/components/map/WellLayer.tsx",
+        "src/components/map/WellFiHalo.tsx",
+        "src/components/map/WellPopup.tsx",
+        "src/lib/mapUtils.ts"
+      ],
+      "reads": [
+        "src/types.ts",
+        "src/lib/supabase.ts",
+        "agents/MANIFEST.json",
+        "agents/STATUS.json"
+      ],
+      "must_not_touch": [
+        "src/types.ts",
+        "src/lib/supabase.ts",
+        "supabase/**"
+      ],
+      "lock_file": "agents/locks/agent-map.lock"
+    },
+    "agent-hooks": {
+      "id": "agent-hooks",
+      "label": "Supabase Hooks & Realtime",
+      "session": 2,
+      "precedence": 2,
+      "owns": [
+        "src/hooks/useWells.ts",
+        "src/hooks/usePumpChanges.ts",
+        "src/hooks/useWellFiDevices.ts"
+      ],
+      "reads": [
+        "src/types.ts",
+        "src/lib/supabase.ts",
+        "supabase/migrations/**",
+        "agents/MANIFEST.json",
+        "agents/STATUS.json"
+      ],
+      "must_not_touch": [
+        "src/types.ts",
+        "src/lib/supabase.ts",
+        "src/components/**",
+        "supabase/**"
+      ],
+      "lock_file": "agents/locks/agent-hooks.lock"
+    },
+    "agent-pump-change": {
+      "id": "agent-pump-change",
+      "label": "Pump Change Module",
+      "session": 3,
+      "precedence": 1,
+      "owns": [
+        "src/components/forms/PumpChangeForm.tsx",
+        "src/components/forms/PumpChecklist.tsx",
+        "src/components/panels/UpcomingList.tsx"
+      ],
+      "reads": [
+        "src/types.ts",
+        "src/lib/supabase.ts",
+        "src/hooks/usePumpChanges.ts",
+        "src/hooks/useWells.ts",
+        "agents/MANIFEST.json",
+        "agents/STATUS.json"
+      ],
+      "must_not_touch": [
+        "src/types.ts",
+        "src/lib/supabase.ts",
+        "src/components/map/**",
+        "src/hooks/**",
+        "supabase/**"
+      ],
+      "lock_file": "agents/locks/agent-pump-change.lock"
+    },
+    "agent-wellfi": {
+      "id": "agent-wellfi",
+      "label": "WellFi Device Module",
+      "session": 3,
+      "precedence": 2,
+      "owns": [
+        "src/components/forms/WellFiInstallForm.tsx",
+        "src/components/panels/RightPanel.tsx",
+        "src/components/panels/FilterBar.tsx"
+      ],
+      "reads": [
+        "src/types.ts",
+        "src/lib/supabase.ts",
+        "src/hooks/useWellFiDevices.ts",
+        "src/hooks/useWells.ts",
+        "agents/MANIFEST.json",
+        "agents/STATUS.json"
+      ],
+      "must_not_touch": [
+        "src/types.ts",
+        "src/lib/supabase.ts",
+        "src/components/map/**",
+        "src/hooks/**",
+        "supabase/**",
+        "src/components/forms/PumpChangeForm.tsx",
+        "src/components/forms/PumpChecklist.tsx",
+        "src/components/panels/UpcomingList.tsx"
+      ],
+      "lock_file": "agents/locks/agent-wellfi.lock"
+    },
+    "agent-notifications": {
+      "id": "agent-notifications",
+      "label": "Notifications Edge Function",
+      "session": 4,
+      "precedence": 1,
+      "owns": [
+        "supabase/functions/notify-pump-change/**",
+        "supabase/functions/_shared/**"
+      ],
+      "reads": [
+        "src/types.ts",
+        "supabase/migrations/**",
+        "agents/MANIFEST.json",
+        "agents/STATUS.json"
+      ],
+      "must_not_touch": [
+        "src/types.ts",
+        "src/lib/supabase.ts",
+        "src/components/**",
+        "src/hooks/**",
+        "src/pages/**"
+      ],
+      "lock_file": "agents/locks/agent-notifications.lock"
+    },
+    "agent-polish": {
+      "id": "agent-polish",
+      "label": "UI Polish & Mobile",
+      "session": 4,
+      "precedence": 2,
+      "owns": [
+        "src/components/ui/**",
+        "src/index.css"
+      ],
+      "reads_all_src": true,
+      "can_modify_with_proposal": [
+        "src/components/**",
+        "src/pages/**",
+        "src/hooks/**"
+      ],
+      "must_not_touch": [
+        "src/types.ts",
+        "src/lib/supabase.ts",
+        "supabase/**"
+      ],
+      "lock_file": "agents/locks/agent-polish.lock",
+      "note": "agent-polish may PROPOSE changes to any component via agents/proposals/. It cannot modify owned files directly without a proposal approved by coordinator."
+    }
+  },
+  "conflict_resolution": {
+    "rule": "Lower precedence number wins. In any session, precedence 1 agent proceeds immediately; precedence 2 agent must wait for lock clearance on any shared file.",
+    "shared_file_protocol": "If both agents in a session need the same file, precedence 1 writes it. Precedence 2 reads it after the lock is cleared.",
+    "frozen_file_protocol": "Files marked frozen cannot be written after their session. Any needed change must be filed as a proposal in agents/proposals/ and reviewed by the coordinator before the next session begins.",
+    "proposal_format": "agents/proposals/{agent-id}-{change-type}-{filename}.md — describe the change needed and why. Coordinator applies it manually."
+  },
+  "precedence_per_session": {
+    "session_1": { "1st": "agent-db", "2nd": "agent-scaffold" },
+    "session_2": { "1st": "agent-map", "2nd": "agent-hooks", "note": "No file conflicts expected — agent-map owns components, agent-hooks owns hooks" },
+    "session_3": { "1st": "agent-pump-change", "2nd": "agent-wellfi", "note": "No file conflicts expected — each owns distinct form files" },
+    "session_4": { "1st": "agent-notifications", "2nd": "agent-polish", "note": "agent-notifications owns supabase/functions only; agent-polish must use proposals for component changes" }
+  }
+}
