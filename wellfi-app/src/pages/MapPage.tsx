@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import wellfiLogo from '@/assets/wellfi-logo.png';
 import type { MapFilters } from '@/types';
 import type { WellEnriched } from '@/types/operationalStatus';
 import { useWells } from '@/hooks/useWells';
@@ -198,9 +199,7 @@ export default function MapPage() {
           <div className="h-6 w-6 rounded-md bg-wellfi-cyan/10 border border-wellfi-cyan/20 flex items-center justify-center">
             <div className="h-3 w-3 rounded-sm bg-wellfi-cyan/80" />
           </div>
-          <h1 className="text-lg font-bold tracking-tight">
-            Well<span className="text-wellfi-cyan">Fi</span>
-          </h1>
+          <img src={wellfiLogo} alt="WellFi Logo" className="h-7 w-auto object-contain drop-shadow-[0_0_8px_rgba(0,212,255,0.5)] opacity-90" />
         </div>
         <div className="flex items-center gap-3">
           {/* Search button — opens command palette */}

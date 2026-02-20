@@ -185,9 +185,13 @@ export default function FilterBar({ filters, onChange, wells }: FilterBarProps) 
             {ALL_FORMATIONS.map((f) => (
               <Button
                 key={f}
-                variant={activeFormation === f ? 'default' : 'outline'}
+                variant="ghost"
                 size="sm"
-                className="flex-1 text-xs h-9 lg:h-8"
+                className={`flex-1 text-xs h-9 lg:h-8 border ${
+                  activeFormation === f 
+                    ? 'bg-wellfi-cyan/20 text-wellfi-cyan border-wellfi-cyan/50 hover:bg-wellfi-cyan/30' 
+                    : 'bg-white/5 text-gray-400 border-white/10 hover:bg-white/10 hover:text-white'
+                }`}
                 onClick={() => setFormation(f)}
               >
                 {f}
@@ -235,17 +239,25 @@ export default function FilterBar({ filters, onChange, wells }: FilterBarProps) 
           </Label>
           <div className="mt-2 flex gap-1">
             <Button
-              variant={!wellfiActive ? 'default' : 'outline'}
+              variant="ghost"
               size="sm"
-              className="flex-1 text-xs"
+              className={`flex-1 text-xs border ${
+                !wellfiActive
+                  ? 'bg-wellfi-cyan/20 text-wellfi-cyan border-wellfi-cyan/50 hover:bg-wellfi-cyan/30'
+                  : 'bg-white/5 text-gray-400 border-white/10 hover:bg-white/10 hover:text-white'
+              }`}
               onClick={() => setWellfiFilter(false)}
             >
               All ({wells.length})
             </Button>
             <Button
-              variant={wellfiActive ? 'default' : 'outline'}
+              variant="ghost"
               size="sm"
-              className="flex-1 text-xs"
+              className={`flex-1 text-xs border ${
+                wellfiActive
+                  ? 'bg-wellfi-cyan/20 text-wellfi-cyan border-wellfi-cyan/50 hover:bg-wellfi-cyan/30'
+                  : 'bg-white/5 text-gray-400 border-white/10 hover:bg-white/10 hover:text-white'
+              }`}
               onClick={() => setWellfiFilter(true)}
             >
               WellFi ({wellfiCount})

@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/lib/auth';
+import wellfiLogo from '@/assets/wellfi-logo.png';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
@@ -170,10 +171,11 @@ export default function LoginPage() {
                 ready ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
               }`}
             >
-              <h1 className="font-syne text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-tight text-white leading-none select-none">
-                Well
-                <span className="login-glow text-wellfi-cyan">Fi</span>
-              </h1>
+              <img 
+                src={wellfiLogo} 
+                alt="WellFi Logo" 
+                className="h-16 sm:h-20 lg:h-24 xl:h-28 w-auto object-contain mx-auto drop-shadow-[0_0_12px_rgba(0,212,255,0.6)] opacity-90" 
+              />
               <div className="h-px w-24 mx-auto mt-5 bg-gradient-to-r from-transparent via-wellfi-cyan/40 to-transparent" />
             </div>
 

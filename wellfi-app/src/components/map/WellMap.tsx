@@ -107,7 +107,7 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
       attributionControl: false,
     });
 
-    map.addControl(new mapboxgl.NavigationControl(), 'top-left');
+    map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
     map.addControl(new mapboxgl.AttributionControl({ compact: true }), 'bottom-right');
 
     map.on('load', () => {
@@ -167,7 +167,8 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
       const isDown = w.operational_status?.status === 'well_down';
       const noWellFi = !w.wellfi_device || !w.wellfi_device.is_active;
       const runningLong = (w.months_running ?? 0) >= 14;
-      return !isDown && noWellFi && runningLong;
+      const hasCoords = typeof w.lon === 'number' && typeof w.lat === 'number' && w.lon !== 0 && w.lat !== 0;
+      return !isDown && noWellFi && runningLong && hasCoords;
     });
 
     // Create markers (only if showProduction is active to reduce clutter)
