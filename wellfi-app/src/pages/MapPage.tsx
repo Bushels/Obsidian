@@ -126,6 +126,20 @@ export default function MapPage() {
 
   const filteredCount = filteredWells.length;
 
+  // Lock body scroll when a mobile bottom sheet is open
+  useEffect(() => {
+    const isSmallScreen = window.innerWidth < 1024;
+    const isSheetOpen = mobileFilterOpen || selectedWell !== null;
+    if (isSmallScreen && isSheetOpen) {
+      document.body.classList.add('sheet-open');
+    } else {
+      document.body.classList.remove('sheet-open');
+    }
+    return () => {
+      document.body.classList.remove('sheet-open');
+    };
+  }, [mobileFilterOpen, selectedWell]);
+
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -304,10 +318,10 @@ export default function MapPage() {
               className="absolute inset-0 bg-black/50"
               onClick={() => setMobileFilterOpen(false)}
             />
-            <div className="absolute bottom-0 left-0 right-0 max-h-[70vh] overflow-y-auto bg-[#080D16]/95 backdrop-blur-xl rounded-t-2xl border-t border-white/[0.08] animate-slide-up safe-area-bottom">
+            <div className="absolute bottom-0 left-0 right-0 max-h-[80vh] mobile-sheet-landscape overflow-y-auto bg-[#080D16]/95 backdrop-blur-xl rounded-t-2xl border-t border-white/[0.08] animate-slide-up safe-area-bottom">
               <div className="drag-handle" />
               <div className="sticky top-0 z-10 bg-[#080D16]/95 backdrop-blur-xl px-4 py-3 border-b border-white/[0.06] flex items-center justify-between">
-                <span className="text-sm font-semibold">Filters</span>
+                <span className="text-sm font-semibold">Filters & Overview</span>
                 <button
                   type="button"
                   className="flex h-8 w-8 items-center justify-center rounded-md text-gray-500 hover:text-white hover:bg-white/[0.06] transition-all duration-200"
@@ -316,6 +330,11 @@ export default function MapPage() {
                 >
                   &times;
                 </button>
+              </div>
+              {/* Mobile-only dashboard widgets */}
+              <div className="px-3 pt-3 space-y-2">
+                <RiskOverview wells={filteredWells} />
+                <InventoryOverview />
               </div>
               <FilterBar filters={filters} onChange={setFilters} wells={wells} />
               <div className="p-4 border-t border-white/[0.06]">
@@ -335,7 +354,7 @@ export default function MapPage() {
               className="absolute inset-0 bg-black/50"
               onClick={handleClosePanel}
             />
-            <div className="absolute bottom-0 left-0 right-0 max-h-[70vh] overflow-y-auto bg-[#080D16]/95 backdrop-blur-xl rounded-t-2xl border-t border-white/[0.08] animate-slide-up safe-area-bottom">
+            <div className="absolute bottom-0 left-0 right-0 max-h-[80vh] mobile-sheet-landscape overflow-y-auto bg-[#080D16]/95 backdrop-blur-xl rounded-t-2xl border-t border-white/[0.08] animate-slide-up safe-area-bottom">
               <RightPanel well={selectedWell} onClose={handleClosePanel} canEdit={isAdmin} />
             </div>
           </div>

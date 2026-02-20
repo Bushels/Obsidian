@@ -146,7 +146,7 @@ export function CommandPalette({ wells, open, onClose, onSelect }: CommandPalett
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh] animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-start justify-center pt-[8vh] sm:pt-[15vh] animate-in fade-in duration-150"
       onClick={onClose}
       role="dialog"
       aria-modal="true"

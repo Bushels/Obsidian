@@ -97,7 +97,7 @@ export function parcelPopupHTML(
   const wellListHTML = buildWellListHTML(health.wells, opStatusByWellId);
 
   return `
-<div style="font-family: system-ui, -apple-system, sans-serif; min-width: 260px; max-width: 300px; color: #e5e7eb;">
+<div style="font-family: system-ui, -apple-system, sans-serif; min-width: 220px; max-width: min(300px, calc(100vw - 40px)); color: #e5e7eb;">
   <!-- Header -->
   <div style="margin-bottom: 10px;">
     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
@@ -111,25 +111,25 @@ export function parcelPopupHTML(
   </div>
 
   <!-- Summary Grid (2x2) -->
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; font-size: 12px; margin-bottom: 10px;">
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; font-size: 13px; margin-bottom: 10px;">
     <div>
-      <div style="color: #6b7280; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em;">Wells</div>
+      <div style="color: #6b7280; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;">Wells</div>
       <div style="color: #d1d5db; font-weight: 500;">${wellCount}</div>
     </div>
     <div>
-      <div style="color: #6b7280; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em;">WellFi</div>
+      <div style="color: #6b7280; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;">WellFi</div>
       <div style="display: flex; align-items: center; gap: 4px;">
         <span style="color: #d1d5db; font-weight: 500;">${wellfiCount}</span>
         ${wellfiCount > 0 ? '<span style="width: 6px; height: 6px; border-radius: 50%; background: #00D4FF; display: inline-block;"></span>' : ''}
       </div>
     </div>
     <div>
-      <div style="color: #6b7280; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em;">Avg Run</div>
+      <div style="color: #6b7280; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;">Avg Run</div>
       <div style="color: #d1d5db; font-weight: 500;">${avgRun}${health.avgMonthsRunning > 0 ? ' mo' : ''}</div>
     </div>
     <div>
-      <div style="color: #6b7280; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em;">Risk</div>
-      <div style="display: inline-block; padding: 1px 6px; border-radius: 9999px; font-size: 10px; font-weight: 600; color: #fff; background: ${barColor};">
+      <div style="color: #6b7280; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;">Risk</div>
+      <div style="display: inline-block; padding: 1px 6px; border-radius: 9999px; font-size: 11px; font-weight: 600; color: #fff; background: ${barColor};">
         ${escapeHtml(dominantRisk)}
       </div>
     </div>
@@ -169,15 +169,15 @@ function buildWellListHTML(
     return `
       <div
         data-well-id="${escapeHtml(w.id)}"
-        style="display: flex; align-items: center; gap: 6px; padding: 4px 6px; border-radius: 4px; cursor: pointer; transition: background 0.15s;"
+        style="display: flex; align-items: center; gap: 6px; padding: 5px 6px; border-radius: 4px; cursor: pointer; min-height: 36px; transition: background 0.15s;"
         onmouseover="this.style.background='rgba(255,255,255,0.04)'"
         onmouseout="this.style.background='transparent'"
       >
         ${opDotHTML}
-        <div style="flex: 1; font-size: 11px; color: #d1d5db; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+        <div style="flex: 1; font-size: 12px; color: #d1d5db; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
           ${escapeHtml(truncName)}
         </div>
-        <div style="font-size: 10px; font-weight: 600; color: ${monthColor}; white-space: nowrap;">
+        <div style="font-size: 11px; font-weight: 600; color: ${monthColor}; white-space: nowrap;">
           ${w.monthsRunning}mo
         </div>
         ${w.hasWellfi ? '<div style="width: 5px; height: 5px; border-radius: 50%; background: #00D4FF; flex-shrink: 0;" title="WellFi"></div>' : '<div style="width: 5px; flex-shrink: 0;"></div>'}

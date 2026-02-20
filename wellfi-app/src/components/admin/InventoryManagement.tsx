@@ -155,7 +155,7 @@ export function InventoryManagement({ open, onClose }: InventoryManagementProps)
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent className="max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
+      <DialogContent className="w-[calc(100%-2rem)] sm:w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle>Device Inventory</DialogTitle>
           <DialogDescription>
@@ -164,7 +164,7 @@ export function InventoryManagement({ open, onClose }: InventoryManagementProps)
         </DialogHeader>
 
         {/* Add device form */}
-        <form onSubmit={handleAddDevice} className="flex gap-2 items-end">
+        <form onSubmit={handleAddDevice} className="flex flex-col sm:flex-row gap-2 sm:items-end">
           <div className="flex-1">
             <label htmlFor="serial" className="text-[10px] font-medium text-white/40 uppercase tracking-wide">
               Serial Number
@@ -177,7 +177,7 @@ export function InventoryManagement({ open, onClose }: InventoryManagementProps)
               className="h-9 text-xs font-mono mt-1"
             />
           </div>
-          <div className="w-32">
+          <div className="w-full sm:w-32">
             <label htmlFor="add-status" className="text-[10px] font-medium text-white/40 uppercase tracking-wide">
               Status
             </label>
@@ -206,7 +206,7 @@ export function InventoryManagement({ open, onClose }: InventoryManagementProps)
           <Button
             type="submit"
             size="sm"
-            className="h-9 bg-[#00D4FF] text-black hover:bg-[#00D4FF]/90 shrink-0"
+            className="h-9 w-full sm:w-auto bg-[#00D4FF] text-black hover:bg-[#00D4FF]/90 shrink-0"
             disabled={!serialInput.trim() || addDevice.isPending}
           >
             {addDevice.isPending ? 'Adding...' : 'Add Device'}
@@ -237,9 +237,9 @@ export function InventoryManagement({ open, onClose }: InventoryManagementProps)
         </div>
 
         {/* Device table */}
-        <div className="flex-1 overflow-y-auto rounded border border-white/[0.06]">
+        <div className="flex-1 overflow-auto rounded border border-white/[0.06]">
           {filteredDevices.length > 0 ? (
-            <table className="w-full">
+            <table className="w-full min-w-[480px]">
               <thead className="sticky top-0 bg-[#0a0f18]">
                 <tr className="border-b border-white/[0.08] text-[10px] font-semibold text-white/30 uppercase tracking-wide">
                   <th className="px-3 py-2 text-left">Serial</th>

@@ -366,3 +366,50 @@ body {
     transform: translateX(100%);
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   Mobile / Responsive Enhancements
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Body scroll lock — applied via JS when bottom sheets are open */
+body.sheet-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+/* Safe area — top (for notched phones) */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* Landscape bottom sheet override */
+@media (orientation: landscape) and (max-width: 1023px) {
+  .mobile-sheet-landscape {
+    max-height: 90vh !important;
+  }
+}
+
+/* Reduced motion — disable all custom animations */
+@media (prefers-reduced-motion: reduce) {
+  .wellfi-pulse,
+  .panel-slide-in,
+  .animate-slide-up,
+  .login-sonar,
+  .login-contour,
+  .login-scan,
+  .login-card-glow,
+  .login-pulse-dot,
+  .login-btn-shimmer,
+  .skeleton-shimmer,
+  .spring-transition {
+    animation: none !important;
+    transition: none !important;
+  }
+  [class*="animate-in"],
+  [class*="animate-out"] {
+    animation-duration: 0s !important;
+  }
+}

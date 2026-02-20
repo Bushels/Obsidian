@@ -668,36 +668,36 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
       {/* Map container */}
       <div ref={containerRef} className="absolute inset-0" />
 
-      {/* Top-right controls — glassmorphic */}
-      <div className="absolute top-3 right-3 z-10 flex gap-1.5">
+      {/* Top-right controls — glassmorphic, responsive */}
+      <div className="absolute top-3 right-3 z-10 flex gap-1 sm:gap-1.5">
         {/* Land (parcel health) toggle */}
         <button
           onClick={toggleLand}
-          className={`px-3 py-1.5 rounded-lg text-xs font-medium border backdrop-blur-md transition-all duration-200 ${
+          className={`min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 px-2 sm:px-3 py-2 sm:py-1.5 rounded-lg text-xs font-medium border backdrop-blur-md transition-all duration-200 flex items-center justify-center ${
             showLand
               ? 'bg-wellfi-cyan/15 text-wellfi-cyan border-wellfi-cyan/25 shadow-[0_0_15px_-3px_rgba(0,212,255,0.15)]'
               : 'bg-white/[0.04] text-gray-500 border-white/[0.08] hover:bg-white/[0.06] hover:text-gray-300'
           }`}
           title="Toggle parcel health overlay"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block mr-1 -mt-0.5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block sm:mr-1 -mt-0.5">
             <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z" />
             <circle cx="12" cy="10" r="3" />
           </svg>
-          Land
+          <span className="hidden sm:inline">Land</span>
         </button>
 
         {/* Health Heatmap Glow toggle */}
         <button
           onClick={toggleProduction}
-          className={`px-3 py-1.5 rounded-lg text-xs font-medium border backdrop-blur-md transition-all duration-200 ${
+          className={`min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 px-2 sm:px-3 py-2 sm:py-1.5 rounded-lg text-xs font-medium border backdrop-blur-md transition-all duration-200 flex items-center justify-center ${
             showProduction
               ? 'bg-wellfi-cyan/15 text-wellfi-cyan border-wellfi-cyan/25 shadow-[0_0_15px_-3px_rgba(0,212,255,0.15)]'
               : 'bg-white/[0.04] text-gray-500 border-white/[0.08] hover:bg-white/[0.06] hover:text-gray-300'
           }`}
           title="Toggle health heatmap glow"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block mr-1 -mt-0.5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block sm:mr-1 -mt-0.5">
             <circle cx="12" cy="12" r="5" />
             <line x1="12" x2="12" y1="1" y2="3" />
             <line x1="12" x2="12" y1="21" y2="23" />
@@ -708,27 +708,27 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
             <line x1="4.22" x2="5.64" y1="19.78" y2="18.36" />
             <line x1="18.36" x2="19.78" y1="5.64" y2="4.22" />
           </svg>
-          Glow
+          <span className="hidden sm:inline">Glow</span>
         </button>
 
         {/* Grid toggle */}
         <button
           onClick={toggleGrid}
-          className={`px-3 py-1.5 rounded-lg text-xs font-medium border backdrop-blur-md transition-all duration-200 ${
+          className={`min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 px-2 sm:px-3 py-2 sm:py-1.5 rounded-lg text-xs font-medium border backdrop-blur-md transition-all duration-200 flex items-center justify-center ${
             showGrid
               ? 'bg-wellfi-cyan/15 text-wellfi-cyan border-wellfi-cyan/25 shadow-[0_0_15px_-3px_rgba(0,212,255,0.15)]'
               : 'bg-white/[0.04] text-gray-500 border-white/[0.08] hover:bg-white/[0.06] hover:text-gray-300'
           }`}
           title="Toggle LSD grid overlay"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block mr-1 -mt-0.5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block sm:mr-1 -mt-0.5">
             <rect x="3" y="3" width="18" height="18" rx="2" />
             <line x1="3" x2="21" y1="9" y2="9" />
             <line x1="3" x2="21" y1="15" y2="15" />
             <line x1="9" x2="9" y1="3" y2="21" />
             <line x1="15" x2="15" y1="3" y2="21" />
           </svg>
-          LSD
+          <span className="hidden sm:inline">LSD</span>
         </button>
 
         {/* Style switcher — 2-way */}
@@ -737,21 +737,22 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
             <button
               key={style}
               onClick={() => handleStyleChange(style)}
-              className={`px-3 py-1.5 text-xs font-medium transition-all duration-200 ${
+              className={`min-h-[44px] sm:min-h-0 px-2 sm:px-3 py-2 sm:py-1.5 text-xs font-medium transition-all duration-200 ${
                 mapStyle === style
                   ? 'bg-wellfi-cyan/15 text-wellfi-cyan'
                   : 'bg-white/[0.03] text-gray-500 hover:text-gray-300 hover:bg-white/[0.05]'
               } ${style === 'satellite' ? 'border-r border-white/[0.08]' : ''}`}
               title={style === 'glass' ? 'Glassmorphic dark map' : 'Satellite imagery'}
             >
-              {style === 'glass' ? 'Glass' : 'Satellite'}
+              <span className="hidden sm:inline">{style === 'glass' ? 'Glass' : 'Satellite'}</span>
+              <span className="sm:hidden">{style === 'glass' ? 'G' : 'S'}</span>
             </button>
           ))}
         </div>
       </div>
 
-      {/* Legend — bottom left — glassmorphic */}
-      <div className="absolute bottom-6 left-3 z-10 bg-[#080D16]/90 backdrop-blur-xl border border-white/[0.06] rounded-xl p-3 text-xs shadow-2xl shadow-black/30">
+      {/* Legend — bottom left — glassmorphic (pushed up on mobile to avoid FAB overlap) */}
+      <div className="absolute bottom-20 lg:bottom-6 left-3 z-10 bg-[#080D16]/90 backdrop-blur-xl border border-white/[0.06] rounded-xl p-3 text-xs shadow-2xl shadow-black/30">
         <div className="text-gray-500 font-semibold mb-2 text-[10px] uppercase tracking-wider">
           Health Zones
         </div>

@@ -217,7 +217,7 @@ export default function FilterBar({ filters, onChange, wells }: FilterBarProps) 
                     type="checkbox"
                     checked={isActive}
                     onChange={() => toggleField(field)}
-                    className="h-3 w-3 rounded border-input"
+                    className="h-4 w-4 rounded border-input accent-wellfi-cyan"
                   />
                   <span className={`flex-1 ${isActive ? 'font-medium' : ''}`}>{field}</span>
                   <Badge variant="secondary" className="text-xs px-1.5 py-0">
@@ -272,7 +272,7 @@ export default function FilterBar({ filters, onChange, wells }: FilterBarProps) 
               type="checkbox"
               checked={filters.showUpcomingOnly}
               onChange={(e) => onChange({ ...filters, showUpcomingOnly: e.target.checked })}
-              className="h-3.5 w-3.5 rounded border-input"
+              className="h-4 w-4 rounded border-input accent-wellfi-cyan"
             />
             <span className="text-sm">
               Upcoming changes only

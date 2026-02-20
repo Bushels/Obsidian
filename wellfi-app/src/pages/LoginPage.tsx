@@ -151,8 +151,8 @@ export default function LoginPage() {
                 key={i}
                 className="login-sonar absolute rounded-full"
                 style={{
-                  width: 280,
-                  height: 280,
+                  width: 'min(280px, 70vw)',
+                  height: 'min(280px, 70vw)',
                   border: '1px solid rgba(0,212,255,0.12)',
                   animationDelay: `${i * 1.8}s`,
                 }}
