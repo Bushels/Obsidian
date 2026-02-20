@@ -159,7 +159,7 @@ export default function LoginPage() {
               />
             ))}
             <div
-              className="w-2 h-2 rounded-full bg-wellfi-cyan"
+              className="w-2 h-2 rounded-full bg-wellfi-cyan -translate-y-16 sm:-translate-y-20"
               style={{ boxShadow: '0 0 20px rgba(0,212,255,0.5)' }}
             />
           </div>
@@ -186,7 +186,7 @@ export default function LoginPage() {
               }`}
               style={{ transitionDelay: ready ? '300ms' : '0ms' }}
             >
-              Deep Earth Intelligence
+              Wireless Below. Insight Above.
             </p>
 
             {/* Stats */}
