@@ -242,6 +242,13 @@
     "frozen_file_protocol": "Files marked frozen cannot be written after their session. Any needed change must be filed as a proposal in agents/proposals/ and reviewed by the coordinator before the next session begins.",
     "proposal_format": "agents/proposals/{agent-id}-{change-type}-{filename}.md — describe the change needed and why. Coordinator applies it manually."
   },
+  "8": {
+      "label": "Engineer Experience & Operational Status",
+      "gate": ["1", "2", "3", "4"],
+      "run_mode": "phased",
+      "agents": ["agent-db-s8", "agent-data-s8", "agent-ui-s8", "agent-map-s8", "agent-search-s8", "agent-integrator-s8", "agent-critic-s8", "agent-tester-s8", "agent-recorder-s8"]
+    }
+  },
   "precedence_per_session": {
     "session_1": { "1st": "agent-db", "2nd": "agent-scaffold" },
     "session_2": { "1st": "agent-map", "2nd": "agent-hooks", "note": "No file conflicts expected — agent-map owns components, agent-hooks owns hooks" },

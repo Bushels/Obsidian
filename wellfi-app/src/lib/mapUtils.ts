@@ -57,6 +57,20 @@ export interface WellFeatureProperties {
   has_upcoming_change: boolean;
 }
 
+// Health level legend labels — monochromatic green palette
+export const HEALTH_LEVEL_LABELS: { level: number; color: string; label: string }[] = [
+  { level: 1, color: '#4ADE80', label: '< 9 months' },
+  { level: 2, color: '#22C55E', label: '9-13 months' },
+  { level: 3, color: '#16A34A', label: '14-16 months' },
+  { level: 4, color: '#15803D', label: '17+ months (Due)' },
+  { level: 5, color: '#34D399', label: 'Upcoming Change' },
+  { level: 6, color: '#6B7280', label: 'No data' },
+  // Operational status overlays
+  { level: 10, color: '#3B82F6', label: 'Watch (operational)' },
+  { level: 11, color: '#EAB308', label: 'Warning (operational)' },
+  { level: 12, color: '#EF4444', label: 'Well Down (operational)' },
+];
+
 // Convert Well[] to GeoJSON FeatureCollection
 export function wellsToGeoJSON(wells: Well[]): FeatureCollection<Point, WellFeatureProperties> {
   const features: Feature<Point, WellFeatureProperties>[] = wells.map((w) => ({

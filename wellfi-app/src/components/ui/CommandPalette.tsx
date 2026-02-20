@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import type { Well, RiskLevel } from '@/types';
+import type { RiskLevel } from '@/types';
+import type { WellEnriched } from '@/types/operationalStatus';
+import { OP_STATUS_CONFIG } from '@/types/operationalStatus';
 import { riskColor } from '@/lib/mapUtils';
 
 interface CommandPaletteProps {
-  wells: Well[];
+  wells: WellEnriched[];
   open: boolean;
   onClose: () => void;
-  onSelect: (well: Well) => void;
+  onSelect: (well: WellEnriched) => void;
 }
 
 // Risk level short labels for compact display
@@ -23,7 +25,7 @@ const RISK_SHORT: Record<RiskLevel, string> = {
 export function CommandPalette({ wells, open, onClose, onSelect }: CommandPaletteProps) {
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [recentWells, setRecentWells] = useState<Well[]>([]);
+  const [recentWells, setRecentWells] = useState<WellEnriched[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -32,11 +34,12 @@ export function CommandPalette({ wells, open, onClose, onSelect }: CommandPalett
     const q = query.trim().toLowerCase();
     if (q.length === 0) return [];
 
-    const matches: { well: Well; score: number }[] = [];
+    const matches: { well: WellEnriched; score: number }[] = [];
 
     for (const well of wells) {
       const name = (well.name ?? '').toLowerCase();
       const formattedId = (well.formatted_id ?? '').toLowerCase();
+      const uwi = (well.well_id ?? '').toLowerCase();
       const field = (well.field ?? '').toLowerCase();
       const formation = (well.formation ?? '').toLowerCase();
 
@@ -45,11 +48,13 @@ export function CommandPalette({ wells, open, onClose, onSelect }: CommandPalett
       // Exact prefix matches get highest priority
       if (name.startsWith(q)) score = 100;
       else if (formattedId.startsWith(q)) score = 90;
+      else if (uwi.startsWith(q)) score = 85;
       else if (field.startsWith(q)) score = 80;
       else if (formation.startsWith(q)) score = 70;
       // Substring matches get lower priority
       else if (name.includes(q)) score = 60;
       else if (formattedId.includes(q)) score = 50;
+      else if (uwi.includes(q)) score = 45;
       else if (field.includes(q)) score = 40;
       else if (formation.includes(q)) score = 30;
 
@@ -99,7 +104,7 @@ export function CommandPalette({ wells, open, onClose, onSelect }: CommandPalett
   }, [selectedIndex]);
 
   const handleSelect = useCallback(
-    (well: Well) => {
+    (well: WellEnriched) => {
       // Update recent wells (prepend, dedupe, keep max 5)
       setRecentWells((prev) => {
         const filtered = prev.filter((w) => w.id !== well.id);
@@ -179,7 +184,7 @@ export function CommandPalette({ wells, open, onClose, onSelect }: CommandPalett
             ref={inputRef}
             type="text"
             className="flex-1 bg-transparent text-white text-base placeholder:text-gray-500 outline-none"
-            placeholder="Search wells by name, ID, field, or formation..."
+            placeholder="Search wells by name, UWI, field, or formation..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoComplete="off"
@@ -209,6 +214,15 @@ export function CommandPalette({ wells, open, onClose, onSelect }: CommandPalett
               const risk = well.risk_level ?? 'UNKNOWN';
               const riskLabel = RISK_SHORT[risk] ?? '?';
               const color = riskColor(risk);
+              const showUwi =
+                well.well_id &&
+                well.formatted_id &&
+                well.well_id !== well.formatted_id;
+              const opStatus = well.operational_status;
+              const opCfg =
+                opStatus?.is_active && opStatus.status
+                  ? OP_STATUS_CONFIG[opStatus.status]
+                  : null;
 
               return (
                 <button
@@ -239,7 +253,29 @@ export function CommandPalette({ wells, open, onClose, onSelect }: CommandPalett
                         {well.formatted_id ?? well.well_id}
                       </span>
                     </div>
+                    {showUwi && (
+                      <div className="text-[10px] font-mono text-gray-600 truncate mt-0.5">
+                        {well.well_id}
+                      </div>
+                    )}
                   </div>
+
+                  {/* Operational status badge */}
+                  {opCfg && (
+                    <span
+                      className="shrink-0 flex items-center gap-1 text-[10px] font-medium px-1.5 py-0.5 rounded"
+                      style={{
+                        backgroundColor: `${opCfg.color}20`,
+                        color: opCfg.color,
+                      }}
+                    >
+                      <span
+                        className="w-1.5 h-1.5 rounded-full"
+                        style={{ backgroundColor: opCfg.color }}
+                      />
+                      {opCfg.label}
+                    </span>
+                  )}
 
                   {/* Formation badge */}
                   {well.formation && (
@@ -282,7 +318,7 @@ export function CommandPalette({ wells, open, onClose, onSelect }: CommandPalett
               </svg>
               <p className="text-sm font-medium">No wells found</p>
               <p className="text-xs text-gray-600 mt-1">
-                Try a different name, ID, or formation
+                Try a different name, UWI, or formation
               </p>
             </div>
           ) : recentWells.length === 0 ? (
@@ -305,7 +341,7 @@ export function CommandPalette({ wells, open, onClose, onSelect }: CommandPalett
               </svg>
               <p className="text-sm font-medium">Search {wells.length} wells</p>
               <p className="text-xs text-gray-600 mt-1">
-                Type to search by name, ID, field, or formation
+                Type to search by name, UWI, field, or formation
               </p>
             </div>
           ) : null}

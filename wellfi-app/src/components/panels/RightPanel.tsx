@@ -13,14 +13,18 @@ import { RiskBadge } from '@/components/ui/RiskBadge';
 import { MonthsBar } from '@/components/ui/MonthsBar';
 import { SparkLine } from '@/components/ui/SparkLine';
 import PumpChecklist from '@/components/forms/PumpChecklist';
+import OperationalStatusForm from '@/components/forms/OperationalStatusForm';
 import DownholeModel3D from '@/components/panels/DownholeModel3D';
-import type { Well } from '@/types';
+import type { WellEnriched } from '@/types/operationalStatus';
+import { DeviceAssignment } from '@/components/panels/DeviceAssignment';
+import { ComparablesWidget } from '@/components/panels/ComparablesWidget';
+
 
 const WellFiInstallForm = lazy(() => import('@/components/forms/WellFiInstallForm'));
 const PumpChangeForm = lazy(() => import('@/components/forms/PumpChangeForm'));
 
 interface RightPanelProps {
-  well: Well | null;
+  well: WellEnriched | null;
   onClose: () => void;
   canEdit?: boolean;
 }
@@ -92,7 +96,13 @@ export default function RightPanel({ well, onClose, canEdit = false }: RightPane
           </CardContent>
         </Card>
 
-        {/* Section 2 -- Pump Status */}
+        {/* Section 2 -- Operational Status (all authenticated users) */}
+        <OperationalStatusForm key={well.id} well={well} />
+
+        {/* Section 2b -- Device Assignment */}
+        <DeviceAssignment well={well} canEdit={canEdit} />
+
+        {/* Section 3 -- Pump Status */}
         <Card>
           <CardHeader className="pb-2 pt-3 px-4">
             <CardTitle className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
@@ -160,101 +170,88 @@ export default function RightPanel({ well, onClose, canEdit = false }: RightPane
         </Card>
 
         {/* Section 4 -- WellFi Device */}
-        <Card>
-          <CardHeader className="pb-2 pt-3 px-4">
-            <CardTitle className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              WellFi Device
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2 px-4 pb-3">
-            {well.wellfi_device ? (
-              <>
-                <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
-                  <div>
-                    <p className="text-xs text-muted-foreground">Serial</p>
-                    <p className="font-medium">{well.wellfi_device.serial_number ?? 'N/A'}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Firmware</p>
-                    <p className="font-medium">{well.wellfi_device.firmware_version ?? 'N/A'}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Installed by</p>
-                    <p className="font-medium">{well.wellfi_device.installed_by}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Installed</p>
-                    <p className="font-medium">{formatDate(well.wellfi_device.installed_at)}</p>
-                  </div>
+        {well.wellfi_device ? (
+          <Card>
+            <CardHeader className="pb-2 pt-3 px-4">
+              <CardTitle className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+                WellFi Device
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2 px-4 pb-3">
+              <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+                <div>
+                  <p className="text-xs text-muted-foreground">Serial</p>
+                  <p className="font-medium">{well.wellfi_device.serial_number ?? 'N/A'}</p>
                 </div>
-
-                {/* Parameters table */}
-                <div className="mt-2 rounded border text-xs">
-                  <table className="w-full">
-                    <tbody>
-                      <tr className="border-b">
-                        <td className="px-2 py-1 text-muted-foreground">Pump Speed</td>
-                        <td className="px-2 py-1 text-right font-medium">
-                          {well.wellfi_device.pump_speed_rpm != null
-                            ? `${well.wellfi_device.pump_speed_rpm} RPM`
-                            : 'N/A'}
-                        </td>
-                      </tr>
-                      <tr className="border-b">
-                        <td className="px-2 py-1 text-muted-foreground">Formation Pressure</td>
-                        <td className="px-2 py-1 text-right font-medium">
-                          {well.wellfi_device.formation_pressure_kpa != null
-                            ? `${well.wellfi_device.formation_pressure_kpa} kPa`
-                            : 'N/A'}
-                        </td>
-                      </tr>
-                      <tr className="border-b">
-                        <td className="px-2 py-1 text-muted-foreground">Pump Intake</td>
-                        <td className="px-2 py-1 text-right font-medium">
-                          {well.wellfi_device.pump_intake_pressure_kpa != null
-                            ? `${well.wellfi_device.pump_intake_pressure_kpa} kPa`
-                            : 'N/A'}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-2 py-1 text-muted-foreground">Target Surface</td>
-                        <td className="px-2 py-1 text-right font-medium">
-                          {well.wellfi_device.target_surface_pressure_kpa != null
-                            ? `${well.wellfi_device.target_surface_pressure_kpa} kPa`
-                            : 'N/A'}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div>
+                  <p className="text-xs text-muted-foreground">Firmware</p>
+                  <p className="font-medium">{well.wellfi_device.firmware_version ?? 'N/A'}</p>
                 </div>
-
-                {canEdit && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="mt-2 w-full"
-                    onClick={() => setInstallDialogOpen(true)}
-                  >
-                    Update Device
-                  </Button>
-                )}
-              </>
-            ) : (
-              <div className="text-center py-2">
-                <p className="text-sm text-muted-foreground mb-2">No WellFi installed</p>
-                {canEdit && (
-                  <Button
-                    size="sm"
-                    className="bg-wellfi-cyan text-black hover:bg-wellfi-cyan/90"
-                    onClick={() => setInstallDialogOpen(true)}
-                  >
-                    Register Installation
-                  </Button>
-                )}
+                <div>
+                  <p className="text-xs text-muted-foreground">Installed by</p>
+                  <p className="font-medium">{well.wellfi_device.installed_by}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Installed</p>
+                  <p className="font-medium">{formatDate(well.wellfi_device.installed_at)}</p>
+                </div>
               </div>
-            )}
-          </CardContent>
-        </Card>
+
+              {/* Parameters table */}
+              <div className="mt-2 rounded border text-xs">
+                <table className="w-full">
+                  <tbody>
+                    <tr className="border-b">
+                      <td className="px-2 py-1 text-muted-foreground">Pump Speed</td>
+                      <td className="px-2 py-1 text-right font-medium">
+                        {well.wellfi_device.pump_speed_rpm != null
+                          ? `${well.wellfi_device.pump_speed_rpm} RPM`
+                          : 'N/A'}
+                      </td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="px-2 py-1 text-muted-foreground">Formation Pressure</td>
+                      <td className="px-2 py-1 text-right font-medium">
+                        {well.wellfi_device.formation_pressure_kpa != null
+                          ? `${well.wellfi_device.formation_pressure_kpa} kPa`
+                          : 'N/A'}
+                      </td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="px-2 py-1 text-muted-foreground">Pump Intake</td>
+                      <td className="px-2 py-1 text-right font-medium">
+                        {well.wellfi_device.pump_intake_pressure_kpa != null
+                          ? `${well.wellfi_device.pump_intake_pressure_kpa} kPa`
+                          : 'N/A'}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-2 py-1 text-muted-foreground">Target Surface</td>
+                      <td className="px-2 py-1 text-right font-medium">
+                        {well.wellfi_device.target_surface_pressure_kpa != null
+                          ? `${well.wellfi_device.target_surface_pressure_kpa} kPa`
+                          : 'N/A'}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {canEdit && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="mt-2 w-full"
+                  onClick={() => setInstallDialogOpen(true)}
+                >
+                  Update Device
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+        ) : (
+          canEdit ? <div className="mt-2"><ComparablesWidget onDeploy={() => setInstallDialogOpen(true)} /></div> : null
+        )}
 
         {/* Section 5 -- Downhole View */}
         <DownholeModel3D well={well} />

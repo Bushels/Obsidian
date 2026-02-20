@@ -43,6 +43,17 @@ export interface Well {
   updated_at: string;
   wellfi_device?: WellFiDevice | null;
   active_pump_change?: PumpChange | null;
+  // Downhole equipment depths
+  pump_top_depth_m?: number | null;
+  pump_bottom_depth_m?: number | null;
+  slotted_tag_bar_top_depth_m?: number | null;
+  slotted_tag_bar_bottom_depth_m?: number | null;
+  wellfi_tool_top_depth_m?: number | null;
+  wellfi_tool_bottom_depth_m?: number | null;
+  no_turn_tool_top_depth_m?: number | null;
+  no_turn_tool_bottom_depth_m?: number | null;
+  collar_top_depth_m?: number | null;
+  collar_bottom_depth_m?: number | null;
 }
 
 export interface WellFiDevice {

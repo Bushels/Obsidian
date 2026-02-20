@@ -12,7 +12,7 @@
  * toward its centroid at 5 levels, creating a topographic bowl effect
  * that communicates formation depth beneath the surface.
  */
-import mapboxgl from 'mapbox-gl';
+import type { Map as MapboxMap } from 'mapbox-gl';
 import { FORMATION_POLYGONS, type FormationPolygon } from '@/lib/formationData';
 
 // ─── Layer & source IDs ────────────────────────────────────────────────────
@@ -112,7 +112,7 @@ function buildBoundaryGeoJSON(): GeoJSON.FeatureCollection {
  * Call this in the map load handler BEFORE the DLS grid layers
  * so formations render beneath the grid.
  */
-export function addFormationLayers(map: mapboxgl.Map): void {
+export function addFormationLayers(map: MapboxMap): void {
   map.addSource(SRC_FILLS, { type: 'geojson', data: buildDepthContoursGeoJSON() });
   map.addSource(SRC_BOUNDARY, { type: 'geojson', data: buildBoundaryGeoJSON() });
 
@@ -238,7 +238,7 @@ export function addFormationLayers(map: mapboxgl.Map): void {
 /**
  * Remove all formation layers and sources from the map.
  */
-export function removeFormationLayers(map: mapboxgl.Map): void {
+export function removeFormationLayers(map: MapboxMap): void {
   for (const id of ALL_LAYERS) {
     if (map.getLayer(id)) map.removeLayer(id);
   }
@@ -250,7 +250,7 @@ export function removeFormationLayers(map: mapboxgl.Map): void {
 /**
  * Smoothly fade formation layers in/out using opacity transitions.
  */
-export function setFormationVisibility(map: mapboxgl.Map, visible: boolean): void {
+export function setFormationVisibility(map: MapboxMap, visible: boolean): void {
   if (map.getLayer(LAYER_FILL)) {
     map.setPaintProperty(LAYER_FILL, 'fill-opacity', visible ? 1 : 0);
   }

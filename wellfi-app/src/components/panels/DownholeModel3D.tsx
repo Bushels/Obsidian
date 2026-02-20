@@ -1,16 +1,22 @@
 import { memo, useEffect, useMemo, useState } from 'react';
-import { Maximize2, RotateCcw, ZoomIn, ZoomOut } from 'lucide-react';
+import { Maximize2, RotateCcw, ZoomIn, ZoomOut, FileEdit, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
+  DialogClose,
 } from '@/components/ui/dialog';
 import { FORMATION_POLYGONS } from '@/lib/formationData';
 import { SCHEMATIC_DEPTHS, type SchematicDepthEntry } from '@/lib/schematicDepths';
+import { supabase } from '@/lib/supabase';
 import type { Well } from '@/types';
 
 interface DownholeModel3DProps {
@@ -27,9 +33,12 @@ interface DownholePlacement {
   wellFiLengthM: number;
   noTurnDepthM: number;
   noTurnLengthM: number;
+  collarDepthM: number;
+  collarLengthM: number;
   hasManualDepths: boolean;
   hasSchematicDepths: boolean;
-  depthSource: 'manual' | 'schematic' | 'estimated';
+  hasDatabaseDepths: boolean;
+  depthSource: 'manual' | 'schematic' | 'estimated' | 'database';
   sourceFile: string | null;
 }
 
@@ -40,7 +49,7 @@ interface FormationProfile {
 }
 
 interface ToolSegment {
-  id: 'pump' | 'slotted_tag_bar' | 'wellfi_tool' | 'no_turn_tool';
+  id: 'pump' | 'slotted_tag_bar' | 'wellfi_tool' | 'no_turn_tool' | 'collar';
   label: string;
   depthM: number;
   lengthM: number;
@@ -174,11 +183,13 @@ function resolveDownholePlacement(well: Well): DownholePlacement {
   const defaultSlottedTagBarDepthM = defaultPumpDepthM + 1.3;
   const defaultWellFiDepthM = defaultSlottedTagBarDepthM + 0.65;
   const defaultNoTurnDepthM = defaultWellFiDepthM + 0.65;
-  const defaultTotalDepthM = Math.max(formationDepthM + 120, defaultNoTurnDepthM + 24);
+  const defaultCollarDepthM = defaultNoTurnDepthM + 0.5;
+  const defaultTotalDepthM = Math.max(formationDepthM + 120, defaultCollarDepthM + 24);
   const defaultPumpLengthM = 8.0;
   const defaultSlottedTagBarLengthM = 0.9;
-  const defaultWellFiLengthM = 0.75;
+  const defaultWellFiLengthM = 6.30;
   const defaultNoTurnLengthM = 0.6;
+  const defaultCollarLengthM = 0.4;
 
   const notes = well.wellfi_device?.notes;
 
@@ -195,11 +206,15 @@ function resolveDownholePlacement(well: Well): DownholePlacement {
   const schematicNoTurnDepthM = schematic?.no_turn_tool
     ? (schematic.no_turn_tool.top_m + schematic.no_turn_tool.bottom_m) / 2
     : null;
+  // Schematic doesn't visually distinguish collar usually, so null fallback
+  // const schematicCollarDepthM: number | null = null; 
 
   const pumpLengthM = schematic?.pump?.length_m ?? defaultPumpLengthM;
   const slottedTagBarLengthM = schematic?.slotted_tag_bar?.length_m ?? defaultSlottedTagBarLengthM;
   const wellFiLengthM = schematic?.wellfi_tool?.length_m ?? defaultWellFiLengthM;
   const noTurnLengthM = schematic?.no_turn_tool?.length_m ?? defaultNoTurnLengthM;
+  // Use default for collar length if not specified (conceptually)
+  const collarLengthM = defaultCollarLengthM;
 
   const manualTotalDepthM = firstDefined([
     parseDepthTag(notes, 'total_depth_m'),
@@ -222,12 +237,57 @@ function resolveDownholePlacement(well: Well): DownholePlacement {
     parseDepthTag(notes, 'no_turn_md_m'),
   ]);
 
+  // Database values (new columns)
+  const dbPumpDepthM =
+    well.pump_top_depth_m && well.pump_bottom_depth_m
+      ? (well.pump_top_depth_m + well.pump_bottom_depth_m) / 2
+      : null;
+  const dbSlottedTagBarDepthM =
+    well.slotted_tag_bar_top_depth_m && well.slotted_tag_bar_bottom_depth_m
+      ? (well.slotted_tag_bar_top_depth_m + well.slotted_tag_bar_bottom_depth_m) / 2
+      : null;
+  const dbWellFiDepthM =
+    well.wellfi_tool_top_depth_m && well.wellfi_tool_bottom_depth_m
+      ? (well.wellfi_tool_top_depth_m + well.wellfi_tool_bottom_depth_m) / 2
+      : null;
+  const dbNoTurnDepthM =
+    well.no_turn_tool_top_depth_m && well.no_turn_tool_bottom_depth_m
+      ? (well.no_turn_tool_top_depth_m + well.no_turn_tool_bottom_depth_m) / 2
+      : null;
+  const dbCollarDepthM =
+    well.collar_top_depth_m && well.collar_bottom_depth_m
+      ? (well.collar_top_depth_m + well.collar_bottom_depth_m) / 2
+      : null;
+
   let totalDepthM = manualTotalDepthM ?? schematicTotalDepthM ?? defaultTotalDepthM;
-  let pumpDepthM = manualPumpDepthM ?? schematicPumpDepthM ?? defaultPumpDepthM;
+  let pumpDepthM = dbPumpDepthM ?? manualPumpDepthM ?? schematicPumpDepthM ?? defaultPumpDepthM;
   let slottedTagBarDepthM =
-    manualSlottedTagBarDepthM ?? schematicSlottedTagBarDepthM ?? defaultSlottedTagBarDepthM;
-  let wellFiDepthM = manualWellFiDepthM ?? schematicWellFiDepthM ?? defaultWellFiDepthM;
-  let noTurnDepthM = manualNoTurnDepthM ?? schematicNoTurnDepthM ?? defaultNoTurnDepthM;
+    dbSlottedTagBarDepthM ?? manualSlottedTagBarDepthM ?? schematicSlottedTagBarDepthM ?? defaultSlottedTagBarDepthM;
+  let wellFiDepthM = dbWellFiDepthM ?? manualWellFiDepthM ?? schematicWellFiDepthM ?? defaultWellFiDepthM;
+  let noTurnDepthM = dbNoTurnDepthM ?? manualNoTurnDepthM ?? schematicNoTurnDepthM ?? defaultNoTurnDepthM;
+  let collarDepthM = dbCollarDepthM ?? defaultCollarDepthM;
+
+  // Use database lengths if available implies using db depths
+  const finalPumpLengthM =
+    well.pump_top_depth_m && well.pump_bottom_depth_m
+      ? Math.abs(well.pump_bottom_depth_m - well.pump_top_depth_m)
+      : pumpLengthM;
+  const finalSlottedTagBarLengthM =
+    well.slotted_tag_bar_top_depth_m && well.slotted_tag_bar_bottom_depth_m
+      ? Math.abs(well.slotted_tag_bar_bottom_depth_m - well.slotted_tag_bar_top_depth_m)
+      : slottedTagBarLengthM;
+  const finalWellFiLengthM =
+    well.wellfi_tool_top_depth_m && well.wellfi_tool_bottom_depth_m
+      ? Math.abs(well.wellfi_tool_bottom_depth_m - well.wellfi_tool_top_depth_m)
+      : wellFiLengthM;
+  const finalNoTurnLengthM =
+    well.no_turn_tool_top_depth_m && well.no_turn_tool_bottom_depth_m
+      ? Math.abs(well.no_turn_tool_bottom_depth_m - well.no_turn_tool_top_depth_m)
+      : noTurnLengthM;
+  const finalCollarLengthM =
+    well.collar_top_depth_m && well.collar_bottom_depth_m
+      ? Math.abs(well.collar_bottom_depth_m - well.collar_top_depth_m)
+      : collarLengthM;
 
   if (manualWellFiDepthM == null && schematicWellFiDepthM == null) {
     const gap = noTurnDepthM - slottedTagBarDepthM;
@@ -238,10 +298,26 @@ function resolveDownholePlacement(well: Well): DownholePlacement {
 
   const minSpacing = 0.24;
   pumpDepthM = clamp(pumpDepthM, 60, totalDepthM - 12);
-  slottedTagBarDepthM = Math.max(slottedTagBarDepthM, pumpDepthM + minSpacing);
-  wellFiDepthM = Math.max(wellFiDepthM, slottedTagBarDepthM + minSpacing);
-  noTurnDepthM = Math.max(noTurnDepthM, wellFiDepthM + minSpacing);
-  totalDepthM = Math.max(totalDepthM, noTurnDepthM + 18);
+
+  // If we don't have explicit DB or manual values, enforce spacing constraint
+  if (!dbSlottedTagBarDepthM && !manualSlottedTagBarDepthM) {
+    slottedTagBarDepthM = Math.max(slottedTagBarDepthM, pumpDepthM + minSpacing);
+  }
+  if (!dbWellFiDepthM && !manualWellFiDepthM) {
+    wellFiDepthM = Math.max(wellFiDepthM, slottedTagBarDepthM + minSpacing);
+  }
+  if (!dbNoTurnDepthM && !manualNoTurnDepthM) {
+    noTurnDepthM = Math.max(noTurnDepthM, wellFiDepthM + minSpacing);
+  }
+  if (!dbCollarDepthM) {
+    collarDepthM = Math.max(collarDepthM, noTurnDepthM + minSpacing);
+  }
+  
+  // User correction: Nothing past the last collar.
+  // We only extend TD if manual/schematic TD is deeper. Otherwise, TD is effectively the bottom of collar.
+  // We add a tiny buffer just for visual containment if needed, but not 24m/12m of rat hole.
+  // Actually, let's keep TD slightly below for visual framing, but ensure string visual stops.
+  totalDepthM = Math.max(totalDepthM, collarDepthM + collarLengthM + 2);
 
   const hasManualDepths =
     manualTotalDepthM != null ||
@@ -258,21 +334,31 @@ function resolveDownholePlacement(well: Well): DownholePlacement {
       schematicWellFiDepthM != null ||
       schematicNoTurnDepthM != null);
 
+  const hasDatabaseDepths =
+    dbPumpDepthM != null ||
+    dbSlottedTagBarDepthM != null ||
+    dbWellFiDepthM != null ||
+    dbNoTurnDepthM != null ||
+    dbCollarDepthM != null;
+
   const depthSource: DownholePlacement['depthSource'] =
-    hasManualDepths ? 'manual' : hasSchematicDepths ? 'schematic' : 'estimated';
+    hasDatabaseDepths ? 'database' : hasManualDepths ? 'manual' : hasSchematicDepths ? 'schematic' : 'estimated';
 
   return {
     totalDepthM,
     pumpDepthM,
-    pumpLengthM,
+    pumpLengthM: finalPumpLengthM,
     slottedTagBarDepthM,
-    slottedTagBarLengthM,
+    slottedTagBarLengthM: finalSlottedTagBarLengthM,
     wellFiDepthM,
-    wellFiLengthM,
+    wellFiLengthM: finalWellFiLengthM,
     noTurnDepthM,
-    noTurnLengthM,
+    noTurnLengthM: finalNoTurnLengthM,
+    collarDepthM,
+    collarLengthM: finalCollarLengthM,
     hasManualDepths,
     hasSchematicDepths,
+    hasDatabaseDepths,
     depthSource,
     sourceFile: schematic?.source_file ?? null,
   };
@@ -304,6 +390,8 @@ function toolAccentColor(toolId: ToolSegment['id']): string {
       return '#22d3ee';
     case 'no_turn_tool':
       return '#a5b4fc';
+    case 'collar':
+      return '#cbd5e1';
     default:
       return '#cbd5e1';
   }
@@ -317,6 +405,8 @@ function shortToolLabel(toolId: ToolSegment['id']): string {
       return 'WellFi';
     case 'no_turn_tool':
       return 'No-Turn';
+    case 'collar':
+      return 'Collar';
     default:
       return 'Pump';
   }
@@ -343,6 +433,19 @@ function injectSceneStyleTag(): void {
       0% { transform: translateY(0px); }
       50% { transform: translateY(-1px); }
       100% { transform: translateY(0px); }
+    }
+    @keyframes wellfi-led-blink {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+    @keyframes wellfi-data-stream {
+      from { stroke-dashoffset: 40; }
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes wellfi-flare {
+      0% { opacity: 0.5; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.1); }
+      100% { opacity: 0.5; transform: scale(0.9); }
     }
   `;
   document.head.appendChild(style);
@@ -424,19 +527,112 @@ function buildToolStack(placement: DownholePlacement, hasInstalledWellFi: boolea
       dotClassName: 'bg-indigo-300',
       labelClassName: 'text-indigo-100',
     },
+    {
+      id: 'collar',
+      label: 'Collar',
+      depthM: placement.collarDepthM,
+      lengthM: placement.collarLengthM,
+      barClassName: 'bg-gradient-to-b from-slate-300 to-slate-500 border-slate-100/80',
+      dotClassName: 'bg-slate-300',
+      labelClassName: 'text-slate-100',
+    },
   ];
 }
 
 function DownholeModel3DComponent({ well }: DownholeModel3DProps) {
   const [expandedOpen, setExpandedOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const [view, setView] = useState<SceneViewState>(DEFAULT_VIEW);
   const [sceneMode, setSceneMode] = useState<SceneMode>('cutaway');
+  const [isSaving, setIsSaving] = useState(false);
+  
+  // Local state for the edit form
+  const [formData, setFormData] = useState({
+    pump_top_depth_m: '',
+    pump_bottom_depth_m: '',
+    slotted_tag_bar_top_depth_m: '',
+    slotted_tag_bar_bottom_depth_m: '',
+    wellfi_tool_top_depth_m: '',
+    wellfi_tool_bottom_depth_m: '',
+    no_turn_tool_top_depth_m: '',
+    no_turn_tool_bottom_depth_m: '',
+    collar_top_depth_m: '',
+    collar_bottom_depth_m: '',
+  });
 
   useEffect(() => {
     injectSceneStyleTag();
   }, []);
 
   const placement = useMemo(() => resolveDownholePlacement(well), [well]);
+
+  useEffect(() => {
+    // Determine the current "best" values to populate the form initially
+    // We use the calculated values from placement to imply the current top/bottom
+    // For simplicity, we can load from the 'well' object strictly, or fallback to the placement logic.
+    // Let's fallback to placement logic to pre-fill with defaults if DB is empty.
+    
+    // Helper to format or empty
+    const fmt = (v: number | null | undefined) => (v != null ? v.toFixed(2) : '');
+
+    // If well has DB values, use them. Else use placement values.
+    // NOTE: placement has 'center' depth and 'length'. We need top/bottom.
+    const getTop = (depth: number, length: number) => depth - length / 2;
+    const getBot = (depth: number, length: number) => depth + length / 2;
+
+    setFormData({
+      pump_top_depth_m: fmt(well.pump_top_depth_m ?? getTop(placement.pumpDepthM, placement.pumpLengthM)),
+      pump_bottom_depth_m: fmt(well.pump_bottom_depth_m ?? getBot(placement.pumpDepthM, placement.pumpLengthM)),
+      slotted_tag_bar_top_depth_m: fmt(well.slotted_tag_bar_top_depth_m ?? getTop(placement.slottedTagBarDepthM, placement.slottedTagBarLengthM)),
+      slotted_tag_bar_bottom_depth_m: fmt(well.slotted_tag_bar_bottom_depth_m ?? getBot(placement.slottedTagBarDepthM, placement.slottedTagBarLengthM)),
+      wellfi_tool_top_depth_m: fmt(well.wellfi_tool_top_depth_m ?? getTop(placement.wellFiDepthM, placement.wellFiLengthM)),
+      wellfi_tool_bottom_depth_m: fmt(well.wellfi_tool_bottom_depth_m ?? getBot(placement.wellFiDepthM, placement.wellFiLengthM)),
+      no_turn_tool_top_depth_m: fmt(well.no_turn_tool_top_depth_m ?? getTop(placement.noTurnDepthM, placement.noTurnLengthM)),
+      no_turn_tool_bottom_depth_m: fmt(well.no_turn_tool_bottom_depth_m ?? getBot(placement.noTurnDepthM, placement.noTurnLengthM)),
+      collar_top_depth_m: fmt(well.collar_top_depth_m ?? getTop(placement.collarDepthM, placement.collarLengthM)),
+      collar_bottom_depth_m: fmt(well.collar_bottom_depth_m ?? getBot(placement.collarDepthM, placement.collarLengthM)),
+    });
+  }, [well, placement, editOpen]); // Reset when opening dialog or well changes
+
+  async function handleSaveConfiguration() {
+    setIsSaving(true);
+    try {
+      // Convert empty strings to null, parse numbers
+      const parse = (v: string) => (v === '' ? null : Number(v));
+      
+      const payload = {
+        pump_top_depth_m: parse(formData.pump_top_depth_m),
+        pump_bottom_depth_m: parse(formData.pump_bottom_depth_m),
+        slotted_tag_bar_top_depth_m: parse(formData.slotted_tag_bar_top_depth_m),
+        slotted_tag_bar_bottom_depth_m: parse(formData.slotted_tag_bar_bottom_depth_m),
+        wellfi_tool_top_depth_m: parse(formData.wellfi_tool_top_depth_m),
+        wellfi_tool_bottom_depth_m: parse(formData.wellfi_tool_bottom_depth_m),
+        no_turn_tool_top_depth_m: parse(formData.no_turn_tool_top_depth_m),
+        no_turn_tool_bottom_depth_m: parse(formData.no_turn_tool_bottom_depth_m),
+        collar_top_depth_m: parse(formData.collar_top_depth_m),
+        collar_bottom_depth_m: parse(formData.collar_bottom_depth_m),
+      };
+
+      const { error } = await supabase
+        .from('wells' as never)
+        .update(payload as never)
+        .eq('id', well.id);
+
+      if (error) throw error;
+      
+      toast.success('Configuration saved');
+      setEditOpen(false);
+      // Note: React Query or parent state needs to refresh 'well' prop to see changes immediately.
+      // Assuming parent handles cache invalidation or real-time subscription.
+      // If not, a full page reload might be needed or a callback prop.
+      window.location.reload(); // Simple brute force refresh for this task context as I don't see the parent data fetching logic
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to save configuration');
+    } finally {
+      setIsSaving(false);
+    }
+  }
   const formation = useMemo(() => getFormationProfile(well.formation), [well.formation]);
   const hasInstalledWellFi = !!well.wellfi_device;
 
@@ -519,8 +715,6 @@ function DownholeModel3DComponent({ well }: DownholeModel3DProps) {
 
   function renderCutawayScene(heightClassName: string) {
     const casingPatternId = `${patternIdBase}-casing-lines`;
-    const pumpRibPatternId = `${patternIdBase}-pump-ribs`;
-    const slotPatternId = `${patternIdBase}-slots`;
     const rawCenterYs = renderedTools.map(
       (tool) => cutawayTrackTop + (tool.centerPct / 100) * cutawayTrackSpan,
     );
@@ -567,54 +761,140 @@ function DownholeModel3DComponent({ well }: DownholeModel3DProps) {
           preserveAspectRatio="none"
         >
           <defs>
-            <linearGradient id={`${patternIdBase}-casing-grad`} x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#0f172a" />
-              <stop offset="22%" stopColor="#334155" />
-              <stop offset="50%" stopColor="#64748b" />
-              <stop offset="78%" stopColor="#334155" />
-              <stop offset="100%" stopColor="#0f172a" />
+            {/* Metallic Cylindrical Gradients (Left-to-Right lighting) */}
+            <linearGradient id={`${patternIdBase}-gold-metal`} x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#854d0e" />
+              <stop offset="15%" stopColor="#facc15" />
+              <stop offset="40%" stopColor="#ca8a04" />
+              <stop offset="60%" stopColor="#eab308" />
+              <stop offset="85%" stopColor="#fef08a" />
+              <stop offset="100%" stopColor="#713f12" />
             </linearGradient>
-            <linearGradient id={`${patternIdBase}-inner-grad`} x1="0%" y1="0%" x2="100%" y2="0%">
+
+            <linearGradient id={`${patternIdBase}-steely-blue`} x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#0f172a" />
+              <stop offset="20%" stopColor="#38bdf8" />
+              <stop offset="45%" stopColor="#0369a1" />
+              <stop offset="75%" stopColor="#e0f2fe" />
+              <stop offset="100%" stopColor="#0c4a6e" />
+            </linearGradient>
+
+            <linearGradient id={`${patternIdBase}-dark-composite`} x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#020617" />
-              <stop offset="50%" stopColor="#0f172a" />
+              <stop offset="25%" stopColor="#1e293b" />
+              <stop offset="50%" stopColor="#334155" />
+              <stop offset="75%" stopColor="#1e293b" />
               <stop offset="100%" stopColor="#020617" />
             </linearGradient>
-            <linearGradient id={`${patternIdBase}-tubing-grad`} x1="0%" y1="0%" x2="100%" y2="0%">
+
+            <linearGradient id={`${patternIdBase}-purple-steel`} x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#312e81" />
+              <stop offset="20%" stopColor="#818cf8" />
+              <stop offset="50%" stopColor="#4338ca" />
+              <stop offset="80%" stopColor="#e0e7ff" />
+              <stop offset="100%" stopColor="#1e1b4b" />
+            </linearGradient>
+
+            <linearGradient id={`${patternIdBase}-rough-steel`} x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#334155" />
+              <stop offset="25%" stopColor="#94a3b8" />
+              <stop offset="50%" stopColor="#64748b" />
+              <stop offset="80%" stopColor="#cbd5e1" />
+              <stop offset="100%" stopColor="#1e293b" />
+            </linearGradient>
+
+            <linearGradient id={`${patternIdBase}-casing-grad`} x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#1e293b" />
+              <stop offset="10%" stopColor="#0f172a" />
+              <stop offset="90%" stopColor="#0f172a" />
+              <stop offset="100%" stopColor="#1e293b" />
+            </linearGradient>
+             <linearGradient id={`${patternIdBase}-inner-grad`} x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#020617" />
+              <stop offset="20%" stopColor="#020617" />
+              <stop offset="50%" stopColor="#0f172a" />
+              <stop offset="80%" stopColor="#020617" />
+              <stop offset="100%" stopColor="#020617" />
+            </linearGradient>
+
+             <linearGradient id={`${patternIdBase}-tubing-grad`} x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#0f172a" />
-              <stop offset="50%" stopColor="#1e293b" />
+              <stop offset="30%" stopColor="#334155" />
+              <stop offset="50%" stopColor="#475569" />
+              <stop offset="70%" stopColor="#334155" />
               <stop offset="100%" stopColor="#0f172a" />
             </linearGradient>
-            <linearGradient id={`${patternIdBase}-pump-grad`} x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#fde047" />
-              <stop offset="60%" stopColor="#eab308" />
-              <stop offset="100%" stopColor="#a16207" />
-            </linearGradient>
-            <linearGradient id={`${patternIdBase}-wellfi-grad`} x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#67e8f9" />
-              <stop offset="52%" stopColor="#06b6d4" />
-              <stop offset="100%" stopColor="#155e75" />
-            </linearGradient>
-            <linearGradient id={`${patternIdBase}-noturn-grad`} x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#c4b5fd" />
-              <stop offset="58%" stopColor="#818cf8" />
-              <stop offset="100%" stopColor="#4338ca" />
-            </linearGradient>
-            <pattern id={casingPatternId} width="16" height="16" patternUnits="userSpaceOnUse">
-              <path d="M0 8 H16" stroke="#cbd5e1" strokeOpacity="0.12" strokeWidth="1" />
+
+            <pattern id={casingPatternId} width="12" height="12" patternUnits="userSpaceOnUse">
+               <path d="M-1,1 l2,-2 M0,12 l12,-12 M11,13 l2,-2" stroke="#334155" strokeWidth="0.5" strokeOpacity="0.3" />
             </pattern>
-            <pattern id={pumpRibPatternId} width="8" height="8" patternUnits="userSpaceOnUse">
-              <path d="M0 0 L8 8 M-4 4 L4 12 M4 -4 L12 4" stroke="#fef9c3" strokeOpacity="0.22" strokeWidth="1" />
-            </pattern>
-            <pattern id={slotPatternId} width="10" height="10" patternUnits="userSpaceOnUse">
-              <rect x="3.2" y="1.3" width="3.6" height="7.4" rx="1.2" fill="#020617" fillOpacity="0.72" />
-            </pattern>
+            
+            <filter id={`${patternIdBase}-glow`}>
+              <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+            
+             <filter id={`${patternIdBase}-metal-shine`}>
+                 <feSpecularLighting result="specOut" specularExponent="25" lightingColor="#ffffff">
+                    <fePointLight x="400" y="-800" z="400"/>
+                 </feSpecularLighting>
+                 <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>
+            </filter>
+
+            <filter id={`${patternIdBase}-drop-shadow`} x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="8" dy="12" stdDeviation="6" floodColor="#000000" floodOpacity="0.65" />
+            </filter>
+            
+            <filter id={`${patternIdBase}-inner-shadow`}>
+              <feOffset dx="0" dy="0"/>
+              <feGaussianBlur stdDeviation="3" result="offset-blur"/>
+              <feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse"/>
+              <feFlood floodColor="black" floodOpacity="0.8" result="color"/>
+              <feComposite operator="in" in="color" in2="inverse" result="shadow"/>
+              <feComposite operator="over" in="shadow" in2="SourceGraphic"/>
+            </filter>
           </defs>
 
-          <rect x="388" y="42" width="224" height="620" rx="112" fill={`url(#${patternIdBase}-casing-grad)`} stroke="#94a3b8" strokeOpacity="0.55" />
-          <rect x="406" y="58" width="188" height="588" rx="94" fill={`url(#${patternIdBase}-inner-grad)`} />
-          <rect x="422" y="72" width="156" height="560" rx="78" fill={`url(#${casingPatternId})`} />
-          <rect x="468" y="76" width="64" height="552" rx="32" fill={`url(#${patternIdBase}-tubing-grad)`} stroke="#64748b" strokeOpacity="0.5" />
-          <line x1="500" x2="500" y1="76" y2="628" stroke="#94a3b8" strokeOpacity="0.22" strokeWidth="1" />
+          {/* Casing Background */}
+          <rect x="388" y="42" width="224" height="620" rx="4" fill={`url(#${patternIdBase}-casing-grad)`} stroke="#475569" strokeWidth="2" />
+           {/* Cement/Formation Context */}
+          <rect x="370" y="42" width="18" height="620" fill={`url(#${casingPatternId})`} opacity="0.6" />
+          <rect x="612" y="42" width="18" height="620" fill={`url(#${casingPatternId})`} opacity="0.6" />
+
+           {/* Inner Wellbore Dark Background */}
+          <rect x="406" y="48" width="188" height="608" rx="2" fill={`url(#${patternIdBase}-inner-grad)`} />
+          
+          {/* Tubing String (Dynamic Length) */}
+          {(() => {
+             // Find visual bottom of the stack
+             const lastBody = cutawayBodies[cutawayBodies.length - 1];
+             const tubingBottomY = lastBody ? lastBody.centerY + lastBody.height / 2 : 608;
+             const tubingTopY = 48;
+             return (
+               <g filter={`url(#${patternIdBase}-drop-shadow)`}>
+                 <rect 
+                   x="484" 
+                   y={tubingTopY} 
+                   width="32" 
+                   height={Math.max(0, tubingBottomY - tubingTopY)} 
+                   fill={`url(#${patternIdBase}-tubing-grad)`} 
+                 />
+                 <rect 
+                   x="484" 
+                   y={tubingTopY} 
+                   width="32" 
+                   height={Math.max(0, tubingBottomY - tubingTopY)} 
+                   fill="none"
+                   stroke="#1e293b"
+                   strokeWidth="1"
+                 />
+               </g>
+             );
+          })()}
+
 
           {formationVisible && (
             <rect
@@ -622,37 +902,13 @@ function DownholeModel3DComponent({ well }: DownholeModel3DProps) {
               y={cutawayTrackTop + (formationTopPct / 100) * cutawayTrackSpan}
               width="140"
               height={(formationHeightPct / 100) * cutawayTrackSpan}
-              rx="16"
-              fill="#38bdf8"
-              fillOpacity="0.22"
-              stroke="#7dd3fc"
-              strokeOpacity="0.48"
+              rx="4"
+              fill="none"
+              stroke="#38bdf8"
+              strokeDasharray="4 4"
+              strokeOpacity="0.4"
             />
           )}
-
-          {cutawayBodies.slice(1).map((body, idx) => {
-            const previous = cutawayBodies[idx];
-            const previousBottomY = previous.centerY + previous.height / 2;
-            const currentTopY = body.centerY - body.height / 2;
-            if (currentTopY <= previousBottomY + 1) return null;
-            return (
-              <g key={`connector-${previous.tool.id}-${body.tool.id}`}>
-                <rect
-                  x="494.5"
-                  y={previousBottomY}
-                  width="11"
-                  height={currentTopY - previousBottomY}
-                  rx="5.5"
-                  fill="#334155"
-                  fillOpacity="0.95"
-                  stroke="#64748b"
-                  strokeOpacity="0.65"
-                />
-                <rect x="489" y={previousBottomY - 4} width="22" height="8" rx="4" fill="#475569" />
-                <rect x="489" y={currentTopY - 4} width="22" height="8" rx="4" fill="#475569" />
-              </g>
-            );
-          })}
 
           {cutawayBodies.map(({ tool, centerY, height, width }) => {
             const halfH = height / 2;
@@ -660,62 +916,154 @@ function DownholeModel3DComponent({ well }: DownholeModel3DProps) {
 
             if (tool.id === 'pump') {
               return (
-                <g key={tool.id} transform={`translate(500 ${centerY})`}>
+                <g key={tool.id} transform={`translate(500 ${centerY})`} filter={`url(#${patternIdBase}-drop-shadow)`}>
+                  {/* Stator Body */}
                   <rect
                     x={-halfW}
                     y={-halfH}
                     width={width}
                     height={height}
-                    rx={Math.max(16, width * 0.2)}
-                    fill={`url(#${patternIdBase}-pump-grad)`}
-                    stroke="#fef08a"
-                    strokeOpacity="0.78"
+                    rx="6"
+                    fill={`url(#${patternIdBase}-gold-metal)`}
+                    stroke="#713f12"
+                    strokeWidth="1"
+                    filter={`url(#${patternIdBase}-metal-shine)`}
                   />
-                  <rect
-                    x={-halfW + 8}
-                    y={-halfH + 12}
-                    width={width - 16}
-                    height={Math.max(height - 24, 18)}
-                    rx="10"
-                    fill={`url(#${pumpRibPatternId})`}
-                  />
-                  <rect x={-halfW - 2} y={-halfH + 7} width={width + 4} height="8" rx="4" fill="#fef9c3" fillOpacity="0.38" />
-                  <rect x={-halfW - 2} y={halfH - 15} width={width + 4} height="8" rx="4" fill="#fef9c3" fillOpacity="0.3" />
-                  <circle cx={-width * 0.24} cy="0" r="3" fill="#fef3c7" fillOpacity="0.62" />
-                  <circle cx={width * 0.24} cy="0" r="3" fill="#fef3c7" fillOpacity="0.62" />
+                  {/* Helical Details */}
+                   <path 
+                     d={`M${-halfW} ${-halfH+10} Q0 ${-halfH+20} ${halfW} ${-halfH+10} 
+                        M${-halfW} ${-halfH+30} Q0 ${-halfH+40} ${halfW} ${-halfH+30}
+                        M${-halfW} ${-halfH+50} Q0 ${-halfH+60} ${halfW} ${-halfH+50}
+                        M${-halfW} ${-halfH+70} Q0 ${-halfH+80} ${halfW} ${-halfH+70}
+                        ${height > 100 ? `M${-halfW} ${-halfH+90} Q0 ${-halfH+100} ${halfW} ${-halfH+90}` : ''}
+                        `} 
+                     stroke="#713f12" 
+                     strokeWidth="2" 
+                     opacity="0.3" 
+                     fill="none" 
+                   />
+                   
+                   {/* Top/Bottom Couplings */}
+                   <rect x={-halfW-2} y={-halfH} width={width+4} height="12" rx="2" fill="#ca8a04" stroke="#713f12" />
+                   <rect x={-halfW-2} y={halfH-12} width={width+4} height="12" rx="2" fill="#ca8a04" stroke="#713f12" />
+
+                   {/* Label */}
+                   <text y="4" textAnchor="middle" fill="#451a03" fontSize="10" fontWeight="800" opacity="0.6">STATOR</text>
                 </g>
               );
             }
 
             if (tool.id === 'slotted_tag_bar') {
               return (
-                <g key={tool.id} transform={`translate(500 ${centerY})`}>
+                <g key={tool.id} transform={`translate(500 ${centerY})`} filter={`url(#${patternIdBase}-drop-shadow)`}>
                   <rect
                     x={-halfW}
                     y={-halfH}
                     width={width}
                     height={height}
-                    rx={Math.max(9, width * 0.16)}
-                    fill="#bae6fd"
-                    fillOpacity="0.92"
-                    stroke="#e0f2fe"
-                    strokeOpacity="0.84"
+                    rx="4"
+                    fill={`url(#${patternIdBase}-steely-blue)`}
+                    stroke="#0c4a6e"
+                     filter={`url(#${patternIdBase}-metal-shine)`}
                   />
-                  <rect
-                    x={-halfW + 6}
-                    y={-halfH + 6}
-                    width={width - 12}
-                    height={Math.max(height - 12, 10)}
-                    rx="8"
-                    fill={`url(#${slotPatternId})`}
-                  />
-                  <ellipse cx="0" cy={-halfH + 4} rx={Math.max(halfW - 5, 12)} ry="3.4" fill="#e0f2fe" fillOpacity="0.34" />
-                  <ellipse cx="0" cy={halfH - 4} rx={Math.max(halfW - 5, 12)} ry="3.4" fill="#bae6fd" fillOpacity="0.28" />
+                  {/* Slots */}
+                  {[...Array(6)].map((_, i) => (
+                    <g key={i} transform={`translate(0 ${-halfH + 16 + i * 12})`}>
+                       <rect x={-halfW + 8} y="0" width="10" height="6" rx="3" fill="#020617" filter={`url(#${patternIdBase}-inner-shadow)`} />
+                       <rect x={-5} y="0" width="10" height="6" rx="3" fill="#020617" filter={`url(#${patternIdBase}-inner-shadow)`} />
+                       <rect x={halfW - 18} y="0" width="10" height="6" rx="3" fill="#020617" filter={`url(#${patternIdBase}-inner-shadow)`} />
+                    </g>
+                  ))}
+                   <rect x={-halfW} y={halfH-8} width={width} height="8" fill="#0369a1" />
+                   <path d={`M${-halfW} ${halfH} L0 ${halfH+12} L${halfW} ${halfH} Z`} fill="#0369a1" />
                 </g>
               );
             }
 
             if (tool.id === 'wellfi_tool') {
+              return (
+                <g key={tool.id} transform={`translate(500 ${centerY})`} filter={`url(#${patternIdBase}-drop-shadow)`}>
+                   {/* Main Housing */}
+                  <rect
+                    x={-halfW}
+                    y={-halfH}
+                    width={width}
+                    height={height}
+                    rx="8"
+                    fill={`url(#${patternIdBase}-dark-composite)`}
+                    stroke="#334155"
+                    strokeWidth="1.5"
+                    filter={`url(#${patternIdBase}-metal-shine)`}
+                  />
+                  
+                  {/* Sensor Bands - Glowing */}
+                  <rect x={-halfW-2} y={-halfH + height*0.2} width={width+4} height="6" fill="#06b6d4" filter={`url(#${patternIdBase}-glow)`} />
+                  <rect x={-halfW-2} y={-halfH + height*0.5} width={width+4} height="6" fill="#06b6d4" filter={`url(#${patternIdBase}-glow)`} />
+                  <rect x={-halfW-2} y={-halfH + height*0.8} width={width+4} height="6" fill="#06b6d4" filter={`url(#${patternIdBase}-glow)`} />
+
+                  {/* Electronics Module Detail */}
+                  <rect 
+                    x={-width*0.3} 
+                    y={-halfH + 10} 
+                    width={width*0.6} 
+                    height={height - 20} 
+                    rx="4" 
+                    fill="#0f172a" 
+                    stroke="#38bdf8" 
+                    strokeOpacity="0.4"
+                    opacity="0.9" 
+                    filter={`url(#${patternIdBase}-inner-shadow)`}
+                  />
+
+                  {/* Animated Data Stream Elements inside the module */}
+                  <line 
+                    x1="0" y1={-halfH + 15} 
+                    x2="0" y2={halfH - 15} 
+                    stroke="#22d3ee" 
+                    strokeWidth="2" 
+                    strokeDasharray="4 8"
+                    style={{ animation: 'wellfi-data-stream 1.5s linear infinite' }}
+                  />
+                  {/* Blinking LEDs */}
+                  <circle cx={-width*0.15} cy={-halfH + 20} r="1.5" fill="#f43f5e" style={{ animation: 'wellfi-led-blink 1s steps(2, start) infinite' }} />
+                  <circle cx={-width*0.15} cy={-halfH + 26} r="1.5" fill="#10b981" style={{ animation: 'wellfi-led-blink 2.5s steps(2, start) infinite' }} />
+                  <circle cx={-width*0.15} cy={-halfH + 32} r="1.5" fill="#3b82f6" style={{ animation: 'wellfi-led-blink 0.8s steps(2, start) infinite' }} />
+                  
+                  {/* Glowing text label */}
+                  <g filter={`url(#${patternIdBase}-glow)`}>
+                    <text x="0" y="4" textAnchor="middle" fontSize="10" fontWeight="900" fill="#22d3ee" style={{ letterSpacing: '1px' }}>WELLFI</text>
+                  </g>
+                  <text x="0" y="4" textAnchor="middle" fontSize="10" fontWeight="900" fill="#ffffff" style={{ letterSpacing: '1px' }}>WELLFI</text>
+                </g>
+              );
+            }
+
+            if (tool.id === 'no_turn_tool') {
+               return (
+                <g key={tool.id} transform={`translate(500 ${centerY})`}>
+                  {/* Mandrel */}
+                  <rect
+                    x={-halfW + 10}
+                    y={-halfH}
+                    width={width - 20}
+                    height={height}
+                    rx="2"
+                    fill={`url(#${patternIdBase}-purple-steel)`}
+                    stroke="#1e1b4b"
+                  />
+                  
+                  {/* Fins / Anchors */}
+                  <path d={`M${-halfW+10} ${-halfH+10} L${-halfW-5} ${-halfH+20} L${-halfW-5} ${halfH-20} L${-halfW+10} ${halfH-10} Z`} fill="#4338ca" stroke="#312e81" />
+                  <path d={`M${halfW-10} ${-halfH+10} L${halfW+5} ${-halfH+20} L${halfW+5} ${halfH-20} L${halfW-10} ${halfH-10} Z`} fill="#4338ca" stroke="#312e81" />
+                  
+                  {/* Teeth on Fins */}
+                  <path d={`M${-halfW-5} ${-halfH+20} L${-halfW-8} ${-halfH+25} L${-halfW-5} ${-halfH+30}`} stroke="#818cf8" strokeWidth="2" fill="none" />
+                  <path d={`M${halfW+5} ${-halfH+20} L${halfW+8} ${-halfH+25} L${halfW+5} ${-halfH+30}`} stroke="#818cf8" strokeWidth="2" fill="none" />
+                </g>
+               )
+            }
+            
+             if (tool.id === 'collar') {
               return (
                 <g key={tool.id} transform={`translate(500 ${centerY})`}>
                   <rect
@@ -723,48 +1071,22 @@ function DownholeModel3DComponent({ well }: DownholeModel3DProps) {
                     y={-halfH}
                     width={width}
                     height={height}
-                    rx={Math.max(12, width * 0.18)}
-                    fill={`url(#${patternIdBase}-wellfi-grad)`}
-                    stroke="#a5f3fc"
-                    strokeOpacity="0.9"
+                    rx="2"
+                    fill={`url(#${patternIdBase}-rough-steel)`}
+                    stroke="#1e293b"
                   />
-                  <rect x={-halfW - 3} y={-halfH + 8} width={width + 6} height="8" rx="4" fill="#0e7490" fillOpacity="0.8" />
-                  <rect x={-halfW - 3} y={halfH - 16} width={width + 6} height="8" rx="4" fill="#0e7490" fillOpacity="0.8" />
-                  <rect
-                    x={-Math.max(width * 0.22, 16)}
-                    y={-Math.max(height * 0.14, 6)}
-                    width={Math.max(width * 0.44, 32)}
-                    height={Math.max(height * 0.28, 12)}
-                    rx="6"
-                    fill="#cffafe"
-                    fillOpacity="0.82"
-                    stroke="#67e8f9"
-                    strokeOpacity="0.72"
-                  />
-                  <text x="0" y="3" textAnchor="middle" fontSize="8" fontWeight="700" fill="#164e63">WF</text>
+                  {/* Thread/Joint Lines */}
+                  <line x1={-halfW} y1={-halfH+10} x2={halfW} y2={-halfH+10} stroke="#475569" strokeWidth="2" />
+                  <line x1={-halfW} y1={halfH-10} x2={halfW} y2={halfH-10} stroke="#475569" strokeWidth="2" />
+                  
+                  {/* Heavy Wall Indication */}
+                  <rect x={-halfW+6} y={-halfH} width="4" height={height} fill="#0f172a" opacity="0.3" />
+                  <rect x={halfW-10} y={-halfH} width="4" height={height} fill="#0f172a" opacity="0.3" />
                 </g>
               );
             }
 
-            return (
-              <g key={tool.id} transform={`translate(500 ${centerY})`}>
-                <rect
-                  x={-halfW}
-                  y={-halfH}
-                  width={width}
-                  height={height}
-                  rx={Math.max(10, width * 0.16)}
-                  fill={`url(#${patternIdBase}-noturn-grad)`}
-                  stroke="#ddd6fe"
-                  strokeOpacity="0.85"
-                />
-                <polygon points={`${-halfW},-11 ${-halfW - 16},-6 ${-halfW},0`} fill="#a5b4fc" fillOpacity="0.8" transform={`translate(0 ${-halfH * 0.22})`} />
-                <polygon points={`${-halfW},11 ${-halfW - 16},6 ${-halfW},0`} fill="#a5b4fc" fillOpacity="0.8" transform={`translate(0 ${halfH * 0.22})`} />
-                <polygon points={`${halfW},-11 ${halfW + 16},-6 ${halfW},0`} fill="#a5b4fc" fillOpacity="0.8" transform={`translate(0 ${-halfH * 0.22})`} />
-                <polygon points={`${halfW},11 ${halfW + 16},6 ${halfW},0`} fill="#a5b4fc" fillOpacity="0.8" transform={`translate(0 ${halfH * 0.22})`} />
-                <rect x={-Math.max(width * 0.36, 18)} y="-4" width={Math.max(width * 0.72, 36)} height="8" rx="4" fill="#c7d2fe" fillOpacity="0.52" />
-              </g>
-            );
+            return null; // Should not happen
           })}
 
           {cutawayBodies.map(({ tool, centerY, width }) => {
@@ -1014,8 +1336,17 @@ function DownholeModel3DComponent({ well }: DownholeModel3DProps) {
     <Card>
       <CardHeader className="pb-2 pt-3 px-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <CardTitle className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          <CardTitle className="text-sm font-semibold uppercase tracking-wide text-muted-foreground flex items-center gap-2">
             Downhole 3D View
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-6 w-6 text-slate-400 hover:text-slate-200 border-slate-700/50 hover:bg-slate-800"
+              onClick={() => setEditOpen(true)}
+              title="Edit Configuration"
+            >
+              <FileEdit className="h-3 w-3" />
+            </Button>
           </CardTitle>
           <div className="flex items-center gap-2">
             <div className="inline-flex h-8 items-center rounded-md border border-slate-700/70 bg-slate-900/70 p-0.5">
@@ -1090,7 +1421,9 @@ function DownholeModel3DComponent({ well }: DownholeModel3DProps) {
             ? 'Depths sourced from WellFi install notes.'
             : placement.depthSource === 'schematic'
               ? `Depths sourced from schematic: ${placement.sourceFile ?? 'Well profile PDF'}.`
-              : 'Depths estimated from formation profile. Add install depth tags or import schematic PDFs for exact placement.'}
+              : placement.depthSource === 'database'
+                ? 'Depths explicitly configured in database.'
+                : 'Depths estimated from formation profile. Add install depth tags, import schematic PDFs, or configure manually.'}
         </p>
       </CardContent>
 
@@ -1107,6 +1440,138 @@ function DownholeModel3DComponent({ well }: DownholeModel3DProps) {
           <div className="space-y-3">
             {sceneMode === 'cutaway' ? renderCutawayScene('h-[72vh]') : renderFocusedScene('h-[72vh]')}
           </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogContent className="max-w-2xl border-slate-700 bg-slate-950 text-slate-100">
+          <DialogHeader>
+            <DialogTitle>Edit Downhole Equipment</DialogTitle>
+            <DialogDescription>
+              Configure the exact top and bottom depths for each tool. These values will override schematic and estimated depths.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-6 py-4">
+            <div className="grid grid-cols-[1fr_120px_120px] gap-4 items-end">
+              <div className="text-sm font-medium text-slate-400 pb-2">Component</div>
+              <div className="text-sm font-medium text-slate-400 pb-2">Top Depth (m)</div>
+              <div className="text-sm font-medium text-slate-400 pb-2">Bottom Depth (m)</div>
+
+              <div className="flex items-center gap-2">
+                <div className="h-3 w-3 rounded-full bg-amber-400" />
+                <Label htmlFor="pump-top" className="text-slate-200">Stator / Pump</Label>
+              </div>
+              <Input
+                id="pump-top"
+                type="number"
+                step="0.01"
+                className="h-8 bg-slate-900 border-slate-700"
+                value={formData.pump_top_depth_m}
+                onChange={(e) => setFormData({ ...formData, pump_top_depth_m: e.target.value })}
+              />
+              <Input
+                id="pump-bottom"
+                type="number"
+                step="0.01"
+                className="h-8 bg-slate-900 border-slate-700"
+                value={formData.pump_bottom_depth_m}
+                onChange={(e) => setFormData({ ...formData, pump_bottom_depth_m: e.target.value })}
+              />
+
+              <div className="flex items-center gap-2">
+                <div className="h-3 w-3 rounded-full bg-sky-300" />
+                <Label htmlFor="stb-top" className="text-slate-200">Slotted Tag Bar</Label>
+              </div>
+              <Input
+                id="stb-top"
+                type="number"
+                step="0.01"
+                className="h-8 bg-slate-900 border-slate-700"
+                value={formData.slotted_tag_bar_top_depth_m}
+                onChange={(e) => setFormData({ ...formData, slotted_tag_bar_top_depth_m: e.target.value })}
+              />
+              <Input
+                id="stb-bottom"
+                type="number"
+                step="0.01"
+                className="h-8 bg-slate-900 border-slate-700"
+                value={formData.slotted_tag_bar_bottom_depth_m}
+                onChange={(e) => setFormData({ ...formData, slotted_tag_bar_bottom_depth_m: e.target.value })}
+              />
+
+              <div className="flex items-center gap-2">
+                <div className="h-3 w-3 rounded-full bg-gray-400" />
+                <Label htmlFor="wellfi-top" className="text-slate-200">WellFi Tool</Label>
+              </div>
+              <Input
+                id="wellfi-top"
+                type="number"
+                step="0.01"
+                className="h-8 bg-slate-900 border-slate-700"
+                value={formData.wellfi_tool_top_depth_m}
+                onChange={(e) => setFormData({ ...formData, wellfi_tool_top_depth_m: e.target.value })}
+              />
+              <Input
+                id="wellfi-bottom"
+                type="number"
+                step="0.01"
+                className="h-8 bg-slate-900 border-slate-700"
+                value={formData.wellfi_tool_bottom_depth_m}
+                onChange={(e) => setFormData({ ...formData, wellfi_tool_bottom_depth_m: e.target.value })}
+              />
+
+              <div className="flex items-center gap-2">
+                <div className="h-3 w-3 rounded-full bg-indigo-300" />
+                <Label htmlFor="noturn-top" className="text-slate-200">No Turn Tool</Label>
+              </div>
+              <Input
+                id="noturn-top"
+                type="number"
+                step="0.01"
+                className="h-8 bg-slate-900 border-slate-700"
+                value={formData.no_turn_tool_top_depth_m}
+                onChange={(e) => setFormData({ ...formData, no_turn_tool_top_depth_m: e.target.value })}
+              />
+              <Input
+                id="noturn-bottom"
+                type="number"
+                step="0.01"
+                className="h-8 bg-slate-900 border-slate-700"
+                value={formData.no_turn_tool_bottom_depth_m}
+                onChange={(e) => setFormData({ ...formData, no_turn_tool_bottom_depth_m: e.target.value })}
+              />
+
+              <div className="flex items-center gap-2">
+                <div className="h-3 w-3 rounded-full bg-slate-300" />
+                <Label htmlFor="collar-top" className="text-slate-200">Collar</Label>
+              </div>
+              <Input
+                id="collar-top"
+                type="number"
+                step="0.01"
+                className="h-8 bg-slate-900 border-slate-700"
+                value={formData.collar_top_depth_m}
+                onChange={(e) => setFormData({ ...formData, collar_top_depth_m: e.target.value })}
+              />
+              <Input
+                id="collar-bottom"
+                type="number"
+                step="0.01"
+                className="h-8 bg-slate-900 border-slate-700"
+                value={formData.collar_bottom_depth_m}
+                onChange={(e) => setFormData({ ...formData, collar_bottom_depth_m: e.target.value })}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="ghost">Cancel</Button>
+            </DialogClose>
+            <Button onClick={handleSaveConfiguration} disabled={isSaving}>
+              {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Save Changes
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </Card>

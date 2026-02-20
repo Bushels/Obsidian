@@ -55,10 +55,10 @@
     "wells_seeded": 211,
     "edge_functions": ["notify-pump-change"]
   },
-  "notes": "ALL 4 SESSIONS COMPLETE. Session 4: Edge Function notify-pump-change deployed via MCP (ACTIVE). agent-polish-ui created RiskBadge, MonthsBar, SparkLine, LoadingMap, EmptyState + CSS animations. agent-polish-mobile added mobile responsive layout (bottom sheet panels, filter FAB, loading states), wired UI primitives into RightPanel, increased mobile tap targets. Build passes with zero TS errors.",
+  "notes": "Sessions 1-8 COMPLETE. Session 8: Operational Status system (Watch/Warning/Well Down), RiskOverview dashboard, UWI search, map op-status overlays. 9 agents across 4 phases. Build passes with zero Session 8 TS errors.",
   "session_5": {
     "label": "Innovation + Perfection",
-    "status": "in_progress",
+    "status": "completed",
     "gate_requires": ["1", "2", "3", "4"],
     "agents": {
       "agent-innovation-p0": "completed"
@@ -70,5 +70,33 @@
       "command_palette": "Cmd+K instant well search with fuzzy matching, keyboard nav, recent wells",
       "keyboard_shortcuts": "Escape closes panels, ArrowUp/Down cycles wells with fly-to"
     }
+  },
+  "session_8": {
+    "label": "Engineer Experience & Operational Status",
+    "status": "completed",
+    "gate_requires": ["1", "2", "3", "4"],
+    "agents": {
+      "agent-db-s8": "completed",
+      "agent-data-s8": "completed",
+      "agent-ui-s8": "completed",
+      "agent-map-s8": "completed",
+      "agent-search-s8": "completed",
+      "agent-integrator-s8": "completed",
+      "agent-critic-s8": "completed",
+      "agent-tester-s8": "completed",
+      "agent-recorder-s8": "completed"
+    },
+    "started_at": "2026-02-19T00:00:00Z",
+    "completed_at": "2026-02-19T00:00:00Z",
+    "features": {
+      "operational_status": "Watch/Warning/Well Down system with Supabase persistence + real-time sync",
+      "risk_overview": "At-a-glance risk + op status dashboard in left sidebar",
+      "uwi_search": "Command palette searches by UWI, shows op status badges",
+      "map_overlays": "Parcel op-status fill layer + stroke cascade + legend",
+      "status_form": "3 toggle buttons + notes + pump change date range"
+    },
+    "files_created": 6,
+    "files_modified": 9,
+    "critic_fixes": 3
   }
 }

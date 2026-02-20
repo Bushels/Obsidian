@@ -1,12 +1,15 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { Well, MapFilters } from '@/types';
+import type { MapFilters } from '@/types';
+import type { WellEnriched } from '@/types/operationalStatus';
 import { useWells } from '@/hooks/useWells';
 import { useAuth } from '@/lib/auth';
 import WellMap from '@/components/map/WellMap';
 import FilterBar from '@/components/panels/FilterBar';
 import RightPanel from '@/components/panels/RightPanel';
 import UpcomingList from '@/components/panels/UpcomingList';
+import { RiskOverview } from '@/components/panels/RiskOverview';
+import { InventoryOverview } from '@/components/panels/InventoryOverview';
 import { LoadingMap } from '@/components/ui/LoadingMap';
 import { Badge } from '@/components/ui/badge';
 import { CommandPalette } from '@/components/ui/CommandPalette';
@@ -24,7 +27,7 @@ export default function MapPage() {
   const { data: wells = [], isLoading, error } = useWells();
   const { user, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
-  const [selectedWell, setSelectedWell] = useState<Well | null>(null);
+  const [selectedWell, setSelectedWell] = useState<WellEnriched | null>(null);
   const [filters, setFilters] = useState<MapFilters>(DEFAULT_FILTERS);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [flyTarget, setFlyTarget] = useState<{ lng: number; lat: number } | null>(null);
@@ -35,7 +38,7 @@ export default function MapPage() {
     navigate('/');
   }, [signOut, navigate]);
 
-  const handleWellClick = useCallback((well: Well) => {
+  const handleWellClick = useCallback((well: WellEnriched) => {
     setSelectedWell(well);
     setFlyTarget(null);
   }, []);
@@ -55,7 +58,7 @@ export default function MapPage() {
     setSelectedWell(null);
   }, []);
 
-  const handleCommandPaletteSelect = useCallback((well: Well) => {
+  const handleCommandPaletteSelect = useCallback((well: WellEnriched) => {
     setSelectedWell(well);
     setFlyTarget({ lng: well.lon, lat: well.lat });
   }, []);
@@ -174,14 +177,14 @@ export default function MapPage() {
       : `${wells.length} Wells \u00b7 Clearwater & Bluesky`;
 
   return (
-    <div className="h-screen flex flex-col bg-gray-950 text-white">
-      {/* Header Bar */}
-      <header className="h-14 flex items-center justify-between px-4 border-b border-gray-800 bg-gray-900 shrink-0">
+    <div className="h-screen flex flex-col bg-[#06090F] text-white">
+      {/* Header Bar — glassmorphic */}
+      <header className="h-14 flex items-center justify-between px-4 border-b border-white/[0.06] bg-[#080D16]/90 backdrop-blur-xl shrink-0">
         <div className="flex items-center gap-2">
           {/* Mobile filter toggle */}
           <button
             type="button"
-            className="lg:hidden flex items-center justify-center h-8 w-8 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
+            className="lg:hidden flex items-center justify-center h-8 w-8 rounded-md text-gray-500 hover:text-white hover:bg-white/[0.06] transition-all duration-200"
             onClick={() => setMobileFilterOpen(true)}
             aria-label="Open filters"
           >
@@ -192,8 +195,8 @@ export default function MapPage() {
             </svg>
           </button>
 
-          <div className="h-6 w-6 rounded-md bg-wellfi-cyan/20 flex items-center justify-center">
-            <div className="h-3 w-3 rounded-sm bg-wellfi-cyan" />
+          <div className="h-6 w-6 rounded-md bg-wellfi-cyan/10 border border-wellfi-cyan/20 flex items-center justify-center">
+            <div className="h-3 w-3 rounded-sm bg-wellfi-cyan/80" />
           </div>
           <h1 className="text-lg font-bold tracking-tight">
             Well<span className="text-wellfi-cyan">Fi</span>
@@ -203,7 +206,7 @@ export default function MapPage() {
           {/* Search button — opens command palette */}
           <button
             type="button"
-            className="flex items-center gap-2 h-8 px-3 rounded-lg bg-gray-800 border border-gray-700 text-sm text-gray-400 hover:text-white hover:border-gray-600 transition-colors"
+            className="flex items-center gap-2 h-8 px-3 rounded-lg bg-white/[0.04] border border-white/[0.08] text-sm text-gray-500 hover:text-gray-300 hover:bg-white/[0.06] transition-all duration-200"
             onClick={() => setCommandPaletteOpen(true)}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -211,7 +214,7 @@ export default function MapPage() {
               <path d="m21 21-4.3-4.3" />
             </svg>
             <span className="hidden md:inline">Search wells</span>
-            <kbd className="hidden md:inline-flex items-center gap-0.5 ml-1 px-1.5 py-0.5 text-[10px] font-medium text-gray-500 bg-gray-900 border border-gray-700 rounded">
+            <kbd className="hidden md:inline-flex items-center gap-0.5 ml-1 px-1.5 py-0.5 text-[10px] font-medium text-gray-600 bg-white/[0.04] border border-white/[0.08] rounded">
               <span className="text-xs">{navigator.platform?.includes('Mac') ? '\u2318' : 'Ctrl+'}</span>K
             </kbd>
           </button>
@@ -225,7 +228,7 @@ export default function MapPage() {
               <button
                 type="button"
                 onClick={handleSignOut}
-                className="text-xs text-gray-400 hover:text-white transition-colors px-2 py-1 rounded hover:bg-gray-800"
+                className="text-xs text-gray-500 hover:text-white transition-all duration-200 px-2 py-1 rounded hover:bg-white/[0.06]"
               >
                 Sign Out
               </button>
@@ -237,15 +240,21 @@ export default function MapPage() {
       {/* Main Content */}
       <div className="flex flex-1 overflow-hidden relative">
         {/* Left Sidebar: FilterBar + UpcomingList (desktop only) */}
-        <aside className="hidden lg:flex w-72 shrink-0 flex-col border-r border-gray-800 bg-gray-900 overflow-y-auto">
+        <aside className="hidden lg:flex w-72 shrink-0 flex-col border-r border-white/[0.06] bg-[#080D16]/80 backdrop-blur-xl overflow-y-auto">
+          <div className="p-3 pb-0">
+            <RiskOverview wells={filteredWells} />
+          </div>
+          <div className="px-3 pt-2">
+            <InventoryOverview />
+          </div>
           <FilterBar filters={filters} onChange={setFilters} wells={wells} />
-          <div className="border-t border-gray-800 p-4">
+          <div className="border-t border-white/[0.06] p-4">
             <UpcomingList onWellClick={handleUpcomingWellClick} />
           </div>
         </aside>
 
         {/* Center: WellMap */}
-        <main className="flex-1 relative bg-gray-950">
+        <main className="flex-1 relative bg-[#06090F]">
           {isLoading ? (
             <LoadingMap />
           ) : error ? (
@@ -266,14 +275,14 @@ export default function MapPage() {
         </main>
 
         {/* Right Sidebar: RightPanel (desktop only) */}
-        <aside className="hidden lg:flex w-96 shrink-0 flex-col border-l border-gray-800 bg-gray-900">
+        <aside className="hidden lg:flex w-96 shrink-0 flex-col border-l border-white/[0.06] bg-[#080D16]/80 backdrop-blur-xl">
           <RightPanel well={selectedWell} onClose={handleClosePanel} canEdit={isAdmin} />
         </aside>
 
         {/* Mobile filter FAB */}
         <button
           type="button"
-          className="lg:hidden fixed bottom-6 left-4 z-30 flex items-center gap-2 rounded-full bg-gray-800 border border-gray-700 px-4 py-3 text-sm font-medium text-white shadow-lg hover:bg-gray-700 transition-colors"
+          className="lg:hidden fixed bottom-6 left-4 z-30 flex items-center gap-2 rounded-full bg-[#080D16]/90 backdrop-blur-xl border border-white/[0.08] px-4 py-3 text-sm font-medium text-white shadow-2xl shadow-black/40 hover:bg-[#0D1420] transition-all duration-200"
           onClick={() => setMobileFilterOpen(true)}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -296,13 +305,13 @@ export default function MapPage() {
               className="absolute inset-0 bg-black/50"
               onClick={() => setMobileFilterOpen(false)}
             />
-            <div className="absolute bottom-0 left-0 right-0 max-h-[70vh] overflow-y-auto bg-gray-900 rounded-t-2xl border-t border-gray-700 animate-slide-up safe-area-bottom">
+            <div className="absolute bottom-0 left-0 right-0 max-h-[70vh] overflow-y-auto bg-[#080D16]/95 backdrop-blur-xl rounded-t-2xl border-t border-white/[0.08] animate-slide-up safe-area-bottom">
               <div className="drag-handle" />
-              <div className="sticky top-0 z-10 bg-gray-900 px-4 py-3 border-b border-gray-800 flex items-center justify-between">
+              <div className="sticky top-0 z-10 bg-[#080D16]/95 backdrop-blur-xl px-4 py-3 border-b border-white/[0.06] flex items-center justify-between">
                 <span className="text-sm font-semibold">Filters</span>
                 <button
                   type="button"
-                  className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
+                  className="flex h-8 w-8 items-center justify-center rounded-md text-gray-500 hover:text-white hover:bg-white/[0.06] transition-all duration-200"
                   onClick={() => setMobileFilterOpen(false)}
                   aria-label="Close filters"
                 >
@@ -310,7 +319,7 @@ export default function MapPage() {
                 </button>
               </div>
               <FilterBar filters={filters} onChange={setFilters} wells={wells} />
-              <div className="p-4 border-t border-gray-800">
+              <div className="p-4 border-t border-white/[0.06]">
                 <UpcomingList onWellClick={(wellId) => {
                   handleUpcomingWellClick(wellId);
                   setMobileFilterOpen(false);
@@ -327,7 +336,7 @@ export default function MapPage() {
               className="absolute inset-0 bg-black/50"
               onClick={handleClosePanel}
             />
-            <div className="absolute bottom-0 left-0 right-0 max-h-[70vh] overflow-y-auto bg-gray-900 rounded-t-2xl border-t border-gray-700 animate-slide-up safe-area-bottom">
+            <div className="absolute bottom-0 left-0 right-0 max-h-[70vh] overflow-y-auto bg-[#080D16]/95 backdrop-blur-xl rounded-t-2xl border-t border-white/[0.08] animate-slide-up safe-area-bottom">
               <RightPanel well={selectedWell} onClose={handleClosePanel} canEdit={isAdmin} />
             </div>
           </div>

@@ -58,6 +58,21 @@ export default function LoginPage() {
   const [ready, setReady] = useState(false);
   const wells = useCounter(211, 2400);
 
+  // 3D Tilt State
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    // Calculate rotation: max 10 degrees to keep it subtle and premium
+    setTilt({ x: -(y / rect.height) * 10, y: (x / rect.width) * 10 });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 });
+  };
+
   useEffect(() => {
     requestAnimationFrame(() => setReady(true));
   }, []);
@@ -221,18 +236,34 @@ export default function LoginPage() {
         </div>
 
         {/* ════ Right: Sign-in ════ */}
-        <div className="lg:w-[460px] xl:w-[500px] flex items-center justify-center px-6 py-12 lg:py-0 lg:pr-12 xl:pr-20">
+        <div 
+          className="lg:w-[460px] xl:w-[500px] flex items-center justify-center px-6 py-12 lg:py-0 lg:pr-12 xl:pr-20"
+          style={{ perspective: '1200px' }}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
           <div
             className={`w-full max-w-[380px] transition-all duration-1000 ease-out ${
               ready ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
             }`}
             style={{ transitionDelay: ready ? '200ms' : '0ms' }}
           >
-            {/* Card */}
-            <div className="login-card-glow rounded-2xl">
-              <div className="relative bg-[#0a0f1e]/90 backdrop-blur-2xl rounded-2xl border border-gray-800/40 p-7 sm:p-8">
-                {/* Header */}
-                <div className="mb-7">
+            {/* 3D Tilt Wrapper */}
+            <div 
+              style={{ 
+                transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+                transformStyle: 'preserve-3d'
+              }}
+              className="spring-transition"
+            >
+              {/* Card */}
+              <div className="login-card-glow rounded-2xl">
+                <div 
+                  className="relative glass-panel rounded-2xl p-7 sm:p-8"
+                  style={{ transform: 'translateZ(20px)' }}
+                >
+                  {/* Header */}
+                  <div className="mb-7">
                   <div className="flex items-center gap-2 mb-3">
                     <div className="w-0.5 h-3.5 rounded-full bg-wellfi-cyan" />
                     <span className="text-[9px] tracking-[0.3em] uppercase text-gray-500 font-mono">
@@ -261,7 +292,7 @@ export default function LoginPage() {
                       type="text"
                       placeholder="username"
                       autoComplete="username"
-                      className="h-10 bg-[#0d1320]/80 border-gray-800/60 text-white placeholder:text-gray-700 focus-visible:ring-1 focus-visible:ring-wellfi-cyan/40 focus-visible:border-wellfi-cyan/20 rounded-lg text-sm font-mono"
+                      className="h-10 bg-[#0d1320]/80 border-gray-800/60 text-white placeholder:text-gray-700 focus-visible:ring-1 focus-visible:ring-wellfi-cyan/40 focus-visible:border-wellfi-cyan/40 rounded-lg text-sm font-mono transition-all duration-300"
                       {...register('username')}
                     />
                     {errors.username && (
@@ -283,7 +314,7 @@ export default function LoginPage() {
                       type="password"
                       placeholder="••••••••"
                       autoComplete="current-password"
-                      className="h-10 bg-[#0d1320]/80 border-gray-800/60 text-white placeholder:text-gray-700 focus-visible:ring-1 focus-visible:ring-wellfi-cyan/40 focus-visible:border-wellfi-cyan/20 rounded-lg text-sm font-mono"
+                      className="h-10 bg-[#0d1320]/80 border-gray-800/60 text-white placeholder:text-gray-700 focus-visible:ring-1 focus-visible:ring-wellfi-cyan/40 focus-visible:border-wellfi-cyan/40 rounded-lg text-sm font-mono transition-all duration-300"
                       {...register('password')}
                     />
                     {errors.password && (
@@ -341,6 +372,7 @@ export default function LoginPage() {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>

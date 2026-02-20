@@ -1,0 +1,2247 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100152408419W500",
+        "well_name": "PENN WEST PEACE RIVER 15-24-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.86673689999999,
+              56.281466800000004
+            ],
+            [
+              -116.8379369,
+              56.281466800000004
+            ],
+            [
+              -116.8379369,
+              56.2958668
+            ],
+            [
+              -116.86673689999999,
+              56.2958668
+            ],
+            [
+              -116.86673689999999,
+              56.281466800000004
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100162408419W500",
+        "well_name": "PENN WEST PEACE RIVER 16-24-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.86625289999999,
+              56.281466800000004
+            ],
+            [
+              -116.8374529,
+              56.281466800000004
+            ],
+            [
+              -116.8374529,
+              56.2958668
+            ],
+            [
+              -116.86625289999999,
+              56.2958668
+            ],
+            [
+              -116.86625289999999,
+              56.281466800000004
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "104152408419W500",
+        "well_name": "PENN WEST 103 PEACE RIV 15-24-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.86657489999999,
+              56.281466800000004
+            ],
+            [
+              -116.8377749,
+              56.281466800000004
+            ],
+            [
+              -116.8377749,
+              56.2958668
+            ],
+            [
+              -116.86657489999999,
+              56.2958668
+            ],
+            [
+              -116.86657489999999,
+              56.281466800000004
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100142408419W500",
+        "well_name": "PENN WEST PEACE RIVER 14-24-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.877164,
+              56.2814697
+            ],
+            [
+              -116.848364,
+              56.2814697
+            ],
+            [
+              -116.848364,
+              56.2958697
+            ],
+            [
+              -116.877164,
+              56.2958697
+            ],
+            [
+              -116.877164,
+              56.2814697
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "102142408419W500",
+        "well_name": "PENN WEST 102 PEACE RIV 6-24-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.877325,
+              56.2814697
+            ],
+            [
+              -116.84852500000001,
+              56.2814697
+            ],
+            [
+              -116.84852500000001,
+              56.2958697
+            ],
+            [
+              -116.877325,
+              56.2958697
+            ],
+            [
+              -116.877325,
+              56.2814697
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "103142408419W500",
+        "well_name": "PENN WEST 103 PEACE RIV 14-24-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.87748599999999,
+              56.2814697
+            ],
+            [
+              -116.848686,
+              56.2814697
+            ],
+            [
+              -116.848686,
+              56.2958697
+            ],
+            [
+              -116.87748599999999,
+              56.2958697
+            ],
+            [
+              -116.87748599999999,
+              56.2814697
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "1W0132408419W500",
+        "well_name": "PENN WEST 103 PEACE RIV 13-24-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.88700209999999,
+              56.281471700000004
+            ],
+            [
+              -116.8582021,
+              56.281471700000004
+            ],
+            [
+              -116.8582021,
+              56.2958717
+            ],
+            [
+              -116.88700209999999,
+              56.2958717
+            ],
+            [
+              -116.88700209999999,
+              56.281471700000004
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100162608415W500",
+        "well_name": "PENN WEST SLAVE 16-26-84-15"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.25993179999999,
+              56.2960751
+            ],
+            [
+              -116.2311318,
+              56.2960751
+            ],
+            [
+              -116.2311318,
+              56.3104751
+            ],
+            [
+              -116.25993179999999,
+              56.3104751
+            ],
+            [
+              -116.25993179999999,
+              56.2960751
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100092608415W507",
+        "well_name": "PENN WEST 102 SLAVE 9-26-84-15"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.2600808,
+              56.2960821
+            ],
+            [
+              -116.23128080000001,
+              56.2960821
+            ],
+            [
+              -116.23128080000001,
+              56.310482099999994
+            ],
+            [
+              -116.2600808,
+              56.310482099999994
+            ],
+            [
+              -116.2600808,
+              56.2960821
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100132708415W508",
+        "well_name": "PENN WEST HZ SLAVE 13-27-84-15"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.29503389999999,
+              56.2956422
+            ],
+            [
+              -116.2662339,
+              56.2956422
+            ],
+            [
+              -116.2662339,
+              56.3100422
+            ],
+            [
+              -116.29503389999999,
+              56.3100422
+            ],
+            [
+              -116.29503389999999,
+              56.2956422
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "104162408419W508",
+        "well_name": "PENN WEST 104 HZ PEACE R 16-24-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.8658159,
+              56.2817668
+            ],
+            [
+              -116.83701590000001,
+              56.2817668
+            ],
+            [
+              -116.83701590000001,
+              56.296166799999995
+            ],
+            [
+              -116.8658159,
+              56.296166799999995
+            ],
+            [
+              -116.8658159,
+              56.2817668
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "104052508419W509",
+        "well_name": "PENN WEST 103 HZ PEACE R 5-25-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.8593145,
+              56.305443700000005
+            ],
+            [
+              -116.8305145,
+              56.305443700000005
+            ],
+            [
+              -116.8305145,
+              56.3198437
+            ],
+            [
+              -116.8593145,
+              56.3198437
+            ],
+            [
+              -116.8593145,
+              56.305443700000005
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "106132508419W508",
+        "well_name": "PENN WEST 105 HZ PEACE R 13-25-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.8593145,
+              56.305533700000005
+            ],
+            [
+              -116.8305145,
+              56.305533700000005
+            ],
+            [
+              -116.8305145,
+              56.3199337
+            ],
+            [
+              -116.8593145,
+              56.3199337
+            ],
+            [
+              -116.8593145,
+              56.305533700000005
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "105132408419W509",
+        "well_name": "PENN WEST 104 HZ PEACE R 13-24-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.8857331,
+              56.281471700000004
+            ],
+            [
+              -116.8569331,
+              56.281471700000004
+            ],
+            [
+              -116.8569331,
+              56.2958717
+            ],
+            [
+              -116.8857331,
+              56.2958717
+            ],
+            [
+              -116.8857331,
+              56.281471700000004
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "104162308419W508",
+        "well_name": "PENN WEST 104 PEACE RIVE 16-23-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.8858941,
+              56.281471700000004
+            ],
+            [
+              -116.85709410000001,
+              56.281471700000004
+            ],
+            [
+              -116.85709410000001,
+              56.2958717
+            ],
+            [
+              -116.8858941,
+              56.2958717
+            ],
+            [
+              -116.8858941,
+              56.281471700000004
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "105142408419W509",
+        "well_name": "PENN WEST 105 HZ PEACE R 14-24-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.876519,
+              56.281468700000005
+            ],
+            [
+              -116.84771900000001,
+              56.281468700000005
+            ],
+            [
+              -116.84771900000001,
+              56.2958687
+            ],
+            [
+              -116.876519,
+              56.2958687
+            ],
+            [
+              -116.876519,
+              56.281468700000005
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "106042508419W508",
+        "well_name": "PENN WEST 106 PEACE RIVER 4-25-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.8593136,
+              56.299916700000004
+            ],
+            [
+              -116.8305136,
+              56.299916700000004
+            ],
+            [
+              -116.8305136,
+              56.3143167
+            ],
+            [
+              -116.8593136,
+              56.3143167
+            ],
+            [
+              -116.8593136,
+              56.299916700000004
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "104132308419W509",
+        "well_name": "PENN WEST HZ PEACE RVR 13-23-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.90896839999999,
+              56.2819377
+            ],
+            [
+              -116.8801684,
+              56.2819377
+            ],
+            [
+              -116.8801684,
+              56.296337699999995
+            ],
+            [
+              -116.90896839999999,
+              56.296337699999995
+            ],
+            [
+              -116.90896839999999,
+              56.2819377
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "104152308419W509",
+        "well_name": "PENN WEST 102 HZ PEACE R 15-23-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.8980533,
+              56.281116700000005
+            ],
+            [
+              -116.86925330000001,
+              56.281116700000005
+            ],
+            [
+              -116.86925330000001,
+              56.2955167
+            ],
+            [
+              -116.8980533,
+              56.2955167
+            ],
+            [
+              -116.8980533,
+              56.281116700000005
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "102032308419W509",
+        "well_name": "PENN WEST HZ PEACE RVR 3-23-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.89821529999999,
+              56.2811157
+            ],
+            [
+              -116.8694153,
+              56.2811157
+            ],
+            [
+              -116.8694153,
+              56.295515699999996
+            ],
+            [
+              -116.89821529999999,
+              56.295515699999996
+            ],
+            [
+              -116.89821529999999,
+              56.2811157
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "105132508419W509",
+        "well_name": "PENN WEST HZ PEACE RVR 13-25-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.8593145,
+              56.3065647
+            ],
+            [
+              -116.8305145,
+              56.3065647
+            ],
+            [
+              -116.8305145,
+              56.3209647
+            ],
+            [
+              -116.8593145,
+              56.3209647
+            ],
+            [
+              -116.8593145,
+              56.3065647
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100162208419W509",
+        "well_name": "PENN WEST 102 HZ PEACE R 16-22-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.9221116,
+              56.2814847
+            ],
+            [
+              -116.8933116,
+              56.2814847
+            ],
+            [
+              -116.8933116,
+              56.295884699999995
+            ],
+            [
+              -116.9221116,
+              56.295884699999995
+            ],
+            [
+              -116.9221116,
+              56.2814847
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "102163008318W509",
+        "well_name": "PENN WEST 102 HZ 16-30-83-18"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.83539739999999,
+              56.210614
+            ],
+            [
+              -116.8065974,
+              56.210614
+            ],
+            [
+              -116.8065974,
+              56.225013999999994
+            ],
+            [
+              -116.83539739999999,
+              56.225013999999994
+            ],
+            [
+              -116.83539739999999,
+              56.210614
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100043008318W509",
+        "well_name": "PENN WEST HZ PEACE R 4-30-83-18"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.8355174,
+              56.210615000000004
+            ],
+            [
+              -116.80671740000001,
+              56.210615000000004
+            ],
+            [
+              -116.80671740000001,
+              56.225015
+            ],
+            [
+              -116.8355174,
+              56.225015
+            ],
+            [
+              -116.8355174,
+              56.210615000000004
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100142208419W509",
+        "well_name": "PENN WEST HZ PEACE R 14-22-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.9225986,
+              56.280404700000005
+            ],
+            [
+              -116.89379860000001,
+              56.280404700000005
+            ],
+            [
+              -116.89379860000001,
+              56.2948047
+            ],
+            [
+              -116.9225986,
+              56.2948047
+            ],
+            [
+              -116.9225986,
+              56.280404700000005
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100162908318W509",
+        "well_name": "PENN WEST PEACE RIVER 16-29-83-18"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.78172359999999,
+              56.222007000000005
+            ],
+            [
+              -116.7529236,
+              56.222007000000005
+            ],
+            [
+              -116.7529236,
+              56.236407
+            ],
+            [
+              -116.78172359999999,
+              56.236407
+            ],
+            [
+              -116.78172359999999,
+              56.222007000000005
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "103133408318W509",
+        "well_name": "PENN WEST PEACE RIVER 13-34-83-18"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.7813206,
+              56.222007000000005
+            ],
+            [
+              -116.75252060000001,
+              56.222007000000005
+            ],
+            [
+              -116.75252060000001,
+              56.236407
+            ],
+            [
+              -116.7813206,
+              56.236407
+            ],
+            [
+              -116.7813206,
+              56.222007000000005
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100092908318W509",
+        "well_name": "PENN WEST PEACE RIVER 9-29-83-18"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.78091859999999,
+              56.222007000000005
+            ],
+            [
+              -116.7521186,
+              56.222007000000005
+            ],
+            [
+              -116.7521186,
+              56.236407
+            ],
+            [
+              -116.78091859999999,
+              56.236407
+            ],
+            [
+              -116.78091859999999,
+              56.222007000000005
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100163408318W509",
+        "well_name": "OBE HZ PEACE RIVER 16-34-83-18"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.77385149999999,
+              56.222331000000004
+            ],
+            [
+              -116.7450515,
+              56.222331000000004
+            ],
+            [
+              -116.7450515,
+              56.236731
+            ],
+            [
+              -116.77385149999999,
+              56.236731
+            ],
+            [
+              -116.77385149999999,
+              56.222331000000004
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "103143408318W509",
+        "well_name": "OBE 102 HZ PEACE R 14-34-83-18"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.77465649999999,
+              56.222333000000006
+            ],
+            [
+              -116.7458565,
+              56.222333000000006
+            ],
+            [
+              -116.7458565,
+              56.236733
+            ],
+            [
+              -116.77465649999999,
+              56.236733
+            ],
+            [
+              -116.77465649999999,
+              56.222333000000006
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "102143408318W509",
+        "well_name": "PENN WEST 102 HZ PEACE R 14-34-83-18"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.7742545,
+              56.222332
+            ],
+            [
+              -116.74545450000001,
+              56.222332
+            ],
+            [
+              -116.74545450000001,
+              56.236731999999996
+            ],
+            [
+              -116.7742545,
+              56.236731999999996
+            ],
+            [
+              -116.7742545,
+              56.222332
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100013208319W509",
+        "well_name": "OBE 100 HZ HARMONV 1-32-83-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.9796097,
+              56.2411071
+            ],
+            [
+              -116.95080970000001,
+              56.2411071
+            ],
+            [
+              -116.95080970000001,
+              56.255507099999996
+            ],
+            [
+              -116.9796097,
+              56.255507099999996
+            ],
+            [
+              -116.9796097,
+              56.2411071
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100023208319W509",
+        "well_name": "OBE 100 HZ HARMONV 2-32-83-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.9800137,
+              56.2411061
+            ],
+            [
+              -116.95121370000001,
+              56.2411061
+            ],
+            [
+              -116.95121370000001,
+              56.2555061
+            ],
+            [
+              -116.9800137,
+              56.2555061
+            ],
+            [
+              -116.9800137,
+              56.2411061
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100033208319W509",
+        "well_name": "OBE 100 HZ HARMONV 3-32-83-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.9803967,
+              56.2411061
+            ],
+            [
+              -116.95159670000001,
+              56.2411061
+            ],
+            [
+              -116.95159670000001,
+              56.2555061
+            ],
+            [
+              -116.9803967,
+              56.2555061
+            ],
+            [
+              -116.9803967,
+              56.2411061
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100043208319W509",
+        "well_name": "OBE 100 HZ HARMONV 4-32-83-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.98080069999999,
+              56.2411061
+            ],
+            [
+              -116.9520007,
+              56.2411061
+            ],
+            [
+              -116.9520007,
+              56.2555061
+            ],
+            [
+              -116.98080069999999,
+              56.2555061
+            ],
+            [
+              -116.98080069999999,
+              56.2411061
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100010608013W502",
+        "well_name": "WOODCOTE OIL HZ DAWSON 1-6-80-13"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -115.9964529,
+              55.889911000000005
+            ],
+            [
+              -115.9676529,
+              55.889911000000005
+            ],
+            [
+              -115.9676529,
+              55.904311
+            ],
+            [
+              -115.9964529,
+              55.904311
+            ],
+            [
+              -115.9964529,
+              55.889911000000005
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "103162908115W506",
+        "well_name": "OBE 103 HZ DAWSON 16-29-81-15"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.3418703,
+              56.048250800000005
+            ],
+            [
+              -116.3130703,
+              56.048250800000005
+            ],
+            [
+              -116.3130703,
+              56.0626508
+            ],
+            [
+              -116.3418703,
+              56.0626508
+            ],
+            [
+              -116.3418703,
+              56.048250800000005
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "104092908115W506",
+        "well_name": "OBE 104 HZ DAWSON 9-29-81-15"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.3417533,
+              56.047988800000006
+            ],
+            [
+              -116.3129533,
+              56.047988800000006
+            ],
+            [
+              -116.3129533,
+              56.0623888
+            ],
+            [
+              -116.3417533,
+              56.0623888
+            ],
+            [
+              -116.3417533,
+              56.047988800000006
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100040908013W500",
+        "well_name": "WOODCOTE OIL HZ GIFT 4-9-80-13"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -115.9962319,
+              55.889941
+            ],
+            [
+              -115.96743190000001,
+              55.889941
+            ],
+            [
+              -115.96743190000001,
+              55.904340999999995
+            ],
+            [
+              -115.9962319,
+              55.904340999999995
+            ],
+            [
+              -115.9962319,
+              55.889941
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100120407815W502",
+        "well_name": "WOODCOTE OIL HZ PEAVINE 12-4-78-15"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.26057229999999,
+              55.7258579
+            ],
+            [
+              -116.2317723,
+              55.7258579
+            ],
+            [
+              -116.2317723,
+              55.740257899999996
+            ],
+            [
+              -116.26057229999999,
+              55.740257899999996
+            ],
+            [
+              -116.26057229999999,
+              55.7258579
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100121507815W500",
+        "well_name": "WOODCOTE OIL HZ PEAVINE 12-15-78-15"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.2329468,
+              55.7555479
+            ],
+            [
+              -116.2041468,
+              55.7555479
+            ],
+            [
+              -116.2041468,
+              55.7699479
+            ],
+            [
+              -116.2329468,
+              55.7699479
+            ],
+            [
+              -116.2329468,
+              55.7555479
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "102022008316W509",
+        "well_name": "OBE 102 HZ 2-20-83-16"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.4992973,
+              56.2101679
+            ],
+            [
+              -116.4704973,
+              56.2101679
+            ],
+            [
+              -116.4704973,
+              56.2245679
+            ],
+            [
+              -116.4992973,
+              56.2245679
+            ],
+            [
+              -116.4992973,
+              56.2101679
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100101508013W500",
+        "well_name": "WOODCOTE OIL HZ SEAL 10-15-80-13"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -115.9567702,
+              55.946913
+            ],
+            [
+              -115.9279702,
+              55.946913
+            ],
+            [
+              -115.9279702,
+              55.961313
+            ],
+            [
+              -115.9567702,
+              55.961313
+            ],
+            [
+              -115.9567702,
+              55.946913
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100081808013W500",
+        "well_name": "WOODCOTE OIL HZ SEAL 8-18-80-13"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -115.9936894,
+              55.927968
+            ],
+            [
+              -115.9648894,
+              55.927968
+            ],
+            [
+              -115.9648894,
+              55.942367999999995
+            ],
+            [
+              -115.9936894,
+              55.942367999999995
+            ],
+            [
+              -115.9936894,
+              55.927968
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100040908012W500",
+        "well_name": "WOODCOTE OIL HZ SEAL 4-9-80-12"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -115.8134644,
+              55.904269
+            ],
+            [
+              -115.78466440000001,
+              55.904269
+            ],
+            [
+              -115.78466440000001,
+              55.918668999999994
+            ],
+            [
+              -115.8134644,
+              55.918668999999994
+            ],
+            [
+              -115.8134644,
+              55.904269
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "102132208419W509",
+        "well_name": "OBE 102 HZ 13-22-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.9374309,
+              56.2795787
+            ],
+            [
+              -116.9086309,
+              56.2795787
+            ],
+            [
+              -116.9086309,
+              56.2939787
+            ],
+            [
+              -116.9374309,
+              56.2939787
+            ],
+            [
+              -116.9374309,
+              56.2795787
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "103132208419W509",
+        "well_name": "OBE 103 HZ 13-22-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.9374309,
+              56.2797587
+            ],
+            [
+              -116.9086309,
+              56.2797587
+            ],
+            [
+              -116.9086309,
+              56.2941587
+            ],
+            [
+              -116.9374309,
+              56.2941587
+            ],
+            [
+              -116.9374309,
+              56.2797587
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "102162108419W509",
+        "well_name": "OBE 102 HZ 16-21-84-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.93775389999999,
+              56.2795787
+            ],
+            [
+              -116.9089539,
+              56.2795787
+            ],
+            [
+              -116.9089539,
+              56.2939787
+            ],
+            [
+              -116.93775389999999,
+              56.2939787
+            ],
+            [
+              -116.93775389999999,
+              56.2795787
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100161208317W509",
+        "well_name": "OBE 100 HZ 16-12-83-17"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.55235139999999,
+              56.164549
+            ],
+            [
+              -116.5235514,
+              56.164549
+            ],
+            [
+              -116.5235514,
+              56.178948999999996
+            ],
+            [
+              -116.55235139999999,
+              56.178948999999996
+            ],
+            [
+              -116.55235139999999,
+              56.164549
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100151208317W509",
+        "well_name": "OBE 100 HZ 15-12-83-17"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.5526294,
+              56.164640000000006
+            ],
+            [
+              -116.52382940000001,
+              56.164640000000006
+            ],
+            [
+              -116.52382940000001,
+              56.17904
+            ],
+            [
+              -116.5526294,
+              56.17904
+            ],
+            [
+              -116.5526294,
+              56.164640000000006
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100160608316W509",
+        "well_name": "OBE 100 HZ 16-6-83-16"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.55251539999999,
+              56.164394
+            ],
+            [
+              -116.5237154,
+              56.164394
+            ],
+            [
+              -116.5237154,
+              56.178793999999996
+            ],
+            [
+              -116.55251539999999,
+              56.178793999999996
+            ],
+            [
+              -116.55251539999999,
+              56.164394
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100090608316W509",
+        "well_name": "OBE 100 HZ 9-6-83-16"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.5527924,
+              56.164485
+            ],
+            [
+              -116.52399240000001,
+              56.164485
+            ],
+            [
+              -116.52399240000001,
+              56.178884999999994
+            ],
+            [
+              -116.5527924,
+              56.178884999999994
+            ],
+            [
+              -116.5527924,
+              56.164485
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100083108319W509",
+        "well_name": "OBE 100 HZ HARMONV 8-31-83-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -117.025027,
+              56.2349073
+            ],
+            [
+              -116.996227,
+              56.2349073
+            ],
+            [
+              -116.996227,
+              56.2493073
+            ],
+            [
+              -117.025027,
+              56.2493073
+            ],
+            [
+              -117.025027,
+              56.2349073
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100093108319W509",
+        "well_name": "OBE 100 HZ HARMONV 9-31-83-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -117.02488199999999,
+              56.2350683
+            ],
+            [
+              -116.996082,
+              56.2350683
+            ],
+            [
+              -116.996082,
+              56.2494683
+            ],
+            [
+              -117.02488199999999,
+              56.2494683
+            ],
+            [
+              -117.02488199999999,
+              56.2350683
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100103108319W509",
+        "well_name": "OBE 102 HZ 10-31-83-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -117.025171,
+              56.235148300000006
+            ],
+            [
+              -116.99637100000001,
+              56.235148300000006
+            ],
+            [
+              -116.99637100000001,
+              56.2495483
+            ],
+            [
+              -117.025171,
+              56.2495483
+            ],
+            [
+              -117.025171,
+              56.235148300000006
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "102041108114W509",
+        "well_name": "OBE 102 HZ DAWSON 4-11-81-14"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.101828,
+              56.008861800000005
+            ],
+            [
+              -116.07302800000001,
+              56.008861800000005
+            ],
+            [
+              -116.07302800000001,
+              56.0232618
+            ],
+            [
+              -116.101828,
+              56.0232618
+            ],
+            [
+              -116.101828,
+              56.008861800000005
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100011608114W509",
+        "well_name": "OBE 100 HZ DAWSON 1-16-81-14"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.101861,
+              56.008727900000004
+            ],
+            [
+              -116.07306100000001,
+              56.008727900000004
+            ],
+            [
+              -116.07306100000001,
+              56.0231279
+            ],
+            [
+              -116.101861,
+              56.0231279
+            ],
+            [
+              -116.101861,
+              56.008727900000004
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100160808218W509",
+        "well_name": "OBE 100 HZ HARMONV 16-8-82-18"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.7603458,
+              56.0919394
+            ],
+            [
+              -116.7315458,
+              56.0919394
+            ],
+            [
+              -116.7315458,
+              56.106339399999996
+            ],
+            [
+              -116.7603458,
+              56.106339399999996
+            ],
+            [
+              -116.7603458,
+              56.0919394
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "agreement_type": "SYNTHETIC",
+        "synthetic": true,
+        "zone_description": "Auto-generated",
+        "land_ids": "",
+        "well_id": "100161008218W509",
+        "well_name": "OBE 100 HZ HARMONV 16-10-82-18"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -116.7600238,
+              56.091938400000004
+            ],
+            [
+              -116.73122380000001,
+              56.091938400000004
+            ],
+            [
+              -116.73122380000001,
+              56.1063384
+            ],
+            [
+              -116.7600238,
+              56.1063384
+            ],
+            [
+              -116.7600238,
+              56.091938400000004
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
