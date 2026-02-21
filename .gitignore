@@ -20,7 +20,8 @@ out/
 *.swo
 
 # Project specific
-.claude/
+.claude/*
+!.claude/settings.json
 wellfi-app/node_modules/
 wellfi-app/dist/
 wellfi-app/.env
