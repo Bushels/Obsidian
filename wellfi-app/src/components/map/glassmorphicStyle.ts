@@ -85,7 +85,7 @@ export const GLASS_COLORS = {
   healthEmptyFillHover: 'rgba(34, 197, 94, 0.05)',
   healthEmptyStrokeHover: 'rgba(255, 255, 255, 0.12)',
 
-  // Operational status overlay colors
+  // Operational status overlay colors (flat fill — legacy)
   opWatchFill: 'rgba(59, 130, 246, 0.12)',
   opWatchStroke: 'rgba(59, 130, 246, 0.45)',
   opWatchGlow: 'rgba(59, 130, 246, 0.18)',
@@ -101,6 +101,22 @@ export const GLASS_COLORS = {
   opWellDownGlow: 'rgba(239, 68, 68, 0.22)',
   opWellDownFillHover: 'rgba(239, 68, 68, 0.28)',
   opWellDownStrokeHover: 'rgba(239, 68, 68, 0.80)',
+
+  // 3D Extrusion colors — green hue based on pumping ratio (field health)
+  extrusionHealthy: '#4ADE80',   // bright emerald — all wells pumping
+  extrusionMid: '#166534',       // muted green — half pumping
+  extrusionDown: '#374151',      // gray-700 — all wells down
+  extrusionHealthyHover: '#86EFAC', // brighter on hover
+  extrusionMidHover: '#22C55E',
+  extrusionDownHover: '#4B5563',
+
+  // Op status extrusion overrides (solid colors for 3D blocks)
+  opWatchExtrusion: '#3B82F6',          // blue — watch
+  opWarningExtrusion: '#EAB308',        // yellow — warning
+  opWellDownExtrusion: '#EF4444',       // red — well down
+  opWatchExtrusionHover: '#60A5FA',     // lighter blue
+  opWarningExtrusionHover: '#FACC15',   // lighter yellow
+  opWellDownExtrusionHover: '#F87171',  // lighter red
 } as const;
 
 // ─── Fog + Atmosphere ────────────────────────────────────────────────────────
@@ -108,7 +124,7 @@ export const GLASS_COLORS = {
 export const GLASS_FOG_CONFIG: FogSpecification = {
   color: '#060910',
   'high-color': '#081020',
-  'horizon-blend': 0.06,
+  'horizon-blend': 0.12,       // increased for atmospheric depth cues
   'space-color': '#030508',
   'star-intensity': 0.15,
 };
@@ -132,12 +148,20 @@ export function applyGlassmorphicStyle(map: MapboxMap): void {
   // 1. Atmosphere — deep void + faint stars
   map.setFog(GLASS_FOG_CONFIG);
 
-  // 2. Gentle terrain
+  // 2. Terrain — increased exaggeration for 3D block context
   if (map.getSource('mapbox-dem')) {
-    map.setTerrain({ source: 'mapbox-dem', exaggeration: 0.8 });
+    map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
   }
 
-  // 3. Override base layer colors
+  // 3. 3D lighting for fill-extrusion layers
+  map.setLight({
+    anchor: 'viewport',
+    color: '#ffffff',
+    intensity: 0.25,
+    position: [1.5, 210, 30],
+  });
+
+  // 4. Override base layer colors
   overrideBaseLayers(map);
 }
 

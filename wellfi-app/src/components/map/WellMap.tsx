@@ -4,7 +4,7 @@ import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import type { MapFilters } from '@/types';
 import type { WellEnriched } from '@/types/operationalStatus';
-import { wellsToGeoJSON, HEALTH_LEVEL_LABELS } from '@/lib/mapUtils';
+import { wellsToGeoJSON } from '@/lib/mapUtils';
 import { generateDLSGrid } from '@/lib/dlsGrid';
 import { addHealthHeatmap, setHealthHeatmapVisibility } from './HealthHeatmap';
 import { applyGlassmorphicStyle, GLASS_COLORS } from './glassmorphicStyle';
@@ -104,6 +104,8 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
       style: STYLES[mapStyle],
       center: [-116.63, 56.16],
       zoom: 9,
+      pitch: 45,
+      bearing: -12,
       attributionControl: false,
     });
 
@@ -398,12 +400,14 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
     for (let i = 0; i < orphanWells.length; i++) {
       const well = orphanWells[i];
       const featureId = baseIndex + i;
+      const isPumping = well.well_status === 'Pumping' || well.well_status === 'Operating';
       healthMap.set(featureId, {
         wellCount: 1,
         wellFiCount: well.wellfi_device != null && well.wellfi_device.is_active ? 1 : 0,
         avgMonthsRunning: well.months_running ?? 0,
         maxMonthsRunning: well.months_running ?? 0,
         hasUpcomingChange: well.active_pump_change != null,
+        pumpingRatio: isPumping ? 1 : 0,
         wells: [{
           id: well.id,
           name: well.name,
@@ -412,6 +416,7 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
           hasWellfi: well.wellfi_device != null && well.wellfi_device.is_active,
           riskLevel: well.risk_level,
           formation: well.formation,
+          wellStatus: well.well_status,
         }],
       });
     }
@@ -754,34 +759,40 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
       {/* Legend — bottom left — glassmorphic (pushed up on mobile to avoid FAB overlap) */}
       <div className="absolute bottom-20 lg:bottom-6 left-3 z-10 bg-[#080D16]/90 backdrop-blur-xl border border-white/[0.06] rounded-xl p-3 text-xs shadow-2xl shadow-black/30">
         <div className="text-gray-500 font-semibold mb-2 text-[10px] uppercase tracking-wider">
-          Health Zones
+          Block Height = Pump Run Time
         </div>
         <div className="flex flex-col gap-1.5">
-          {HEALTH_LEVEL_LABELS.filter(item => item.level < 10).map((item) => (
-            <div key={item.label} className="flex items-center gap-2">
-              <span
-                className="inline-block w-2.5 h-2.5 rounded-sm shrink-0"
-                style={{ background: item.color }}
-              />
-              <span className="text-gray-400">{item.label}</span>
-            </div>
-          ))}
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: '#4ADE80' }} />
+            <span className="text-gray-400">Healthy (all pumping)</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: '#166534' }} />
+            <span className="text-gray-400">Partial (some down)</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: '#374151' }} />
+            <span className="text-gray-400">All down</span>
+          </div>
         </div>
         {/* Operational status legend */}
         <div className="border-t border-white/[0.06] mt-2.5 pt-2.5">
           <div className="text-gray-500 font-semibold mb-2 text-[10px] uppercase tracking-wider">
-            Operational
+            Engineer Status
           </div>
           <div className="flex flex-col gap-1.5">
-            {HEALTH_LEVEL_LABELS.filter(item => item.level >= 10).map((item) => (
-              <div key={item.label} className="flex items-center gap-2">
-                <span
-                  className="inline-block w-2.5 h-2.5 rounded-full shrink-0"
-                  style={{ background: item.color }}
-                />
-                <span className="text-gray-400">{item.label}</span>
-              </div>
-            ))}
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-2.5 h-2.5 rounded-full shrink-0" style={{ background: '#3B82F6' }} />
+              <span className="text-gray-400">Watch</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-2.5 h-2.5 rounded-full shrink-0" style={{ background: '#EAB308' }} />
+              <span className="text-gray-400">Warning</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-2.5 h-2.5 rounded-full shrink-0" style={{ background: '#EF4444' }} />
+              <span className="text-gray-400">Well Down</span>
+            </div>
           </div>
         </div>
       </div>
