@@ -28,6 +28,7 @@ export interface ParcelWellSummary {
   hasWellfi: boolean;
   riskLevel: string | null;
   formation: string | null;
+  wellStatus: string | null;
 }
 
 export interface ParcelHealth {
@@ -36,6 +37,7 @@ export interface ParcelHealth {
   avgMonthsRunning: number;
   maxMonthsRunning: number;
   hasUpcomingChange: boolean;
+  pumpingRatio: number; // 0-1: fraction of wells actively pumping (field health indicator)
   wells: ParcelWellSummary[];
 }
 
@@ -199,6 +201,7 @@ export function assignWellsToParcels(
       hasWellfi: well.wellfi_device != null && well.wellfi_device.is_active,
       riskLevel: well.risk_level,
       formation: well.formation,
+      wellStatus: well.well_status,
     };
 
     const existing = healthMap.get(matchedIndex);
@@ -211,6 +214,7 @@ export function assignWellsToParcels(
         avgMonthsRunning: 0,
         maxMonthsRunning: 0,
         hasUpcomingChange: false,
+        pumpingRatio: 0,
         wells: [summary],
       });
     }
@@ -235,6 +239,13 @@ export function assignWellsToParcels(
       const originalWell = wells.find((ow) => ow.id === w.id);
       return originalWell?.active_pump_change != null;
     });
+
+    // Pumping ratio: fraction of wells actively pumping (field health indicator)
+    const pumpingCount = parcelWells.filter(
+      (w) => w.wellStatus === 'Pumping' || w.wellStatus === 'Operating',
+    ).length;
+    health.pumpingRatio =
+      parcelWells.length > 0 ? pumpingCount / parcelWells.length : 0;
   }
 
   return { healthMap, orphanWells };

@@ -1,14 +1,16 @@
 /**
- * ParcelLayers — Health-colored parcel visualization layers
+ * ParcelLayers — 3D extruded parcel health visualization
  *
  * Central module for all parcel health visualization on the map.
  * Uses feature-state driven colors so health updates are instant
  * (no GeoJSON reload required — just setFeatureState calls).
  *
+ * 3D extrusion: height = max pump run time in block,
+ * green hue = pumping ratio (field health), op status overrides to blue/yellow/red.
+ *
  * Layers (bottom to top):
- *   1. Glow — wide blurred line for ambient color bleed
- *   2. Fill — translucent health-colored polygon fill
- *   2b. Op Status Fill — semi-transparent operational status overlay
+ *   1. Glow — wide blurred line for ambient color bleed at ground level
+ *   2. Extrusion — 3D fill-extrusion with health color + height
  *   3. Line — crisp stroke border (prioritizes op_status when present)
  *   4. Labels — symbol layer on centroids showing well count + avg months
  */
@@ -24,13 +26,18 @@ export type { ParcelHealth } from '@/lib/parcelHealth';
 const PARCEL_SOURCE = 'parcel-health-source';
 const PARCEL_CENTROIDS_SOURCE = 'parcel-centroids-source';
 const PARCEL_GLOW = 'parcel-health-glow';
-const PARCEL_FILL = 'parcel-health-fill';
-const PARCEL_OP_STATUS_FILL = 'parcel-op-status-fill';
+const PARCEL_EXTRUSION = 'parcel-health-extrusion';
 const PARCEL_LINE = 'parcel-health-line';
 const PARCEL_LABELS = 'parcel-labels';
 
-const ALL_LAYERS = [PARCEL_LABELS, PARCEL_LINE, PARCEL_OP_STATUS_FILL, PARCEL_FILL, PARCEL_GLOW];
+const ALL_LAYERS = [PARCEL_LABELS, PARCEL_LINE, PARCEL_EXTRUSION, PARCEL_GLOW];
 const ALL_SOURCES = [PARCEL_CENTROIDS_SOURCE, PARCEL_SOURCE];
+
+// ─── 3D Extrusion constants ─────────────────────────────────────────────
+/** Meters of extrusion height per month of pump run time */
+const METERS_PER_MONTH = 300;
+/** Minimum extrusion height (meters) for parcels with wells but 0 months */
+const MIN_EXTRUSION_HEIGHT = 50;
 
 // ─── Health Level Classification ──────────────────────────────────────────
 
@@ -54,136 +61,140 @@ export function healthLevel(h: ParcelHealth): number {
   return 6; // gray / no data
 }
 
-// ─── Color expressions (feature-state driven) ────────────────────────────
+// ─── 3D Extrusion color expressions (feature-state driven) ──────────────
 
 /**
- * Build a match expression that reads feature-state health_level
- * and returns the corresponding color from GLASS_COLORS.
+ * Extrusion color: green hue based on pumping_ratio (field health),
+ * overridden by operational status colors (blue/yellow/red) when present.
  *
- * Uses coalesce to handle null feature-state (before it's set).
+ * pumping_ratio 1.0 = bright emerald (all wells pumping, healthy)
+ * pumping_ratio 0.5 = muted green (half pumping)
+ * pumping_ratio 0.0 = dim gray (all down)
+ *
+ * Op status overrides: watch=blue, warning=yellow, well_down=red
  */
-function healthFillColorExpr(): unknown[] {
+function extrusionColorExpr(): unknown[] {
   return [
-    'match',
-    ['coalesce', ['feature-state', 'health_level'], 0],
-    0, GLASS_COLORS.healthEmptyFill,
-    1, GLASS_COLORS.healthGreenFill,
-    2, GLASS_COLORS.healthYellowFill,
-    3, GLASS_COLORS.healthOrangeFill,
-    4, GLASS_COLORS.healthRedFill,
-    5, GLASS_COLORS.healthPurpleFill,
-    6, GLASS_COLORS.healthGrayFill,
-    GLASS_COLORS.healthEmptyFill, // fallback
+    'case',
+    // Op status overrides (highest priority)
+    ['==', ['coalesce', ['feature-state', 'op_status'], 0], 3],
+    GLASS_COLORS.opWellDownExtrusion,     // red
+    ['==', ['coalesce', ['feature-state', 'op_status'], 0], 2],
+    GLASS_COLORS.opWarningExtrusion,      // yellow
+    ['==', ['coalesce', ['feature-state', 'op_status'], 0], 1],
+    GLASS_COLORS.opWatchExtrusion,        // blue
+    // Default: green hue interpolated by pumping ratio
+    [
+      'interpolate', ['linear'],
+      ['coalesce', ['feature-state', 'pumping_ratio'], 0],
+      0,   GLASS_COLORS.extrusionDown,    // dim gray (all down)
+      0.5, GLASS_COLORS.extrusionMid,     // muted green (half pumping)
+      1.0, GLASS_COLORS.extrusionHealthy, // bright emerald (all pumping)
+    ],
   ];
 }
 
-function healthFillHoverColorExpr(): unknown[] {
+/**
+ * Hover variant of extrusion color: brighter versions.
+ */
+function extrusionColorHoverExpr(): unknown[] {
   return [
-    'match',
-    ['coalesce', ['feature-state', 'health_level'], 0],
-    0, GLASS_COLORS.healthEmptyFillHover,
-    1, GLASS_COLORS.healthGreenFillHover,
-    2, GLASS_COLORS.healthYellowFillHover,
-    3, GLASS_COLORS.healthOrangeFillHover,
-    4, GLASS_COLORS.healthRedFillHover,
-    5, GLASS_COLORS.healthPurpleFillHover,
-    6, GLASS_COLORS.healthGrayFillHover,
-    GLASS_COLORS.healthEmptyFillHover, // fallback
+    'case',
+    ['==', ['coalesce', ['feature-state', 'op_status'], 0], 3],
+    GLASS_COLORS.opWellDownExtrusionHover,
+    ['==', ['coalesce', ['feature-state', 'op_status'], 0], 2],
+    GLASS_COLORS.opWarningExtrusionHover,
+    ['==', ['coalesce', ['feature-state', 'op_status'], 0], 1],
+    GLASS_COLORS.opWatchExtrusionHover,
+    [
+      'interpolate', ['linear'],
+      ['coalesce', ['feature-state', 'pumping_ratio'], 0],
+      0,   GLASS_COLORS.extrusionDownHover,
+      0.5, GLASS_COLORS.extrusionMidHover,
+      1.0, GLASS_COLORS.extrusionHealthyHover,
+    ],
   ];
 }
+
+/**
+ * Extrusion height: driven by max_months feature-state.
+ * Returns meters — scaled by METERS_PER_MONTH.
+ */
+function extrusionHeightExpr(): unknown[] {
+  return [
+    'max',
+    ['*', ['coalesce', ['feature-state', 'max_months'], 0], METERS_PER_MONTH],
+    // Parcels with wells get minimum height so they're visible
+    [
+      'case',
+      ['>', ['coalesce', ['feature-state', 'well_count'], 0], 0],
+      MIN_EXTRUSION_HEIGHT,
+      0,
+    ],
+  ];
+}
+
+// ─── Stroke color expressions (ground-level border lines) ───────────────
 
 function healthStrokeColorExpr(): unknown[] {
   return [
-    'match',
-    ['coalesce', ['feature-state', 'health_level'], 0],
-    0, GLASS_COLORS.healthEmptyStroke,
-    1, GLASS_COLORS.healthGreenStroke,
-    2, GLASS_COLORS.healthYellowStroke,
-    3, GLASS_COLORS.healthOrangeStroke,
-    4, GLASS_COLORS.healthRedStroke,
-    5, GLASS_COLORS.healthPurpleStroke,
-    6, GLASS_COLORS.healthGrayStroke,
-    GLASS_COLORS.healthEmptyStroke, // fallback
+    'case',
+    // Op status stroke takes priority
+    ['==', ['coalesce', ['feature-state', 'op_status'], 0], 3],
+    GLASS_COLORS.opWellDownStroke,
+    ['==', ['coalesce', ['feature-state', 'op_status'], 0], 2],
+    GLASS_COLORS.opWarningStroke,
+    ['==', ['coalesce', ['feature-state', 'op_status'], 0], 1],
+    GLASS_COLORS.opWatchStroke,
+    // Default: subtle white stroke scaled by pumping ratio
+    [
+      'interpolate', ['linear'],
+      ['coalesce', ['feature-state', 'pumping_ratio'], 0],
+      0,   'rgba(255, 255, 255, 0.06)',
+      0.5, 'rgba(255, 255, 255, 0.12)',
+      1.0, 'rgba(255, 255, 255, 0.20)',
+    ],
   ];
 }
 
 function healthStrokeHoverColorExpr(): unknown[] {
   return [
-    'match',
-    ['coalesce', ['feature-state', 'health_level'], 0],
-    0, GLASS_COLORS.healthEmptyStrokeHover,
-    1, GLASS_COLORS.healthGreenStrokeHover,
-    2, GLASS_COLORS.healthYellowStrokeHover,
-    3, GLASS_COLORS.healthOrangeStrokeHover,
-    4, GLASS_COLORS.healthRedStrokeHover,
-    5, GLASS_COLORS.healthPurpleStrokeHover,
-    6, GLASS_COLORS.healthGrayStrokeHover,
-    GLASS_COLORS.healthEmptyStrokeHover, // fallback
+    'case',
+    ['==', ['coalesce', ['feature-state', 'op_status'], 0], 3],
+    GLASS_COLORS.opWellDownStrokeHover,
+    ['==', ['coalesce', ['feature-state', 'op_status'], 0], 2],
+    GLASS_COLORS.opWarningStrokeHover,
+    ['==', ['coalesce', ['feature-state', 'op_status'], 0], 1],
+    GLASS_COLORS.opWatchStrokeHover,
+    [
+      'interpolate', ['linear'],
+      ['coalesce', ['feature-state', 'pumping_ratio'], 0],
+      0,   'rgba(255, 255, 255, 0.15)',
+      0.5, 'rgba(255, 255, 255, 0.30)',
+      1.0, 'rgba(255, 255, 255, 0.45)',
+    ],
   ];
 }
-
-function healthGlowColorExpr(): unknown[] {
-  return [
-    'match',
-    ['coalesce', ['feature-state', 'health_level'], 0],
-    0, GLASS_COLORS.healthEmptyGlow,
-    1, GLASS_COLORS.healthGreenGlow,
-    2, GLASS_COLORS.healthYellowGlow,
-    3, GLASS_COLORS.healthOrangeGlow,
-    4, GLASS_COLORS.healthRedGlow,
-    5, GLASS_COLORS.healthPurpleGlow,
-    6, GLASS_COLORS.healthGrayGlow,
-    GLASS_COLORS.healthEmptyGlow, // fallback
-  ];
-}
-
-// ─── Operational status color expressions (feature-state driven) ─────────
 
 /**
- * Op status fill color: transparent when no status, colored overlay otherwise.
- * Reads feature-state `op_status` (0=none, 1=watch, 2=warning, 3=well_down).
+ * Glow color: green hue from pumping ratio, overridden by op status.
  */
-function opStatusFillColorExpr(): unknown[] {
+function glowColorExpr(): unknown[] {
   return [
-    'match',
-    ['coalesce', ['feature-state', 'op_status'], 0],
-    1, GLASS_COLORS.opWatchFill,
-    2, GLASS_COLORS.opWarningFill,
-    3, GLASS_COLORS.opWellDownFill,
-    'rgba(0,0,0,0)', // fallback — transparent (no status)
-  ];
-}
-
-function opStatusFillHoverColorExpr(): unknown[] {
-  return [
-    'match',
-    ['coalesce', ['feature-state', 'op_status'], 0],
-    1, GLASS_COLORS.opWatchFillHover,
-    2, GLASS_COLORS.opWarningFillHover,
-    3, GLASS_COLORS.opWellDownFillHover,
-    'rgba(0,0,0,0)', // fallback — transparent
-  ];
-}
-
-function opStatusStrokeColorExpr(): unknown[] {
-  return [
-    'match',
-    ['coalesce', ['feature-state', 'op_status'], 0],
-    1, GLASS_COLORS.opWatchStroke,
-    2, GLASS_COLORS.opWarningStroke,
-    3, GLASS_COLORS.opWellDownStroke,
-    'rgba(0,0,0,0)', // fallback
-  ];
-}
-
-function opStatusStrokeHoverColorExpr(): unknown[] {
-  return [
-    'match',
-    ['coalesce', ['feature-state', 'op_status'], 0],
-    1, GLASS_COLORS.opWatchStrokeHover,
-    2, GLASS_COLORS.opWarningStrokeHover,
-    3, GLASS_COLORS.opWellDownStrokeHover,
-    'rgba(0,0,0,0)', // fallback
+    'case',
+    ['==', ['coalesce', ['feature-state', 'op_status'], 0], 3],
+    GLASS_COLORS.opWellDownGlow,
+    ['==', ['coalesce', ['feature-state', 'op_status'], 0], 2],
+    GLASS_COLORS.opWarningGlow,
+    ['==', ['coalesce', ['feature-state', 'op_status'], 0], 1],
+    GLASS_COLORS.opWatchGlow,
+    [
+      'interpolate', ['linear'],
+      ['coalesce', ['feature-state', 'pumping_ratio'], 0],
+      0,   'rgba(107, 114, 128, 0.04)',
+      0.5, 'rgba(34, 197, 94, 0.08)',
+      1.0, 'rgba(74, 222, 128, 0.12)',
+    ],
   ];
 }
 
@@ -219,7 +230,7 @@ export function addParcelLayers(
     });
   }
 
-  // ── 1. Glow layer (wide blurred line for ambient color bleed) ──
+  // ── 1. Glow layer (wide blurred line for ambient color bleed at ground level) ──
   if (!map.getLayer(PARCEL_GLOW)) {
     map.addLayer(
       {
@@ -227,7 +238,7 @@ export function addParcelLayers(
         type: 'line',
         source: PARCEL_SOURCE,
         paint: {
-          'line-color': healthGlowColorExpr() as unknown as mapboxgl.Expression,
+          'line-color': glowColorExpr() as unknown as mapboxgl.Expression,
           'line-width': 8,
           'line-blur': 6,
           'line-opacity': 0.6,
@@ -238,51 +249,31 @@ export function addParcelLayers(
     );
   }
 
-  // ── 2. Fill layer (translucent health-colored fill) ──
-  if (!map.getLayer(PARCEL_FILL)) {
+  // ── 2. 3D Extrusion layer (height = max pump months, color = field health / op status) ──
+  if (!map.getLayer(PARCEL_EXTRUSION)) {
     map.addLayer(
       {
-        id: PARCEL_FILL,
-        type: 'fill',
+        id: PARCEL_EXTRUSION,
+        type: 'fill-extrusion',
         source: PARCEL_SOURCE,
         paint: {
-          'fill-color': [
+          'fill-extrusion-color': [
             'case',
             ['boolean', ['feature-state', 'hover'], false],
-            healthFillHoverColorExpr(),
-            healthFillColorExpr(),
+            extrusionColorHoverExpr(),
+            extrusionColorExpr(),
           ] as unknown as mapboxgl.Expression,
-          'fill-opacity': 1,
-          'fill-opacity-transition': { duration: 300, delay: 0 },
+          'fill-extrusion-height': extrusionHeightExpr() as unknown as number,
+          'fill-extrusion-base': 0,
+          'fill-extrusion-opacity': 0.75,
+          'fill-extrusion-opacity-transition': { duration: 300, delay: 0 },
         },
       },
       PARCEL_GLOW,
     );
   }
 
-  // ── 2b. Op status overlay fill (semi-transparent operational status) ──
-  if (!map.getLayer(PARCEL_OP_STATUS_FILL)) {
-    map.addLayer(
-      {
-        id: PARCEL_OP_STATUS_FILL,
-        type: 'fill',
-        source: PARCEL_SOURCE,
-        paint: {
-          'fill-color': [
-            'case',
-            ['boolean', ['feature-state', 'hover'], false],
-            opStatusFillHoverColorExpr(),
-            opStatusFillColorExpr(),
-          ] as unknown as mapboxgl.Expression,
-          'fill-opacity': 1,
-          'fill-opacity-transition': { duration: 300, delay: 0 },
-        },
-      },
-      PARCEL_GLOW,
-    );
-  }
-
-  // ── 3. Stroke layer (crisp border line — prioritizes op_status when present) ──
+  // ── 3. Stroke layer (crisp ground-level border) ──
   if (!map.getLayer(PARCEL_LINE)) {
     map.addLayer(
       {
@@ -292,16 +283,6 @@ export function addParcelLayers(
         paint: {
           'line-color': [
             'case',
-            // Op status hover takes priority when present
-            ['all',
-              ['boolean', ['feature-state', 'hover'], false],
-              ['>', ['coalesce', ['feature-state', 'op_status'], 0], 0],
-            ],
-            opStatusStrokeHoverColorExpr(),
-            // Op status normal takes priority when present
-            ['>', ['coalesce', ['feature-state', 'op_status'], 0], 0],
-            opStatusStrokeColorExpr(),
-            // Otherwise fall back to health hover / normal
             ['boolean', ['feature-state', 'hover'], false],
             healthStrokeHoverColorExpr(),
             healthStrokeColorExpr(),
@@ -404,12 +385,28 @@ export function updateParcelHealth(
       ? parcelOpStatusLevel(health.wells, opStatusByWellId)
       : 0;
 
+    // Adjust pumping ratio: wells with well_down op status count as "not pumping"
+    let adjustedPumpingRatio = health.pumpingRatio;
+    if (opStatusByWellId && health.wellCount > 0) {
+      const downFromOpStatus = health.wells.filter(
+        (w) => opStatusByWellId.get(w.id) === 'well_down',
+      ).length;
+      const pumpingCount = health.wells.filter(
+        (w) =>
+          (w.wellStatus === 'Pumping' || w.wellStatus === 'Operating') &&
+          opStatusByWellId.get(w.id) !== 'well_down',
+      ).length;
+      adjustedPumpingRatio = pumpingCount / health.wellCount;
+    }
+
     map.setFeatureState(
       { source: PARCEL_SOURCE, id: featureId },
       {
         health_level: level,
         well_count: health.wellCount,
         avg_months: health.avgMonthsRunning,
+        max_months: health.maxMonthsRunning,
+        pumping_ratio: adjustedPumpingRatio,
         op_status: opStatus,
         // Don't overwrite hover — preserve it separately
       },
@@ -443,7 +440,7 @@ export function setupParcelInteraction(
   let activePopup: mapboxgl.Popup | null = null;
 
   // Hover: mousemove on fill layer → highlight parcel
-  map.on('mousemove', PARCEL_FILL, (e) => {
+  map.on('mousemove', PARCEL_EXTRUSION, (e) => {
     if (!e.features || e.features.length === 0) return;
 
     // Clear previous hover
@@ -464,7 +461,7 @@ export function setupParcelInteraction(
   });
 
   // Hover leave: reset hover state + cursor
-  map.on('mouseleave', PARCEL_FILL, () => {
+  map.on('mouseleave', PARCEL_EXTRUSION, () => {
     if (hoveredParcelId !== null) {
       map.setFeatureState(
         { source: PARCEL_SOURCE, id: hoveredParcelId },
@@ -476,7 +473,7 @@ export function setupParcelInteraction(
   });
 
   // Click: show parcel popup with health details and well list
-  map.on('click', PARCEL_FILL, (e) => {
+  map.on('click', PARCEL_EXTRUSION, (e) => {
     if (!e.features || e.features.length === 0) return;
 
     const feature = e.features[0];
