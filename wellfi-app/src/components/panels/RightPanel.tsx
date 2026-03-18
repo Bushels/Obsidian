@@ -14,12 +14,12 @@ import { MonthsBar } from '@/components/ui/MonthsBar';
 import { SparkLine } from '@/components/ui/SparkLine';
 import PumpChecklist from '@/components/forms/PumpChecklist';
 import OperationalStatusForm from '@/components/forms/OperationalStatusForm';
-import DownholeModel3D from '@/components/panels/DownholeModel3D';
 import type { WellEnriched } from '@/types/operationalStatus';
 import { DeviceAssignment } from '@/components/panels/DeviceAssignment';
-import { ComparablesWidget } from '@/components/panels/ComparablesWidget';
-
-
+const DownholeModel3D = lazy(() => import('@/components/panels/DownholeModel3D'));
+const ComparablesWidget = lazy(() =>
+  import('@/components/panels/ComparablesWidget').then((module) => ({ default: module.ComparablesWidget })),
+);
 const WellFiInstallForm = lazy(() => import('@/components/forms/WellFiInstallForm'));
 const PumpChangeForm = lazy(() => import('@/components/forms/PumpChangeForm'));
 
@@ -51,6 +51,18 @@ export default function RightPanel({ well, onClose, canEdit = false }: RightPane
   }
 
   const monthsRunning = well.months_running ?? 0;
+  const asyncCardFallback = (label: string) => (
+    <Card>
+      <CardHeader className="pb-2 pt-3 px-4">
+        <CardTitle className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          {label}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="px-4 pb-3 text-sm text-muted-foreground">
+        Loading {label.toLowerCase()}...
+      </CardContent>
+    </Card>
+  );
 
   return (
     <div className="flex h-full flex-col overflow-y-auto safe-area-bottom">
@@ -97,7 +109,7 @@ export default function RightPanel({ well, onClose, canEdit = false }: RightPane
         </Card>
 
         {/* Section 2 -- Operational Status (all authenticated users) */}
-        <OperationalStatusForm key={well.id} well={well} />
+        <OperationalStatusForm key={well.id} well={well} canEdit={canEdit} />
 
         {/* Section 2b -- Device Assignment */}
         <DeviceAssignment well={well} canEdit={canEdit} />
@@ -250,11 +262,17 @@ export default function RightPanel({ well, onClose, canEdit = false }: RightPane
             </CardContent>
           </Card>
         ) : (
-          canEdit ? <div className="mt-2"><ComparablesWidget onDeploy={() => setInstallDialogOpen(true)} /></div> : null
+          canEdit ? (
+            <Suspense fallback={asyncCardFallback('Deployment Projection')}>
+              <div className="mt-2"><ComparablesWidget onDeploy={() => setInstallDialogOpen(true)} /></div>
+            </Suspense>
+          ) : null
         )}
 
         {/* Section 5 -- Downhole View */}
-        <DownholeModel3D well={well} />
+        <Suspense fallback={asyncCardFallback('Downhole 3D View')}>
+          <DownholeModel3D well={well} />
+        </Suspense>
 
         {/* Section 6 -- Pump Change */}
         <Card>

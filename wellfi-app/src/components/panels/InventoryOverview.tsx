@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useInventoryCounts } from '@/hooks/useDeviceInventory';
-import { useAuth } from '@/lib/auth';
+import { useAuth } from '@/lib/auth-context';
 import { DEVICE_STATUS_CONFIG } from '@/types/deviceInventory';
 import type { DeviceStatus } from '@/types/deviceInventory';
 import { InventoryManagement } from '@/components/admin/InventoryManagement';
@@ -20,6 +20,10 @@ export function InventoryOverview({ className }: InventoryOverviewProps) {
   const counts = useInventoryCounts();
   const { isAdmin } = useAuth();
   const [manageOpen, setManageOpen] = useState(false);
+
+  if (!isAdmin) {
+    return null;
+  }
 
   return (
     <>

@@ -1,15 +1,18 @@
 import { useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/lib/auth-context';
 import type { Well, WellFiDevice, PumpChange } from '@/types';
 import type { OperationalStatus, WellEnriched } from '@/types/operationalStatus';
 import type { DeviceInventoryItem } from '@/types/deviceInventory';
 
 export function useWells() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const query = useQuery({
-    queryKey: ['wells'],
+    queryKey: ['wells', user?.id ?? 'anonymous', user?.operatorSlug ?? 'global'],
+    enabled: !!user,
     queryFn: async (): Promise<WellEnriched[]> => {
       // 1. Fetch all wells
       const { data: wells, error } = await supabase

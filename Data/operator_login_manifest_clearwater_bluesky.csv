@@ -1,0 +1,72 @@
+operator,suggested_username,login_email,role,target_segment,total_wells,oil_wells,clearwater_wells,bluesky_wells,onboarding_status,password_source
+Imperial Oil Resources Limited,imperial-oil-resources-limited,imperial-oil-resources-limited@wellfi.local,viewer,oil-target,4109,4031,4109,0,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Canadian Natural Resources Limited,canadian-natural-resources-limited,canadian-natural-resources-limited@wellfi.local,viewer,oil-target,1777,1094,981,796,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Spur Petroleum Ltd.,spur-petroleum-ltd,spur-petroleum-ltd@wellfi.local,viewer,oil-target,937,742,937,0,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Tamarack Valley Energy Ltd.,tamarack-valley-energy-ltd,tamarack-valley-energy-ltd@wellfi.local,viewer,oil-target,750,665,750,0,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Baytex Energy Ltd.,baytex-energy-ltd,baytex-energy-ltd@wellfi.local,viewer,oil-target,516,484,4,512,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Headwater Exploration Inc.,headwater-exploration-inc,headwater-exploration-inc@wellfi.local,viewer,oil-target,400,294,396,4,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Obsidian Energy Ltd.,obsidian-energy-ltd,obsidian-energy-ltd@wellfi.local,viewer,oil-target,216,204,6,210,ready,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Strathcona Resources Ltd.,strathcona-resources-ltd,strathcona-resources-ltd@wellfi.local,viewer,oil-target,384,191,384,0,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Rubellite Energy Inc.,rubellite-energy-inc,rubellite-energy-inc@wellfi.local,viewer,oil-target,124,122,123,1,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+IPC Canada Ltd.,ipc-canada-ltd,ipc-canada-ltd@wellfi.local,viewer,oil-target,80,47,9,71,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Clear North Energy Corp.,clear-north-energy-corp,clear-north-energy-corp@wellfi.local,viewer,oil-target,42,31,42,0,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Woodcote Inc.,woodcote-inc,woodcote-inc@wellfi.local,viewer,oil-target,14,14,14,0,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+ROK Resources Inc.,rok-resources-inc,rok-resources-inc@wellfi.local,viewer,oil-target,16,13,0,16,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Cardinal Energy Ltd.,cardinal-energy-ltd,cardinal-energy-ltd@wellfi.local,viewer,oil-target,15,13,13,2,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Saturn Oil & Gas Inc.,saturn-oil-and-gas-inc,saturn-oil-and-gas-inc@wellfi.local,viewer,oil-target,15,13,0,15,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Barrel Oil Corp.,barrel-oil-corp,barrel-oil-corp@wellfi.local,viewer,oil-target,40,8,0,40,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+ISH Energy Ltd.,ish-energy-ltd,ish-energy-ltd@wellfi.local,viewer,oil-target,11,8,8,3,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Cenovus Energy Inc.,cenovus-energy-inc,cenovus-energy-inc@wellfi.local,viewer,oil-target,299,7,81,218,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Spoke Resources Ltd.,spoke-resources-ltd,spoke-resources-ltd@wellfi.local,viewer,oil-target,13,7,0,13,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Suncor Energy Inc.,suncor-energy-inc,suncor-energy-inc@wellfi.local,viewer,oil-target,20,5,20,0,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Flywheel Resources Corp,flywheel-resources-corp,flywheel-resources-corp@wellfi.local,viewer,oil-target,4,4,4,0,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Tourmaline Oil Corp.,tourmaline-oil-corp,tourmaline-oil-corp@wellfi.local,viewer,oil-target,229,2,0,229,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Andora Energy Corporation,andora-energy-corporation,andora-energy-corporation@wellfi.local,viewer,oil-target,4,2,0,4,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Gran Tierra Canada Ltd.,gran-tierra-canada-ltd,gran-tierra-canada-ltd@wellfi.local,viewer,oil-target,4,2,2,2,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+SCCC Petroleum Corporation,sccc-petroleum-corporation,sccc-petroleum-corporation@wellfi.local,viewer,oil-target,2,2,0,2,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Paramount Resources Ltd.,paramount-resources-ltd,paramount-resources-ltd@wellfi.local,viewer,oil-target,101,1,0,101,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+ConocoPhillips Canada Resources Corp.,conocophillips-canada-resources-corp,conocophillips-canada-resources-corp@wellfi.local,viewer,oil-target,5,1,5,0,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Islander Oil & Gas Inc.,islander-oil-and-gas-inc,islander-oil-and-gas-inc@wellfi.local,viewer,oil-target,1,1,1,0,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Lineup Resources Corp.,lineup-resources-corp,lineup-resources-corp@wellfi.local,viewer,oil-target,1,1,1,0,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Long Run Exploration Ltd.,long-run-exploration-ltd,long-run-exploration-ltd@wellfi.local,viewer,gas-only-review,933,0,0,933,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Peyto Exploration & Development Corp.,peyto-exploration-and-development-corp,peyto-exploration-and-development-corp@wellfi.local,viewer,gas-only-review,306,0,0,306,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Tallahassee Exploration Inc.,tallahassee-exploration-inc,tallahassee-exploration-inc@wellfi.local,viewer,gas-only-review,87,0,0,87,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Sequoia Resources Corp.,sequoia-resources-corp,sequoia-resources-corp@wellfi.local,viewer,gas-only-review,59,0,59,0,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Vermilion Energy Inc.,vermilion-energy-inc,vermilion-energy-inc@wellfi.local,viewer,gas-only-review,24,0,0,24,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Whitecap Resources Inc.,whitecap-resources-inc,whitecap-resources-inc@wellfi.local,viewer,gas-only-review,24,0,0,24,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+ARC Resources Ltd.,arc-resources-ltd,arc-resources-ltd@wellfi.local,viewer,gas-only-review,20,0,0,20,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Cabot Energy Inc.,cabot-energy-inc,cabot-energy-inc@wellfi.local,viewer,gas-only-review,16,0,0,16,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Greenfire Resources Operating Corporation,greenfire-resources-operating-corporatio,greenfire-resources-operating-corporatio@wellfi.local,viewer,gas-only-review,15,0,15,0,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Outlier Resources Ltd.,outlier-resources-ltd,outlier-resources-ltd@wellfi.local,viewer,gas-only-review,15,0,0,15,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Axiom Oil and Gas Inc.,axiom-oil-and-gas-inc,axiom-oil-and-gas-inc@wellfi.local,viewer,gas-only-review,14,0,14,0,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+CNOOC Petroleum North America ULC,cnooc-petroleum-north-america-ulc,cnooc-petroleum-north-america-ulc@wellfi.local,viewer,manual-review,14,0,14,0,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+New Times Energy Canada GP 3 Ltd.,new-times-energy-canada-gp-3-ltd,new-times-energy-canada-gp-3-ltd@wellfi.local,viewer,gas-only-review,11,0,0,11,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Direct Oil & Gas Inc.,direct-oil-and-gas-inc,direct-oil-and-gas-inc@wellfi.local,viewer,gas-only-review,10,0,0,10,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+HWN Energy Ltd.,hwn-energy-ltd,hwn-energy-ltd@wellfi.local,viewer,gas-only-review,10,0,0,10,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Tidewater Midstream and Infrastructure Ltd.,tidewater-midstream-and-infrastructure-l,tidewater-midstream-and-infrastructure-l@wellfi.local,viewer,gas-only-review,9,0,0,9,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Ovintiv Canada ULC,ovintiv-canada-ulc,ovintiv-canada-ulc@wellfi.local,viewer,gas-only-review,7,0,0,7,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Kelt Exploration Ltd.,kelt-exploration-ltd,kelt-exploration-ltd@wellfi.local,viewer,gas-only-review,6,0,0,6,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Veren Inc.,veren-inc,veren-inc@wellfi.local,viewer,gas-only-review,6,0,0,6,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Alphabow Energy Ltd.,alphabow-energy-ltd,alphabow-energy-ltd@wellfi.local,viewer,gas-only-review,5,0,3,2,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Kiwetinohk Energy Corp.,kiwetinohk-energy-corp,kiwetinohk-energy-corp@wellfi.local,viewer,gas-only-review,5,0,0,5,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Athabasca Oil Corporation,athabasca-oil-corporation,athabasca-oil-corporation@wellfi.local,viewer,manual-review,4,0,4,0,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Logan Energy Corp.,logan-energy-corp,logan-energy-corp@wellfi.local,viewer,gas-only-review,4,0,0,4,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Sinopec Canada Energy Ltd.,sinopec-canada-energy-ltd,sinopec-canada-energy-ltd@wellfi.local,viewer,gas-only-review,4,0,0,4,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Archer Exploration Corp.,archer-exploration-corp,archer-exploration-corp@wellfi.local,viewer,gas-only-review,3,0,0,3,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Astara Energy Corp.,astara-energy-corp,astara-energy-corp@wellfi.local,viewer,gas-only-review,3,0,0,3,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Bighorn Energy Corporation,bighorn-energy-corporation,bighorn-energy-corporation@wellfi.local,viewer,gas-only-review,3,0,3,0,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Altair Energy Ltd.,altair-energy-ltd,altair-energy-ltd@wellfi.local,viewer,gas-only-review,2,0,0,2,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Eagle Energy Inc.,eagle-energy-inc,eagle-energy-inc@wellfi.local,viewer,gas-only-review,2,0,0,2,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Green Impact Operating Corp.,green-impact-operating-corp,green-impact-operating-corp@wellfi.local,viewer,manual-review,2,0,0,2,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Acquisition Oil Corp.,acquisition-oil-corp,acquisition-oil-corp@wellfi.local,viewer,gas-only-review,1,0,0,1,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Advantage Energy Ltd.,advantage-energy-ltd,advantage-energy-ltd@wellfi.local,viewer,gas-only-review,1,0,0,1,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Blue Sky Resources Ltd.,blue-sky-resources-ltd,blue-sky-resources-ltd@wellfi.local,viewer,gas-only-review,1,0,0,1,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Bonterra Energy Corp.,bonterra-energy-corp,bonterra-energy-corp@wellfi.local,viewer,manual-review,1,0,0,1,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Canlin Resources Partnership,canlin-resources-partnership,canlin-resources-partnership@wellfi.local,viewer,gas-only-review,1,0,0,1,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Enercapita Energy Ltd.,enercapita-energy-ltd,enercapita-energy-ltd@wellfi.local,viewer,gas-only-review,1,0,0,1,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Pine Cliff Energy Ltd.,pine-cliff-energy-ltd,pine-cliff-energy-ltd@wellfi.local,viewer,gas-only-review,1,0,1,0,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Repsol Oil & Gas Canada Inc.,repsol-oil-and-gas-canada-inc,repsol-oil-and-gas-canada-inc@wellfi.local,viewer,gas-only-review,1,0,0,1,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Shell Canada Energy,shell-canada-energy,shell-canada-energy@wellfi.local,viewer,gas-only-review,1,0,0,1,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Vanrena Resources Ltd.,vanrena-resources-ltd,vanrena-resources-ltd@wellfi.local,viewer,gas-only-review,1,0,0,1,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Vantage Point Resources Inc.,vantage-point-resources-inc,vantage-point-resources-inc@wellfi.local,viewer,gas-only-review,1,0,1,0,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD
+Yoho Resources Inc.,yoho-resources-inc,yoho-resources-inc@wellfi.local,viewer,gas-only-review,1,0,0,1,planned,env:WELLFI_DEFAULT_COMPANY_PASSWORD

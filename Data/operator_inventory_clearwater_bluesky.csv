@@ -1,0 +1,72 @@
+operator,suggested_username,total_wells,clearwater_wells,bluesky_wells,oil_wells,gas_wells,other_wells,target_segment,provinces,top_formations,sample_well_id,sample_well_name
+Imperial Oil Resources Limited,imperial-oil-resources-limited,4109,4109,0,4031,62,16,oil-target,AB,"Clearwater (4108); Clearwater, McMurray (1)",100051406504W400,ESSO 83 A4-1 COLDLK 5-14-65-4
+Canadian Natural Resources Limited,canadian-natural-resources-limited,1777,981,796,1094,606,77,oil-target,AB,"Clearwater (963); Bluesky (400); Bluesky, Montney (73); Bluesky, Gething (45); Cadotte, Harmon, Notikewin, Falher, Wilrich, Bluesky, Gething (41)",100062407608W602,CRESTAR 100 SADDLE 6-24-76-8
+Spur Petroleum Ltd.,spur-petroleum-ltd,937,937,0,742,0,195,oil-target,AB,Clearwater (937),100012307325W400,SPL 16-13 HZ SMITH 1-23-73-25
+Tamarack Valley Energy Ltd.,tamarack-valley-energy-ltd,750,750,0,665,1,84,oil-target,AB,Clearwater (750),102122506221W400,SPL 13-30 HZ NEWBRK 12-25-62-21
+Baytex Energy Ltd.,baytex-energy-ltd,516,4,512,484,2,30,oil-target,AB,"Bluesky (396); Bluesky, Gething (92); Bluesky, Bullhead (24); Clearwater (4)",100100408314W503,BAYTEX SEAL 10-4-83-14
+Headwater Exploration Inc.,headwater-exploration-inc,400,396,4,294,0,106,oil-target,AB,Clearwater (396); Bluesky (4),100083607425W402,HWX MARTENH 2-35-74-25
+Obsidian Energy Ltd.,obsidian-energy-ltd,216,6,210,204,0,12,oil-target,AB,Bluesky (210); Clearwater (6),100080808215W500,PENN WEST PC RV 2 8-8-82-15
+Strathcona Resources Ltd.,strathcona-resources-ltd,384,384,0,191,162,31,oil-target,AB,Clearwater (384),102051305805W400,PENGROWTH LIND 5-13-58-5
+Rubellite Energy Inc.,rubellite-energy-inc,124,123,1,122,0,2,oil-target,AB,"Clearwater (123); Bluesky, Gething (1)",100103109505W500,PEINC PANNY 10-31-95-5
+IPC Canada Ltd.,ipc-canada-ltd,80,9,71,47,0,33,oil-target,AB,Bluesky (71); Clearwater (9),100071807207W500,ATLAS ET AL RWE HZ MOONEY 7-18-72-7
+Clear North Energy Corp.,clear-north-energy-corp,42,42,0,31,0,11,oil-target,AB,Clearwater (42),100162907911W500,SUMMERLAND HZ GIFT 16-29-79-11
+Woodcote Inc.,woodcote-inc,14,14,0,14,0,0,oil-target,AB,Clearwater (14),100011107610W500,WOODCOTE OIL SALTCK 1-11-76-10
+ROK Resources Inc.,rok-resources-inc,16,0,16,13,3,0,oil-target,AB,"Bluesky (13); Bluesky, Gething (3)",102062206020W500,ROKRESOURCES KAYBOBS 6-22-60-20
+Cardinal Energy Ltd.,cardinal-energy-ltd,15,13,2,13,1,1,oil-target,AB,"Clearwater (13); Falher, Wilrich, Bluesky (1); Spirit River, Bluesky, Gething (1)",100103408706W602,VENTURION OIL  WORSLEY 10-34-87-6
+Saturn Oil & Gas Inc.,saturn-oil-and-gas-inc,15,0,15,13,0,2,oil-target,AB,"Bluesky (13); Bluesky, Bullhead (1); Bluesky, Gething (1)",100130305915W500,CORINTHIAN WIND 13-3-59-15
+Barrel Oil Corp.,barrel-oil-corp,40,0,40,8,32,0,oil-target,AB,"Bluesky (38); Cardium, Notikewin, Bluesky (1); Mannville, Bluesky (1)",100061605418W500,PINE CLIFF EDSON 6-16-54-18
+ISH Energy Ltd.,ish-energy-ltd,11,8,3,8,3,0,oil-target,AB,"Clearwater (8); Bluesky (1); Bluesky, Fernie (1); Bluesky, Gething (1)",100152005516W500,HWN ROSEVEAR 15-20-55-16
+Cenovus Energy Inc.,cenovus-energy-inc,299,81,218,7,276,16,oil-target,AB,"Clearwater (76); Bluesky (66); Falher, Wilrich, Bluesky, Gething, Cadomin (51); Falher, Bluesky, Gething, Cadomin (30); Cadotte, Harmon, Notikewin, Falher, Wilrich, Bluesky, Gething (17)",102062310807W600,HUSKY MOBIL RAINBOW 6-23BY-108-7
+Spoke Resources Ltd.,spoke-resources-ltd,13,0,13,7,6,0,oil-target,AB,"Bluesky (8); Falher, Wilrich, Bluesky, Gething, Cadomin (2); Falher, Wilrich, Bluesky (1); Falher, Wilrich, Bluesky, Gething (1); Spirit River, Falher, Bluesky (1)",100072306206W600,HARVEST KAKWA 7-23-62-6
+Suncor Energy Inc.,suncor-energy-inc,20,20,0,5,0,15,oil-target,AB,"Clearwater (15); Clearwater, Wabiskaw, McMurray (5)",100100409312W400,PC OB13 DOVER 10-4-93-12
+Flywheel Resources Corp,flywheel-resources-corp,4,4,0,4,0,0,oil-target,AB,Clearwater (4),100052606525W400,CLEAR NORTH 100 STEELE 5-26-65-25
+Tourmaline Oil Corp.,tourmaline-oil-corp,229,0,229,2,227,0,oil-target,AB,"Bluesky (96); Bluesky, Gething (14); Spirit River, Wilrich, Bluesky, Gething, Cadomin (14); Spirit River, Bluesky, Gething, Cadomin (11); Upper Mannville, Bluesky, Gething, Cadomin (9)",100121805718W503,BEC PINE CK 12-18-57-18
+Andora Energy Corporation,andora-energy-corporation,4,0,4,2,1,1,oil-target,AB,Bluesky (4),100163009112W502,SIGNET ET AL   SAWN LK 16-30-91-12
+Gran Tierra Canada Ltd.,gran-tierra-canada-ltd,4,2,2,2,2,0,oil-target,AB,"Clearwater (2); Bluesky, Gething, Cadomin, Nikanassin (1); Notikewin, Bluesky, Gething (1)",100162006221W500,GRL KAYBOBS 16-20-62-21
+SCCC Petroleum Corporation,sccc-petroleum-corporation,2,0,2,2,0,0,oil-target,AB,Bluesky (2),100013508809W500,SCCCPETROLEUM REDEARTH 1-35-88-9
+Paramount Resources Ltd.,paramount-resources-ltd,101,0,101,1,100,0,oil-target,AB,"Bluesky (82); Bluesky, Gething (5); Mannville, Spirit River, Bluesky (5); Viking, Mannville, Bluesky, Gething (4); Bluesky, Gething, Cadomin (2)",102101005719W500,ACL PINE CK 10-10-57-19
+ConocoPhillips Canada Resources Corp.,conocophillips-canada-resources-corp,5,5,0,1,0,4,oil-target,AB,"Clearwater (4); Grand Rapids, Clearwater, Wabiskaw, McMurray (1)",100102408306W400,COPRC 100 OBS NEWBY 10-24-83-6
+Islander Oil & Gas Inc.,islander-oil-and-gas-inc,1,1,0,1,0,0,oil-target,AB,Clearwater (1),102082407912W500,ISLANDER GIFT LAKE 8-24-79-12
+Lineup Resources Corp.,lineup-resources-corp,1,1,0,1,0,0,oil-target,AB,Clearwater (1),100152306203W402,LINEUP HZ KENT 15-23-62-3
+Long Run Exploration Ltd.,long-run-exploration-ltd,933,0,933,0,932,1,gas-only-review,AB,"Bluesky (923); Bluesky, Gething (9); Bluesky, Banff (1)",100121510422W500,GUIDEX BOYER 12-15-104-22
+Peyto Exploration & Development Corp.,peyto-exploration-and-development-corp,306,0,306,0,306,0,gas-only-review,AB,"Bluesky (73); Bluesky, Gething, Cadomin (55); Upper Mannville, Bluesky, Gething, Cadomin (30); Spirit River, Bluesky, Gething, Cadomin (18); Bluesky, Gething (15)",100110405623W504,ALBERTA856 WILD RIV 11-4-56-23
+Tallahassee Exploration Inc.,tallahassee-exploration-inc,87,0,87,0,87,0,gas-only-review,AB,Bluesky (87),100061410808W600,TALLAHASSEEXPLOR RAINBOW 6-14-108-8
+Sequoia Resources Corp.,sequoia-resources-corp,59,59,0,0,59,0,gas-only-review,AB,"Clearwater (51); Grand Rapids, Clearwater (4); Clearwater, Wabiskaw (2); Grand Rapids, Clearwater, Wabiskaw, McMurray (1); Sparky, Clearwater (1)",100141708124W402,PEOC HOOLE 14-17-81-24
+Vermilion Energy Inc.,vermilion-energy-inc,24,0,24,0,24,0,gas-only-review,AB,"Bluesky (21); Bluesky, Gething (2); Bluesky, Fernie (1)",100061905615W500,VEI MCLEOD 6-19-56-15
+Whitecap Resources Inc.,whitecap-resources-inc,24,0,24,0,24,0,gas-only-review,AB,"Bluesky (22); Cadotte, Harmon, Notikewin, Falher, Wilrich, Bluesky, Gething (2)",103040806018W503,CELTIC HZ REENTRY KAYBOBS 4-8-60-18
+ARC Resources Ltd.,arc-resources-ltd,20,0,20,0,20,0,gas-only-review,AB,"Cadotte, Harmon, Notikewin, Falher, Wilrich, Bluesky, Gething (6); Bluesky (4); Falher, Wilrich, Bluesky, Gething (4); Bluesky, Gething (2); Dunvegan, Base Fish Scales, Peace River, Spirit River, Bluesky, Gething, Cadomin (2)",100150606301W600,ARC RESOURCES KARR 15-6-63-1
+Cabot Energy Inc.,cabot-energy-inc,16,0,16,0,16,0,gas-only-review,AB,Bluesky (16),100093511106W600,CABOT ENERGY RAINBOW 9-35-111-6
+Greenfire Resources Operating Corporation,greenfire-resources-operating-corporatio,15,15,0,0,9,6,gas-only-review,AB,"Clearwater (13); Grand Rapids, Clearwater (2)",100073608410W400,GROC HANGSTN 7-36-84-10
+Outlier Resources Ltd.,outlier-resources-ltd,15,0,15,0,15,0,gas-only-review,AB,"Bluesky (5); Bluesky, Gething (5); Mannville, Bluesky, Gething (4); Mannville, Wilrich, Bluesky, Gething (1)",100033505917W502,SW RESOURCES ULC KAYBOBS 3-35-59-17
+Axiom Oil and Gas Inc.,axiom-oil-and-gas-inc,14,14,0,0,14,0,gas-only-review,AB,Clearwater (14),100101407805W502,FIRENZE MARTEN 10-14-78-5
+CNOOC Petroleum North America ULC,cnooc-petroleum-north-america-ulc,14,14,0,0,0,14,manual-review,AB,Clearwater (14),100110808606W400,NEXEN OPTI VWP NEWBY 11-8-86-6
+New Times Energy Canada GP 3 Ltd.,new-times-energy-canada-gp-3-ltd,11,0,11,0,11,0,gas-only-review,AB,"Falher, Wilrich, Bluesky, Gething, Cadomin (4); Falher, Wilrich, Bluesky, Gething (2); Bluesky (1); Bluesky, Gething (1); Bluesky, Gething, Cadomin, Nikanassin (1)",100113106706W600,CEC ELM 11-31-67-6
+Direct Oil & Gas Inc.,direct-oil-and-gas-inc,10,0,10,0,10,0,gas-only-review,AB,"Bluesky (8); Bluesky, Gething (1); Bluesky, Shunda (1)",100023409425W500,TALLAHASSEEXPLOR HOTCHKIS 2-34-94-25
+HWN Energy Ltd.,hwn-energy-ltd,10,0,10,0,10,0,gas-only-review,AB,"Bluesky (7); Bluesky, Gething (2); Bluesky, Gething, Cadomin (1)",102030406119W500,ROKRESOURCES KAYBOBS 3-4-61-19
+Tidewater Midstream and Infrastructure Ltd.,tidewater-midstream-and-infrastructure-l,9,0,9,0,9,0,gas-only-review,AB,"Bluesky (4); Spirit River, Falher, Bluesky (2); Falher, Bluesky (1); Falher, Wilrich, Bluesky (1); Shaftesbury, Falher, Bluesky (1)",100063107409W602,TIDEWATER VALHALLA 6-31-74-9
+Ovintiv Canada ULC,ovintiv-canada-ulc,7,0,7,0,7,0,gas-only-review,AB,Bluesky (7),100051207507W600,ECA LA GLACE 5-12-75-7
+Kelt Exploration Ltd.,kelt-exploration-ltd,6,0,6,0,4,2,gas-only-review,AB,"Bluesky (2); Bluesky, Gething (1); Bluesky, Gething, Cadomin, Nikanassin (1); Falher, Bluesky, Gething, Cadomin (1); Falher, Bluesky, Gething, Cadomin, Nikanassin (1)",100142708012W602,KELT EXP PCOUPE 14-27-80-12
+Veren Inc.,veren-inc,6,0,6,0,6,0,gas-only-review,AB,"Bluesky (5); Bluesky, Gething (1)",100142306019W500,CPEC KAYBOBS 14-23-60-19
+Alphabow Energy Ltd.,alphabow-energy-ltd,5,3,2,0,5,0,gas-only-review,AB,Clearwater (3); Bluesky (2),100070606515W400,SOC FIGURE 7-6-65-15
+Kiwetinohk Energy Corp.,kiwetinohk-energy-corp,5,0,5,0,5,0,gas-only-review,AB,"Bluesky (1); Dunvegan, Base Fish Scales, Peace River, Spirit River, Bluesky, Gething, Cadomin (1); Dunvegan, Base Fish Scales, Peace River, Spirit River, Wilrich, Bluesky, Gething, Cadomin (1); Falher, Bluesky, Gething (1); Viking, Mannville, Bluesky, Gething (1)",100063406023W502,ALBERTA856 PLACID 6-34-60-23
+Athabasca Oil Corporation,athabasca-oil-corporation,4,4,0,0,0,4,manual-review,AB,Clearwater (4),1F2011007810W400,ATH LEISMER 1-10-78-10
+Logan Energy Corp.,logan-energy-corp,4,0,4,0,4,0,gas-only-review,AB,"Bluesky, Gething (2); Bluesky, Bullhead (1); Spirit River, Wilrich, Bluesky, Gething, Cadomin (1)",100041606101W600,LOGAN RESTHA 4-16-61-1
+Sinopec Canada Energy Ltd.,sinopec-canada-energy-ltd,4,0,4,0,4,0,gas-only-review,AB,"Bluesky (2); Falher, Wilrich, Bluesky, Gething (1); Upper Mannville, Bluesky, Gething, Cadomin (1)",102012605818W500,DAYLIGHT ET AL KAYBOBS 1-26-58-18
+Archer Exploration Corp.,archer-exploration-corp,3,0,3,0,3,0,gas-only-review,AB,Bluesky (3),100051507508W600,ECA VALHALLA 5-15-75-8
+Astara Energy Corp.,astara-energy-corp,3,0,3,0,3,0,gas-only-review,AB,"Bluesky (2); Falher, Bluesky (1)",100071207312W602,SHIELDENERGY SINCLAIR 7-12-73-12
+Bighorn Energy Corporation,bighorn-energy-corporation,3,3,0,0,3,0,gas-only-review,AB,Clearwater (3),100130107420W402,Midstream Canada AMADOU 13-1-74-20
+Altair Energy Ltd.,altair-energy-ltd,2,0,2,0,2,0,gas-only-review,AB,"Bluesky (1); Spirit River, Bluesky (1)",100102008701W600,BSRL DIXON 10-20-87-1
+Eagle Energy Inc.,eagle-energy-inc,2,0,2,0,2,0,gas-only-review,AB,"Bluesky (1); Spirit River, Bluesky, Gething (1)",100152108624W505,INSIGNIAENERGY DIXON 15-21-86-24
+Green Impact Operating Corp.,green-impact-operating-corp,2,0,2,0,0,2,manual-review,AB,Bluesky (2),100061807805W602,PDS  RYCROFT 6-18-78-5
+Acquisition Oil Corp.,acquisition-oil-corp,1,0,1,0,1,0,gas-only-review,AB,"Bluesky, Detrital, Debolt (1)",100151909502W600,Aquisition Oil HOTCHKIS 15-19-95-2
+Advantage Energy Ltd.,advantage-energy-ltd,1,0,1,0,1,0,gas-only-review,AB,"Bluesky, Gething (1)",100142807610W602,AVN VALHALLA 14-28-76-10
+Blue Sky Resources Ltd.,blue-sky-resources-ltd,1,0,1,0,1,0,gas-only-review,AB,Bluesky (1),100101208414W500,SUMMERLAND SLAVE 10-12-84-14
+Bonterra Energy Corp.,bonterra-energy-corp,1,0,1,0,0,1,manual-review,AB,Bluesky (1),100131508211W602,RIDGEBACK BONANZA 13-15-82-11
+Canlin Resources Partnership,canlin-resources-partnership,1,0,1,0,1,0,gas-only-review,AB,Bluesky (1),100073007611W602,Canlin PCOUPES 7-30-76-11
+Enercapita Energy Ltd.,enercapita-energy-ltd,1,0,1,0,1,0,gas-only-review,AB,Bluesky (1),100062707020W500,LONGVIEW SUNSET 6-27-70-20
+Pine Cliff Energy Ltd.,pine-cliff-energy-ltd,1,1,0,0,1,0,gas-only-review,AB,Clearwater (1),100080605312W403,PINE CLIFF PLAIN 8-6-53-12
+Repsol Oil & Gas Canada Inc.,repsol-oil-and-gas-canada-inc,1,0,1,0,1,0,gas-only-review,AB,Bluesky (1),100063208210W600,CNRL BALSAM 6-32-82-10
+Shell Canada Energy,shell-canada-energy,1,0,1,0,1,0,gas-only-review,AB,"Peace River, Spirit River, Bluesky, Gething (1)",100083205720W500,TOURMALINE KAYBOBS 8-32-57-20
+Vanrena Resources Ltd.,vanrena-resources-ltd,1,0,1,0,1,0,gas-only-review,AB,"Viking, Mannville, Bluesky, Gething (1)",100092405919W500,CDN COYOTE KAYBOBS 9-24-59-19
+Vantage Point Resources Inc.,vantage-point-resources-inc,1,1,0,0,1,0,gas-only-review,AB,"Clearwater, Wabiskaw, McMurray (1)",100132906107W400,Vantage SUGDEN 13-29-61-7
+Yoho Resources Inc.,yoho-resources-inc,1,0,1,0,1,0,gas-only-review,AB,"Cardium, Dunvegan, Base Fish Scales, Viking, Mannville, Bluesky, Gething, Cadomin (1)",100091206221W500,VISION ET AL KAYBOBS 9-12-62-21

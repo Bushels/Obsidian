@@ -11,6 +11,7 @@ import { applyGlassmorphicStyle, GLASS_COLORS } from './glassmorphicStyle';
 import { assignWellsToParcels, computeParcelCentroids, generateSyntheticParcels } from '@/lib/parcelHealth';
 import type { ParcelHealth } from '@/lib/parcelHealth';
 import { addParcelLayers, updateParcelHealth, updateParcelData, setupParcelInteraction, setParcelVisibility } from './ParcelLayers';
+import { wellPopupHTML } from './WellPopup';
 
 interface WellMapProps {
   wells: WellEnriched[];
@@ -50,6 +51,68 @@ const DARK_OVERLAY_LAYER = 'subsurface-dark';
 
 // Health heatmap layer ID (must match HealthHeatmap.ts)
 const HEALTH_HEATMAP_LAYER = 'health-heatmap';
+const MONITORED_ALERT_GLOW_LAYER = 'monitored-alert-glow';
+const MONITORED_ALERT_POINTS_LAYER = 'monitored-alert-points';
+const MONITORED_ALERT_LAYER_IDS = [MONITORED_ALERT_GLOW_LAYER, MONITORED_ALERT_POINTS_LAYER] as const;
+const MONITORED_ALERT_BASE_FILTER: mapboxgl.Expression = ['==', ['get', 'show_monitoring_alert'], true];
+const MONITORED_ALERT_COLOR: mapboxgl.Expression = [
+  'case',
+  ['==', ['get', 'op_status'], 'well_down'], '#EF4444',
+  ['==', ['get', 'op_status'], 'warning'], '#EAB308',
+  ['==', ['get', 'op_status'], 'watch'], '#3B82F6',
+  ['==', ['get', 'pump_change_status'], 'in_progress'], '#8B5CF6',
+  ['==', ['get', 'pump_change_status'], 'scheduled'], '#06B6D4',
+  ['==', ['get', 'pump_change_status'], 'warning'], '#F97316',
+  '#94A3B8',
+];
+const MONITORED_ALERT_RADIUS: mapboxgl.Expression = [
+  'case',
+  ['==', ['get', 'op_status'], 'well_down'], 11,
+  ['==', ['get', 'op_status'], 'warning'], 9,
+  ['==', ['get', 'op_status'], 'watch'], 8,
+  ['==', ['get', 'pump_change_status'], 'in_progress'], 9,
+  ['==', ['get', 'pump_change_status'], 'scheduled'], 8,
+  7,
+];
+
+function buildBaseWellFilter(filters: MapFilters): mapboxgl.Expression | null {
+  const conditions: mapboxgl.Expression[] = [];
+
+  if (filters.riskLevels.length > 0) {
+    conditions.push(['in', ['get', 'risk_level'], ['literal', filters.riskLevels]]);
+  }
+
+  if (filters.formations.length > 0) {
+    conditions.push(['in', ['get', 'formation'], ['literal', filters.formations]]);
+  }
+
+  if (filters.fields.length > 0) {
+    conditions.push(['in', ['get', 'field'], ['literal', filters.fields]]);
+  }
+
+  if (filters.showWellFiOnly) {
+    conditions.push(['==', ['get', 'has_wellfi'], true]);
+  }
+
+  if (filters.showUpcomingOnly) {
+    conditions.push(['==', ['get', 'has_upcoming_change'], true]);
+  }
+
+  if (filters.minRateBblD > 0) {
+    conditions.push(['>=', ['get', 'dec_rate_bbl_d'], filters.minRateBblD]);
+  }
+
+  if (conditions.length === 0) {
+    return null;
+  }
+
+  return conditions.length === 1 ? conditions[0] : ['all', ...conditions];
+}
+
+function buildMonitoredAlertFilter(filters: MapFilters): mapboxgl.Expression {
+  const baseFilter = buildBaseWellFilter(filters);
+  return baseFilter ? ['all', MONITORED_ALERT_BASE_FILTER, baseFilter] : MONITORED_ALERT_BASE_FILTER;
+}
 
 export default function WellMap({ wells, onWellClick, filters, flyToCoords }: WellMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -90,12 +153,13 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
 
   const opStatusRef = useRef(opStatusByWellId);
   opStatusRef.current = opStatusByWellId;
+  const geojsonData = useMemo(() => wellsToGeoJSON(wells), [wells]);
+  const geojsonRef = useRef(geojsonData);
+  geojsonRef.current = geojsonData;
 
   // Initialize map
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
-
-    const popup = popupRef.current;
 
     mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN as string;
 
@@ -116,6 +180,7 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
       addDLSGridLayers(map);
       addSourceAndLayers(map);
       addHealthHeatmap(map);
+      addMonitoredAlertLayers(map);
       loadParcels(map);
       // Apply glassmorphic overlay in glass mode
       if (mapStyle === 'glass') {
@@ -142,7 +207,8 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
 
     return () => {
       setMapLoaded(false);
-      popup?.remove();
+      popupRef.current?.remove();
+      popupRef.current = null;
       pulseMarkersRef.current.forEach(m => m.remove());
       pulseMarkersRef.current = [];
       map.remove();
@@ -435,6 +501,142 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
     updateParcelHealth(map, healthMap, centroids, opStatusMap);
   }, []);
 
+  const hideMonitoringPopup = useCallback(() => {
+    popupRef.current?.remove();
+    popupRef.current = null;
+  }, []);
+
+  const showMonitoringPopup = useCallback(
+    (map: mapboxgl.Map, lngLat: mapboxgl.LngLatLike, properties: Record<string, unknown>) => {
+      const popup =
+        popupRef.current ??
+        new mapboxgl.Popup({
+          closeButton: false,
+          closeOnClick: false,
+          closeOnMove: false,
+          maxWidth: '320px',
+          className: 'wellfi-popup',
+          offset: 14,
+        });
+
+      popup
+        .setLngLat(lngLat)
+        .setHTML(wellPopupHTML(properties, { showViewDetails: false }))
+        .addTo(map);
+
+      popupRef.current = popup;
+    },
+    [],
+  );
+
+  const moveMonitoredAlertLayersToTop = useCallback((map: mapboxgl.Map) => {
+    for (const layerId of MONITORED_ALERT_LAYER_IDS) {
+      if (map.getLayer(layerId)) {
+        map.moveLayer(layerId);
+      }
+    }
+  }, []);
+
+  const addMonitoredAlertLayers = useCallback(
+    (map: mapboxgl.Map) => {
+      if (!map.getSource(SOURCE_ID)) {
+        return;
+      }
+
+      if (!map.getLayer(MONITORED_ALERT_GLOW_LAYER)) {
+        map.addLayer({
+          id: MONITORED_ALERT_GLOW_LAYER,
+          type: 'circle',
+          source: SOURCE_ID,
+          filter: MONITORED_ALERT_BASE_FILTER,
+          paint: {
+            'circle-color': MONITORED_ALERT_COLOR,
+            'circle-radius': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              8,
+              ['*', MONITORED_ALERT_RADIUS, 1.8],
+              12,
+              ['*', MONITORED_ALERT_RADIUS, 2.4],
+            ],
+            'circle-opacity': 0.22,
+            'circle-blur': 0.8,
+            'circle-stroke-width': 0,
+          },
+        });
+      }
+
+      const addedPointsLayer = !map.getLayer(MONITORED_ALERT_POINTS_LAYER);
+      if (addedPointsLayer) {
+        map.addLayer({
+          id: MONITORED_ALERT_POINTS_LAYER,
+          type: 'circle',
+          source: SOURCE_ID,
+          filter: MONITORED_ALERT_BASE_FILTER,
+          paint: {
+            'circle-color': MONITORED_ALERT_COLOR,
+            'circle-radius': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              8,
+              MONITORED_ALERT_RADIUS,
+              12,
+              ['*', MONITORED_ALERT_RADIUS, 1.2],
+            ],
+            'circle-stroke-color': '#020617',
+            'circle-stroke-width': 2,
+            'circle-opacity': 0.95,
+          },
+        });
+      }
+
+      moveMonitoredAlertLayersToTop(map);
+
+      if (!addedPointsLayer) {
+        return;
+      }
+
+      map.on('mouseenter', MONITORED_ALERT_POINTS_LAYER, (e) => {
+        map.getCanvas().style.cursor = 'pointer';
+        const feature = e.features?.[0];
+        if (!feature?.properties) {
+          return;
+        }
+        showMonitoringPopup(map, e.lngLat, feature.properties as Record<string, unknown>);
+      });
+
+      map.on('mousemove', MONITORED_ALERT_POINTS_LAYER, (e) => {
+        const feature = e.features?.[0];
+        if (!feature?.properties) {
+          return;
+        }
+        showMonitoringPopup(map, e.lngLat, feature.properties as Record<string, unknown>);
+      });
+
+      map.on('mouseleave', MONITORED_ALERT_POINTS_LAYER, () => {
+        map.getCanvas().style.cursor = '';
+        hideMonitoringPopup();
+      });
+
+      map.on('click', MONITORED_ALERT_POINTS_LAYER, (e) => {
+        const feature = e.features?.[0];
+        const wellId = feature?.properties?.id;
+        if (typeof wellId !== 'string') {
+          return;
+        }
+
+        const well = wellsRef.current.find((candidate) => candidate.id === wellId);
+        if (well) {
+          hideMonitoringPopup();
+          onWellClickRef.current(well);
+        }
+      });
+    },
+    [hideMonitoringPopup, moveMonitoredAlertLayersToTop, showMonitoringPopup],
+  );
+
   // Load mineral rights and add parcel layers (synthetic parcels generated at runtime)
   const loadParcels = useCallback((map: mapboxgl.Map) => {
     fetch('/data/obsidian-mineral-rights.geojson')
@@ -456,6 +658,7 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
         // Add parcel layers with mineral rights only initially
         const centroids = computeParcelCentroids(mineralRights);
         addParcelLayers(map, mineralRights, centroids, DLS_TWP_LINES);
+        moveMonitoredAlertLayersToTop(map);
 
         // Set up parcel interaction (hover + click)
         setupParcelInteraction(map, {
@@ -475,15 +678,13 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
       .catch((err) => {
         console.warn('[WellFi] Failed to load parcels:', err);
       });
-  }, [runHealthComputation]);
+  }, [moveMonitoredAlertLayersToTop, runHealthComputation]);
 
   // Add source helper (wells-source only, no dot layers)
   const addSourceAndLayers = useCallback((map: mapboxgl.Map) => {
-    const geojson = wellsToGeoJSON(wellsRef.current);
-
     map.addSource(SOURCE_ID, {
       type: 'geojson',
-      data: geojson,
+      data: geojsonRef.current,
     });
   }, []);
 
@@ -494,9 +695,9 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
 
     const source = map.getSource(SOURCE_ID) as mapboxgl.GeoJSONSource | undefined;
     if (source) {
-      source.setData(wellsToGeoJSON(wells));
+      source.setData(geojsonData);
     }
-  }, [wells, mapLoaded]);
+  }, [geojsonData, mapLoaded]);
 
   // Recompute parcel health when wells or operational statuses change
   useEffect(() => {
@@ -511,48 +712,18 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
     const map = mapRef.current;
     if (!map || !mapLoaded) return;
 
-    const conditions: mapboxgl.Expression[] = [];
-
-    // Risk level filter
-    if (filters.riskLevels.length > 0) {
-      conditions.push(['in', ['get', 'risk_level'], ['literal', filters.riskLevels]]);
-    }
-
-    // Formation filter
-    if (filters.formations.length > 0) {
-      conditions.push(['in', ['get', 'formation'], ['literal', filters.formations]]);
-    }
-
-    // Field filter
-    if (filters.fields.length > 0) {
-      conditions.push(['in', ['get', 'field'], ['literal', filters.fields]]);
-    }
-
-    // WellFi only
-    if (filters.showWellFiOnly) {
-      conditions.push(['==', ['get', 'has_wellfi'], true]);
-    }
-
-    // Upcoming pump changes only
-    if (filters.showUpcomingOnly) {
-      conditions.push(['==', ['get', 'has_upcoming_change'], true]);
-    }
-
-    // Minimum rate
-    if (filters.minRateBblD > 0) {
-      conditions.push(['>=', ['get', 'dec_rate_bbl_d'], filters.minRateBblD]);
-    }
-
-    const filterExpr: mapboxgl.Expression | null =
-      conditions.length === 0
-        ? null
-        : conditions.length === 1
-          ? conditions[0]
-          : ['all', ...conditions];
+    const filterExpr = buildBaseWellFilter(filters);
+    const monitoredAlertFilter = buildMonitoredAlertFilter(filters);
 
     // Apply filter to health heatmap layer
     if (map.getLayer(HEALTH_HEATMAP_LAYER)) {
       map.setFilter(HEALTH_HEATMAP_LAYER, filterExpr);
+    }
+
+    for (const layerId of MONITORED_ALERT_LAYER_IDS) {
+      if (map.getLayer(layerId)) {
+        map.setFilter(layerId, monitoredAlertFilter);
+      }
     }
   }, [filters, mapLoaded]);
 
@@ -782,6 +953,9 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
                 <span className="text-gray-400">{item.label}</span>
               </div>
             ))}
+          </div>
+          <div className="mt-2 text-[10px] leading-relaxed text-gray-500">
+            Alert dots appear only on wells with an active WellFi device.
           </div>
         </div>
       </div>

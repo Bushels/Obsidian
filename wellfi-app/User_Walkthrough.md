@@ -1,42 +1,50 @@
 # WellFi App User Walkthrough
 
-Welcome to the WellFi App! This walkthrough will guide you through the core features of the platform, from logging in to managing your well inventory and submitting service requests.
+This guide explains the main parts of the WellFi portal in plain language so engineers and operations staff can move through the system quickly.
 
-## 1. Login
+## 1. Logging In
 
-To get started, navigate to the login screen and enter your credentials:
+Access is issued separately to approved customers. Enter your assigned username and password on the login page to open the operations dashboard.
 
-- **Username:** `Obsidian`
-- **Password:** `blue sky`
+## 2. Left Sidebar
 
-Click the login button to proceed to the main dashboard.
+The left side of the dashboard is your summary and planning area.
 
-## 2. Left-Hand Navigation Menu
+- **Risk Overview:** Shows how many wells are currently in watch, warning, or other risk states.
+- **Inventory Overview:** Summarizes available WellFi equipment.
+- **Filters:** Narrow the map by risk, formation, field, WellFi installs, upcoming work, or production rate.
+- **Upcoming Actions:** Lists wells with active or scheduled pump-change work so engineers can jump directly to them.
 
-Once logged in, you will see a navigation menu on the left-hand side.
-Here, you can find a quick overview of your well inventory. Notice the section highlighting wells that are approaching their **15 to 16-month run life**, which require closer monitoring or upcoming maintenance.
+## 3. Main Map
 
-## 3. Map Overview
+The center map is the operating view of the field.
 
-The central focus of your dashboard is the **interactive map** displaying your land and well locations.
+- Click a well to inspect it.
+- Zoom in to separate clusters and review individual locations.
+- Use the search button or `Ctrl+K` / `Cmd+K` to jump directly to a well by name or identifier.
 
-- **Run Life Indicators:** Look for the green-colored indicators on the map. The varying shades of green represent the current run life of your active wells.
+## 4. Well Details Panel
 
-## 4. Viewing Specific Wells
+When you select a well, the detail panel opens on the **right-hand side** on desktop and as a bottom sheet on mobile.
 
-You can interact with the map to get more detailed information:
+This panel includes:
 
-- **Zoom In:** Zoom in on the map to see individual well clusters. The map will display exactly how many wells are located at each site.
-- **Well Breakdown:** Click on a specific well or cluster to view its detailed breakdown. This information will appear in a dedicated panel on the left-hand side, showing relevant operational data.
+- Well identity and operating context
+- Current engineer-assigned operational status
+- Assigned WellFi device information
+- Production and comparables views
+- Pump change planning and scheduling information
 
-## 5. Submitting a Request
+## 5. Recording a Well Status
 
-If you need to log an issue or request an action for a specific well:
+If an engineer decides a pump should be monitored, scheduled, or taken offline:
 
-- In the well's detail panel on the left-hand side, locate the request section.
-- You can categorize your request by selecting one of the following statuses:
-  - **Watch** (Requires monitoring)
-  - **Warning** (Potential issue identified)
-  - **Well Down** (Urgent attention needed)
-- Add any relevant **notes** detailing the issue or required action.
-- Submit the request. This action will automatically save your device inventory directly towards that specific well, ensuring all resources and equipment are properly tracked and allocated.
+1. Open the well.
+2. Choose the appropriate status:
+   - **Watch**
+   - **Warning**
+   - **Well Down**
+3. Add notes and any pump change timing details.
+4. Save the update.
+
+The status is stored against that well and can trigger Slack notifications. Email notifications can also be enabled if configured by the administrator.

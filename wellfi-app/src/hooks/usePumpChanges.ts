@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/lib/auth-context';
 import type { Database } from '@/lib/supabase';
 import type { PumpChange } from '@/types';
 
@@ -9,9 +10,11 @@ type PumpChangeUpdate = Database['public']['Tables']['pump_changes']['Update'];
 
 export function usePumpChanges(wellId?: string) {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const query = useQuery({
-    queryKey: ['pump_changes', wellId],
+    queryKey: ['pump_changes', user?.id ?? 'anonymous', user?.operatorSlug ?? 'global', wellId ?? 'all'],
+    enabled: !!user,
     queryFn: async (): Promise<PumpChange[]> => {
       let q = supabase
         .from('pump_changes')

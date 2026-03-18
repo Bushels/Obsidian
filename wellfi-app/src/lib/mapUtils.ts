@@ -1,4 +1,5 @@
 import type { Well } from '@/types';
+import type { OperationalStatus } from '@/types/operationalStatus';
 import type { FeatureCollection, Feature, Point } from 'geojson';
 
 /** Mapbox GL expression type alias (avoids namespace import issues with verbatimModuleSyntax) */
@@ -45,6 +46,7 @@ export const WELL_STROKE_EXPRESSION: MapExpression = [
 export interface WellFeatureProperties {
   id: string;
   well_id: string;
+  formatted_id: string | null;
   name: string | null;
   formation: string | null;
   field: string | null;
@@ -53,8 +55,16 @@ export interface WellFeatureProperties {
   months_running: number;
   dec_rate_bbl_d: number;
   cumulative_oil: number;
+  annual_uptime_pct: number | null;
+  total_downtime_days: number | null;
+  operating_days_12mo: number | null;
   has_wellfi: boolean;
   has_upcoming_change: boolean;
+  show_monitoring_alert: boolean;
+  op_status: string | null;
+  pump_change_status: string | null;
+  pump_change_date: string | null;
+  pump_change_notes: string | null;
 }
 
 // Health level legend labels — monochromatic green palette
@@ -71,14 +81,19 @@ export const HEALTH_LEVEL_LABELS: { level: number; color: string; label: string 
   { level: 12, color: '#EF4444', label: 'Well Down (operational)' },
 ];
 
+type MappableWell = Well & {
+  operational_status?: OperationalStatus | null;
+};
+
 // Convert Well[] to GeoJSON FeatureCollection
-export function wellsToGeoJSON(wells: Well[]): FeatureCollection<Point, WellFeatureProperties> {
+export function wellsToGeoJSON(wells: MappableWell[]): FeatureCollection<Point, WellFeatureProperties> {
   const features: Feature<Point, WellFeatureProperties>[] = wells.map((w) => ({
     type: 'Feature' as const,
     geometry: { type: 'Point' as const, coordinates: [w.lon, w.lat] },
     properties: {
       id: w.id,
       well_id: w.well_id,
+      formatted_id: w.formatted_id,
       name: w.name,
       formation: w.formation,
       field: w.field,
@@ -87,11 +102,25 @@ export function wellsToGeoJSON(wells: Well[]): FeatureCollection<Point, WellFeat
       months_running: w.months_running ?? 0,
       dec_rate_bbl_d: w.dec_rate_bbl_d ?? 0,
       cumulative_oil: w.cumulative_oil ?? 0,
-      has_wellfi: !!w.wellfi_device,
+      annual_uptime_pct: w.annual_uptime_pct ?? null,
+      total_downtime_days: w.total_downtime_days ?? null,
+      operating_days_12mo:
+        w.total_downtime_days != null ? Math.max(0, 365 - w.total_downtime_days) : null,
+      has_wellfi: !!w.wellfi_device?.is_active,
       has_upcoming_change: !!(
         w.active_pump_change &&
         ['warning', 'scheduled', 'in_progress'].includes(w.active_pump_change.status)
       ),
+      show_monitoring_alert:
+        !!w.wellfi_device?.is_active && !!(w.operational_status?.is_active || w.active_pump_change),
+      op_status:
+        w.operational_status?.is_active && w.operational_status.status
+          ? w.operational_status.status
+          : null,
+      pump_change_status: w.active_pump_change?.status ?? null,
+      pump_change_date:
+        w.active_pump_change?.scheduled_date ?? w.active_pump_change?.actual_date ?? null,
+      pump_change_notes: w.active_pump_change?.notes ?? null,
     },
   }));
 

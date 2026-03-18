@@ -1,0 +1,4 @@
+interface:
+  display_name: "Operator Onboarding"
+  short_description: "Provision one operator login and import packet for WellFi."
+  default_prompt: "Take one operator from the rollout manifest through provisioning, import prep, and checklist review."

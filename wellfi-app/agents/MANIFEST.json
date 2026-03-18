@@ -190,11 +190,11 @@
     },
     "agent-notifications": {
       "id": "agent-notifications",
-      "label": "Notifications Edge Function",
+      "label": "Operational Status Notifications",
       "session": 4,
       "precedence": 1,
       "owns": [
-        "supabase/functions/notify-pump-change/**",
+        "supabase/functions/notify-operational-status/**",
         "supabase/functions/_shared/**"
       ],
       "reads": [
@@ -242,12 +242,21 @@
     "frozen_file_protocol": "Files marked frozen cannot be written after their session. Any needed change must be filed as a proposal in agents/proposals/ and reviewed by the coordinator before the next session begins.",
     "proposal_format": "agents/proposals/{agent-id}-{change-type}-{filename}.md — describe the change needed and why. Coordinator applies it manually."
   },
-  "8": {
-      "label": "Engineer Experience & Operational Status",
-      "gate": ["1", "2", "3", "4"],
-      "run_mode": "phased",
-      "agents": ["agent-db-s8", "agent-data-s8", "agent-ui-s8", "agent-map-s8", "agent-search-s8", "agent-integrator-s8", "agent-critic-s8", "agent-tester-s8", "agent-recorder-s8"]
-    }
+  "session_8": {
+    "label": "Engineer Experience & Operational Status",
+    "gate": ["1", "2", "3", "4"],
+    "run_mode": "phased",
+    "agents": [
+      "agent-db-s8",
+      "agent-data-s8",
+      "agent-ui-s8",
+      "agent-map-s8",
+      "agent-search-s8",
+      "agent-integrator-s8",
+      "agent-critic-s8",
+      "agent-tester-s8",
+      "agent-recorder-s8"
+    ]
   },
   "precedence_per_session": {
     "session_1": { "1st": "agent-db", "2nd": "agent-scaffold" },

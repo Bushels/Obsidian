@@ -1,0 +1,47 @@
+{
+  "downloadsDir": "output/stackdx/downloads",
+  "artifactsDir": "output/stackdx/artifacts",
+  "promptTargets": [
+    {
+      "type": "placeholder",
+      "value": "Ask StackDX"
+    },
+    {
+      "type": "css",
+      "value": "textarea"
+    }
+  ],
+  "submitTargets": [
+    {
+      "type": "role",
+      "role": "button",
+      "name": "Send"
+    },
+    {
+      "type": "role",
+      "role": "button",
+      "name": "Run"
+    }
+  ],
+  "downloadTargets": [
+    {
+      "type": "role",
+      "role": "button",
+      "name": "Download"
+    },
+    {
+      "type": "role",
+      "role": "button",
+      "name": "Export"
+    }
+  ],
+  "jobs": [
+    {
+      "name": "obsidian-wells",
+      "url": "https://app.stackdx.com/",
+      "prompt": "Export the latest data for the Obsidian wells we track, including the fields required by the WellFi import workflow, and prepare a downloadable file.",
+      "waitForMs": 5000,
+      "saveAs": "obsidian-wells-latest.xlsx"
+    }
+  ]
+}

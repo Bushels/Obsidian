@@ -27,10 +27,24 @@ interface WellJson {
   last_oil_rate: number;
 }
 
-function parsePumpRisk(workbook: XLSX.WorkBook): Map<string, any> {
-  const rows = XLSX.utils.sheet_to_json(workbook.Sheets['Pump Change Risk'], { header: 1 }) as any[][];
+type SheetCell = string | number | boolean | null | undefined;
+type SheetRow = SheetCell[];
+
+interface PumpRiskData {
+  riskLevel: string;
+  consecMonths: number;
+  dec2025BblD: number;
+  total2025Bbl: number;
+  prodHours: number;
+  shutdownMonths: string;
+  restartMonths: string;
+  statusNote: string;
+}
+
+function parsePumpRisk(workbook: XLSX.WorkBook): Map<string, PumpRiskData> {
+  const rows = XLSX.utils.sheet_to_json(workbook.Sheets['Pump Change Risk'], { header: 1 }) as SheetRow[];
   const headerIdx = rows.findIndex(r => r[0] === 'Risk Level');
-  const map = new Map<string, any>();
+  const map = new Map<string, PumpRiskData>();
   for (let i = headerIdx + 1; i < rows.length; i++) {
     const row = rows[i];
     if (!row[1]) continue;
@@ -50,7 +64,7 @@ function parsePumpRisk(workbook: XLSX.WorkBook): Map<string, any> {
 }
 
 function parseMonthlyHours(workbook: XLSX.WorkBook): Map<string, number[]> {
-  const rows = XLSX.utils.sheet_to_json(workbook.Sheets['Monthly Hours'], { header: 1 }) as any[][];
+  const rows = XLSX.utils.sheet_to_json(workbook.Sheets['Monthly Hours'], { header: 1 }) as SheetRow[];
   const headerIdx = rows.findIndex(r => r[0] === 'Well Identifier');
   const map = new Map<string, number[]>();
   if (headerIdx < 0) return map;
@@ -70,7 +84,7 @@ function parseMonthlyHours(workbook: XLSX.WorkBook): Map<string, number[]> {
 
 
 function parseMonthlyOil(workbook: XLSX.WorkBook): Map<string, (number | null)[]> {
-  const rows = XLSX.utils.sheet_to_json(workbook.Sheets['Monthly bbl per day'], { header: 1 }) as any[][];
+  const rows = XLSX.utils.sheet_to_json(workbook.Sheets['Monthly bbl per day'], { header: 1 }) as SheetRow[];
   const headerIdx = rows.findIndex(r => r[0] === 'Well Identifier');
   const map = new Map<string, (number | null)[]>();
   if (headerIdx < 0) return map;
@@ -105,11 +119,13 @@ function parseRestartMonth(s: string): string | null {
   return m ? `2025-${months[m[1]]}-01` : null;
 }
 
-function sqlStr(v: any): string {
+function sqlStr(v: unknown): string {
   if (v === null || v === undefined) return 'NULL';
   if (typeof v === 'boolean') return v ? 'TRUE' : 'FALSE';
   if (typeof v === 'number') return isNaN(v) ? 'NULL' : String(v);
-  if (Array.isArray(v)) return `ARRAY[${v.map(x => typeof x === 'number' ? (isNaN(x) ? 'NULL' : String(x)) : 'NULL').join(',')}]`;
+  if (Array.isArray(v)) {
+    return `ARRAY[${v.map((x) => typeof x === 'number' ? (isNaN(x) ? 'NULL' : String(x)) : 'NULL').join(',')}]`;
+  }
   return `'${String(v).replace(/'/g, "''")}'`;
 }
 

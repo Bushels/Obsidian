@@ -1,7 +1,8 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/sonner';
-import { AuthProvider, useAuth } from '@/lib/auth';
+import { AuthProvider } from '@/lib/auth';
+import { useAuth } from '@/lib/auth-context';
 import LoginPage from '@/pages/LoginPage';
 import { lazy, Suspense, Component } from 'react';
 import type { ReactNode } from 'react';
@@ -65,6 +66,7 @@ function LoadingFallback() {
 /** Redirect to login if not authenticated */
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { session, isLoading } = useAuth();
+  const location = useLocation();
 
   if (isLoading) {
     return (
@@ -75,7 +77,8 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
   }
 
   if (!session) {
-    return <Navigate to="/" replace />;
+    const redirect = `${location.pathname}${location.search}${location.hash}`;
+    return <Navigate to={`/?redirect=${encodeURIComponent(redirect)}`} replace />;
   }
 
   return <>{children}</>;
@@ -84,6 +87,7 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
 /** Redirect to map if already authenticated */
 function PublicRoute({ children }: { children: ReactNode }) {
   const { session, isLoading } = useAuth();
+  const location = useLocation();
 
   if (isLoading) {
     return (
@@ -94,7 +98,11 @@ function PublicRoute({ children }: { children: ReactNode }) {
   }
 
   if (session) {
-    return <Navigate to="/map" replace />;
+    const params = new URLSearchParams(location.search);
+    const redirect = params.get('redirect');
+    const target =
+      redirect && redirect.startsWith('/') && !redirect.startsWith('//') ? redirect : '/map';
+    return <Navigate to={target} replace />;
   }
 
   return <>{children}</>;

@@ -1,28 +1,9 @@
-import { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import type { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
-
-export type UserRole = 'admin' | 'viewer';
-
-export interface AuthUser {
-  id: string;
-  username: string;
-  displayName: string;
-  role: UserRole;
-  email: string;
-}
-
-interface AuthContextValue {
-  session: Session | null;
-  user: AuthUser | null;
-  isLoading: boolean;
-  isAdmin: boolean;
-  signIn: (username: string, password: string) => Promise<{ error: string | null }>;
-  signOut: () => Promise<void>;
-}
-
-const AuthContext = createContext<AuthContextValue | null>(null);
+import { AuthContext } from '@/lib/auth-context';
+import type { AuthUser, UserRole } from '@/lib/auth-context';
 
 /** Map username to the email format Supabase Auth expects */
 function usernameToEmail(username: string): string {
@@ -34,19 +15,51 @@ async function fetchAppUser(authUser: User): Promise<AuthUser | null> {
   try {
     const { data, error } = await supabase
       .from('app_users' as never)
-      .select('username, display_name, role')
+      .select('username, display_name, role, operator_id')
       .eq('id', authUser.id)
       .single();
 
     if (error || !data) return null;
 
-    const row = data as { username: string; display_name: string; role: UserRole };
+    const row = data as {
+      username: string;
+      display_name: string;
+      role: UserRole;
+      operator_id: string | null;
+    };
+    let operatorSlug: string | null = null;
+    let operatorDisplayName: string | null = null;
+    let basinScope: string | null = null;
+
+    if (row.operator_id) {
+      const { data: operatorData, error: operatorError } = await supabase
+        .from('operators' as never)
+        .select('slug, display_name, basin_scope')
+        .eq('id', row.operator_id)
+        .single();
+
+      if (!operatorError && operatorData) {
+        const operator = operatorData as {
+          slug: string;
+          display_name: string;
+          basin_scope: string | null;
+        };
+        operatorSlug = operator.slug;
+        operatorDisplayName = operator.display_name;
+        basinScope = operator.basin_scope;
+      }
+    }
+
     return {
       id: authUser.id,
       username: row.username,
       displayName: row.display_name,
       role: row.role,
       email: authUser.email ?? '',
+      operatorId: row.operator_id,
+      operatorSlug,
+      operatorDisplayName,
+      basinScope,
     };
   } catch (err) {
     console.error('[WellFi] fetchAppUser error:', err);
@@ -135,10 +148,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       {children}
     </AuthContext.Provider>
   );
-}
-
-export function useAuth(): AuthContextValue {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
-  return ctx;
 }
