@@ -5,21 +5,22 @@ import XLSX from 'xlsx';
 import { createClient } from '@supabase/supabase-js';
 
 interface SourceRow {
-  operator?: string;
-  well_id?: string;
-  formatted_well_id?: string;
-  well_name?: string;
-  petro_ninja_well_status?: string;
-  well_status?: string;
+  uwi?: string;
+  operator_licensee?: string;
   producing_formation?: string;
-  intersecting_formations?: string;
   field_name?: string;
+  well_status?: string;
+  well_fluid_type?: string;
   surface_latitude?: string;
   surface_longitude?: string;
-  last_oil_rate?: string;
-  cumulative_oil?: string;
-  on_production_date?: string;
+  last_oil_production_rate?: string;
+  cumulative_oil_production?: string;
+  recent_oil?: string;
+  recent_gas?: string;
+  recent_water?: string;
+  recent_steam_injection?: string;
   last_production_date?: string;
+  spud_date?: string;
 }
 
 interface RolloutRow {
@@ -36,7 +37,7 @@ interface CliOptions {
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const DEFAULT_SOURCE_PATH = path.resolve(__dirname, '..', '..', 'Data', 'active_bluesky_clearwater_wells_AB_SK.csv');
+const DEFAULT_SOURCE_PATH = path.resolve(__dirname, '..', '..', 'Data', 'active_clearwater_bluesky_recent_prod_ab_sk.csv');
 const DEFAULT_MANIFEST_PATH = path.resolve(__dirname, '..', '..', 'Data', 'operator_rollout_manifest_clearwater_bluesky.csv');
 
 function printHelp() {
@@ -145,10 +146,7 @@ function parseRows<T>(filePath: string): T[] {
 }
 
 function isActive(row: SourceRow): boolean {
-  const petroStatus = normalize(row.petro_ninja_well_status).toLowerCase();
   const wellStatus = normalize(row.well_status).toLowerCase();
-
-  if (petroStatus === 'active') return true;
   return ['active', 'pumping', 'flowing', 'producing', 'operating'].includes(wellStatus);
 }
 
@@ -172,7 +170,7 @@ function parseDate(value: unknown): string | null {
 }
 
 function deriveFormation(row: SourceRow): 'Bluesky' | 'Clearwater' | null {
-  const text = `${normalize(row.producing_formation)} ${normalize(row.intersecting_formations)}`.toLowerCase();
+  const text = normalize(row.producing_formation).toLowerCase();
   if (text.includes('clearwater')) return 'Clearwater';
   if (text.includes('bluesky')) return 'Bluesky';
   return null;
@@ -217,7 +215,7 @@ async function main() {
 
   const sourceRows = parseRows<SourceRow>(options.sourcePath);
   const matchedSourceRows = sourceRows.filter((row) => {
-    const operatorName = normalize(row.operator);
+    const operatorName = normalize(row.operator_licensee);
     return operatorName === sourceOperatorName || slugifyOperator(operatorName) === options.operatorSlug;
   });
   const activeRows = matchedSourceRows.filter(isActive);
@@ -232,12 +230,12 @@ async function main() {
 
   const skippedRows: string[] = [];
   const importRows = activeRows.flatMap((row) => {
-    const wellId = normalize(row.well_id);
+    const wellId = normalize(row.uwi);
     const lat = parseNumber(row.surface_latitude);
     const lon = parseNumber(row.surface_longitude);
 
     if (!wellId) {
-      skippedRows.push('Skipped row with missing well_id');
+      skippedRows.push('Skipped row with missing uwi');
       return [];
     }
 
@@ -249,8 +247,8 @@ async function main() {
     return [
       {
         well_id: wellId,
-        formatted_id: normalize(row.formatted_well_id) || null,
-        name: normalize(row.well_name) || null,
+        formatted_id: null,
+        name: null,
         lat,
         lon,
         formation: deriveFormation(row),
@@ -258,17 +256,17 @@ async function main() {
         well_status: mapWellStatus(row.well_status),
         risk_level: 'NO DATA',
         months_running: null,
-        dec_rate_bbl_d: parseNumber(row.last_oil_rate),
+        dec_rate_bbl_d: parseNumber(row.last_oil_production_rate),
         total_2025_bbl: null,
-        cumulative_oil: parseNumber(row.cumulative_oil),
-        on_production_date: parseDate(row.on_production_date),
+        cumulative_oil: parseNumber(row.cumulative_oil_production),
+        on_production_date: parseDate(row.spud_date),
         last_production_date: parseDate(row.last_production_date),
         annual_uptime_pct: null,
         total_downtime_days: null,
         monthly_hrs: null,
         monthly_oil: null,
         monthly_uptime: null,
-        status_note: 'Imported from Clearwater / Bluesky basin snapshot; operator workbook enrichment pending.',
+        status_note: 'Imported from Clearwater / Bluesky basin snapshot (Jan 2026).',
       },
     ];
   });
