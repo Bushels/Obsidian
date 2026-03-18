@@ -2,17 +2,25 @@
  * ProductionPopup — Hover tooltip for production well dots
  */
 
+function escapeHTML(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 export function productionDotPopupHTML(
   properties: Record<string, unknown>,
 ): string {
-  const uwi = String(properties.uwi ?? '');
-  const operator = String(properties.operator ?? '');
-  const formation = String(properties.formation ?? '');
+  const uwi = escapeHTML(String(properties.uwi ?? ''));
+  const operator = escapeHTML(String(properties.operator ?? ''));
+  const formation = escapeHTML(String(properties.formation ?? ''));
   const fluidType = String(properties.fluid_type ?? 'oil');
   const recentOil = Number(properties.recent_oil) || 0;
   const recentGas = Number(properties.recent_gas) || 0;
   const recentWater = Number(properties.recent_water) || 0;
-  const fieldName = String(properties.field_name ?? '');
+  const fieldName = escapeHTML(String(properties.field_name ?? ''));
   const opStatus = String(properties.op_status ?? 'normal');
 
   const isGas = fluidType === 'gas';

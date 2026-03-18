@@ -18,7 +18,7 @@ function parseCSVLine(line) {
 }
 
 const raw = fs.readFileSync(CSV_PATH, 'utf8');
-const lines = raw.split('\n').filter(l => l.trim());
+const lines = raw.split(/\r?\n/).filter(l => l.trim());
 const header = parseCSVLine(lines[0]);
 const idx = Object.fromEntries(header.map((h, i) => [h, i]));
 
