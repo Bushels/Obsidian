@@ -11,6 +11,7 @@
     "operators:audit": "tsx scripts/build_operator_inventory.ts",
     "operators:provision": "tsx scripts/provision_operator_users.ts",
     "operators:import": "tsx scripts/import_operator_basin_wells.ts",
+    "build:operator-geojson": "npx tsx scripts/build_operator_geojson.ts",
     "stackdx:refresh": "tsx scripts/stackdx_refresh.ts",
     "stackdx:install-browser": "playwright install chromium"
   },

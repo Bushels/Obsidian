@@ -40,6 +40,9 @@ agents/locks/*.lock
 # Vite
 *.local
 
+# Generated per-operator GeoJSON (built by scripts/build_operator_geojson.ts)
+public/data/operators/
+
 # Local StackDX automation state
 .codex/stackdx-jobs.local.json
 output/stackdx/
