@@ -69,15 +69,15 @@ density 0.75 -> rgba(21, 128, 61, 0.55)     // forest
 density 1.0  -> rgba(20, 83, 45, 0.70)      // dark emerald
 ```
 
-### Bluesky Color Ramp (Amber)
+### Bluesky Color Ramp (Gold)
 
 ```
-density 0.0  -> rgba(251, 191, 36, 0)       // transparent
-density 0.15 -> rgba(251, 191, 36, 0.15)    // faint amber
-density 0.35 -> rgba(245, 158, 11, 0.25)    // amber
-density 0.55 -> rgba(217, 119, 6, 0.40)     // dark amber
-density 0.75 -> rgba(180, 83, 9, 0.55)      // burnt orange
-density 1.0  -> rgba(120, 53, 15, 0.70)     // deep sienna
+density 0.0  -> rgba(253, 224, 71, 0)       // transparent
+density 0.15 -> rgba(253, 224, 71, 0.15)    // faint gold
+density 0.35 -> rgba(250, 204, 21, 0.25)    // gold
+density 0.55 -> rgba(234, 179, 8, 0.40)     // deep gold
+density 0.75 -> rgba(202, 138, 4, 0.55)     // dark gold
+density 1.0  -> rgba(161, 98, 7, 0.70)      // rich amber
 ```
 
 ## Well Dots Layer
@@ -260,6 +260,10 @@ Files removed from rendering but NOT deleted (available for reference):
 
 ### Brainstorming pivot saved complexity
 **Lesson:** Started with 3D extruded cylinders (deck.gl/Three.js), pivoted to native Mapbox heatmap after clarifying the real need. The heatmap approach: (1) zero new dependencies, (2) follows existing HealthHeatmap.ts pattern, (3) GPU-accelerated KDE for free, (4) ~350 lines vs estimated ~1000+ for 3D.
+
+### Gold vs brown color ramp for Bluesky
+**Problem:** Original Bluesky ramp used Tailwind amber-500→amber-900 scale which trends toward burnt sienna/brown at high density. On the dark map, the dense production zones looked muddy rather than distinctive.
+**Fix:** Shifted to Tailwind yellow-300→amber-700 scale (gold family). Keeps warm character but reads as gold, not brown. Better visual distinction from Clearwater green.
 
 ### Gemini as design auditor
 **Lesson:** Having Gemini audit the design doc before implementation caught two critical issues (normalization bias, color blending in overlap zones) that would have required post-implementation rework. Cost: one API call. Saved: hours of visual debugging.
