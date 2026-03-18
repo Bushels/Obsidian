@@ -12,6 +12,8 @@ import { assignWellsToParcels, computeParcelCentroids, generateSyntheticParcels 
 import type { ParcelHealth } from '@/lib/parcelHealth';
 import { addParcelLayers, updateParcelHealth, updateParcelData, setupParcelInteraction, setParcelVisibility } from './ParcelLayers';
 import { wellPopupHTML } from './WellPopup';
+import { addProductionGlow, setFormationHeatmapVisibility, PRODUCTION_LAYER_IDS } from './ProductionGlow';
+import { productionDotPopupHTML } from './ProductionPopup';
 
 interface WellMapProps {
   wells: WellEnriched[];
@@ -123,6 +125,8 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
   const [showGrid, setShowGrid] = useState(false);
   const [showProduction, setShowProduction] = useState(true);
   const [showLand, setShowLand] = useState(true);
+  const [showClearwater, setShowClearwater] = useState(true);
+  const [showBluesky, setShowBluesky] = useState(true);
 
   // Markers for highly recommended WellFi candidates
   const pulseMarkersRef = useRef<mapboxgl.Marker[]>([]);
@@ -180,6 +184,44 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
       addDLSGridLayers(map);
       addSourceAndLayers(map);
       addHealthHeatmap(map);
+
+      // Production glow for Clearwater/Bluesky wells (async, loads GeoJSON)
+      const productionBeforeLayer =
+        map.getLayer('parcel-health-glow') ? 'parcel-health-glow' :
+        map.getLayer('mineral-rights-glow') ? 'mineral-rights-glow' :
+        undefined;
+      addProductionGlow(map, productionBeforeLayer)
+        .then(() => {
+          // ── Production dot hover ──────────────────────────────────────
+          map.on('mouseenter', PRODUCTION_LAYER_IDS.dots, (e) => {
+            map.getCanvas().style.cursor = 'pointer';
+            if (!e.features?.[0]) return;
+
+            const props = e.features[0].properties ?? {};
+            const coords = (e.features[0].geometry as GeoJSON.Point).coordinates.slice() as [number, number];
+
+            popupRef.current?.remove();
+
+            popupRef.current = new mapboxgl.Popup({
+              closeButton: false,
+              closeOnClick: false,
+              maxWidth: '280px',
+              className: 'wellfi-popup',
+              offset: 10,
+            })
+              .setLngLat(coords)
+              .setHTML(productionDotPopupHTML(props))
+              .addTo(map);
+          });
+
+          map.on('mouseleave', PRODUCTION_LAYER_IDS.dots, () => {
+            map.getCanvas().style.cursor = '';
+            popupRef.current?.remove();
+            popupRef.current = null;
+          });
+        })
+        .catch(console.error);
+
       addMonitoredAlertLayers(map);
       loadParcels(map);
       // Apply glassmorphic overlay in glass mode
@@ -900,6 +942,44 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
             <line x1="15" x2="15" y1="3" y2="21" />
           </svg>
           <span className="hidden sm:inline">LSD</span>
+        </button>
+
+        {/* Clearwater formation heatmap toggle */}
+        <button
+          onClick={() => {
+            const next = !showClearwater;
+            setShowClearwater(next);
+            if (mapRef.current) {
+              setFormationHeatmapVisibility(mapRef.current, 'Clearwater', next);
+            }
+          }}
+          className={`min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 px-2 sm:px-3 py-2 sm:py-1.5 rounded-lg text-xs font-medium border backdrop-blur-md transition-all duration-200 flex items-center justify-center ${
+            showClearwater
+              ? 'bg-green-500/15 text-green-400 border-green-500/25 shadow-[0_0_15px_-3px_rgba(34,197,94,0.15)]'
+              : 'bg-white/[0.04] text-gray-500 border-white/[0.08] hover:bg-white/[0.06] hover:text-gray-300'
+          }`}
+          title="Toggle Clearwater production heatmap"
+        >
+          CW
+        </button>
+
+        {/* Bluesky formation heatmap toggle */}
+        <button
+          onClick={() => {
+            const next = !showBluesky;
+            setShowBluesky(next);
+            if (mapRef.current) {
+              setFormationHeatmapVisibility(mapRef.current, 'Bluesky', next);
+            }
+          }}
+          className={`min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 px-2 sm:px-3 py-2 sm:py-1.5 rounded-lg text-xs font-medium border backdrop-blur-md transition-all duration-200 flex items-center justify-center ${
+            showBluesky
+              ? 'bg-amber-500/15 text-amber-400 border-amber-500/25 shadow-[0_0_15px_-3px_rgba(245,158,11,0.15)]'
+              : 'bg-white/[0.04] text-gray-500 border-white/[0.08] hover:bg-white/[0.06] hover:text-gray-300'
+          }`}
+          title="Toggle Bluesky production heatmap"
+        >
+          BS
         </button>
 
         {/* Style switcher — 2-way */}
