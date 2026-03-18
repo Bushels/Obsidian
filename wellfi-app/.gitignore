@@ -43,3 +43,5 @@ agents/locks/*.lock
 # Local StackDX automation state
 .codex/stackdx-jobs.local.json
 output/stackdx/
+.vercel
+.env*.local
