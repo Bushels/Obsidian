@@ -4,13 +4,9 @@ import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import type { MapFilters } from '@/types';
 import type { WellEnriched } from '@/types/operationalStatus';
-import { wellsToGeoJSON, HEALTH_LEVEL_LABELS } from '@/lib/mapUtils';
+import { wellsToGeoJSON } from '@/lib/mapUtils';
 import { generateDLSGrid } from '@/lib/dlsGrid';
-import { addHealthHeatmap, setHealthHeatmapVisibility } from './HealthHeatmap';
 import { applyGlassmorphicStyle, GLASS_COLORS } from './glassmorphicStyle';
-import { assignWellsToParcels, computeParcelCentroids, generateSyntheticParcels } from '@/lib/parcelHealth';
-import type { ParcelHealth } from '@/lib/parcelHealth';
-import { addParcelLayers, updateParcelHealth, updateParcelData, setupParcelInteraction, setParcelVisibility } from './ParcelLayers';
 import { wellPopupHTML } from './WellPopup';
 import { addProductionGlow, setFormationHeatmapVisibility, PRODUCTION_LAYER_IDS } from './ProductionGlow';
 import { productionDotPopupHTML } from './ProductionPopup';
@@ -29,7 +25,7 @@ const STYLES = {
 
 type MapStyle = keyof typeof STYLES;
 
-// Well source ID (kept for heatmap)
+// Well source ID (used for monitored alert layers)
 const SOURCE_ID = 'wells-source';
 
 // DLS grid layer IDs
@@ -51,8 +47,6 @@ const DLS_LSD_LABELS_SRC = 'dls-lsd-labels-src';
 const DARK_OVERLAY_SRC = 'subsurface-dark-src';
 const DARK_OVERLAY_LAYER = 'subsurface-dark';
 
-// Health heatmap layer ID (must match HealthHeatmap.ts)
-const HEALTH_HEATMAP_LAYER = 'health-heatmap';
 const MONITORED_ALERT_GLOW_LAYER = 'monitored-alert-glow';
 const MONITORED_ALERT_POINTS_LAYER = 'monitored-alert-points';
 const MONITORED_ALERT_LAYER_IDS = [MONITORED_ALERT_GLOW_LAYER, MONITORED_ALERT_POINTS_LAYER] as const;
@@ -123,18 +117,11 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
   const [mapStyle, setMapStyle] = useState<MapStyle>('glass');
   const [mapLoaded, setMapLoaded] = useState(false);
   const [showGrid, setShowGrid] = useState(false);
-  const [showProduction, setShowProduction] = useState(true);
-  const [showLand, setShowLand] = useState(true);
   const [showClearwater, setShowClearwater] = useState(true);
   const [showBluesky, setShowBluesky] = useState(true);
 
   // Markers for highly recommended WellFi candidates
   const pulseMarkersRef = useRef<mapboxgl.Marker[]>([]);
-
-  // Parcel data refs
-  const mineralRightsRef = useRef<GeoJSON.FeatureCollection | null>(null);
-  const parcelsRef = useRef<GeoJSON.FeatureCollection | null>(null);
-  const healthMapRef = useRef<Map<number, ParcelHealth>>(new Map());
 
   // Stable reference to wells for use in click handler
   const wellsRef = useRef<WellEnriched[]>(wells);
@@ -144,19 +131,6 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
   const onWellClickRef = useRef(onWellClick);
   onWellClickRef.current = onWellClick;
 
-  // Build operational status map: well UUID -> status type string
-  const opStatusByWellId = useMemo(() => {
-    const m = new Map<string, string>();
-    for (const w of wells) {
-      if (w.operational_status?.is_active && w.operational_status.status) {
-        m.set(w.id, w.operational_status.status);
-      }
-    }
-    return m;
-  }, [wells]);
-
-  const opStatusRef = useRef(opStatusByWellId);
-  opStatusRef.current = opStatusByWellId;
   const geojsonData = useMemo(() => wellsToGeoJSON(wells), [wells]);
   const geojsonRef = useRef(geojsonData);
   geojsonRef.current = geojsonData;
@@ -183,7 +157,6 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
       addDarkOverlay(map);
       addDLSGridLayers(map);
       addSourceAndLayers(map);
-      addHealthHeatmap(map);
 
       // Production glow for Clearwater/Bluesky wells (async, loads GeoJSON)
       const productionBeforeLayer =
@@ -223,7 +196,6 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
         .catch(console.error);
 
       addMonitoredAlertLayers(map);
-      loadParcels(map);
       // Apply glassmorphic overlay in glass mode
       if (mapStyle === 'glass') {
         applyGlassmorphicStyle(map);
@@ -279,26 +251,23 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
       return !isDown && noWellFi && runningLong && hasCoords;
     });
 
-    // Create markers (only if showProduction is active to reduce clutter)
-    if (showProduction) {
-      candidates.forEach(w => {
-        const el = document.createElement('div');
-        el.className = 'w-10 h-10 rounded-full border border-wellfi-cyan/50 bg-wellfi-cyan/20 wellfi-pulse pointer-events-none flex items-center justify-center';
-        const inner = document.createElement('div');
-        inner.className = 'w-2 h-2 rounded-full bg-wellfi-cyan shadow-[0_0_10px_rgba(0,212,255,0.8)]';
-        el.appendChild(inner);
+    candidates.forEach(w => {
+      const el = document.createElement('div');
+      el.className = 'w-10 h-10 rounded-full border border-wellfi-cyan/50 bg-wellfi-cyan/20 wellfi-pulse pointer-events-none flex items-center justify-center';
+      const inner = document.createElement('div');
+      inner.className = 'w-2 h-2 rounded-full bg-wellfi-cyan shadow-[0_0_10px_rgba(0,212,255,0.8)]';
+      el.appendChild(inner);
 
-        const marker = new mapboxgl.Marker({ element: el })
-          .setLngLat([w.lon, w.lat])
-          .addTo(map);
-        pulseMarkersRef.current.push(marker);
-      });
-    }
+      const marker = new mapboxgl.Marker({ element: el })
+        .setLngLat([w.lon, w.lat])
+        .addTo(map);
+      pulseMarkersRef.current.push(marker);
+    });
 
     return () => {
       // Cleanup handled on unmount and before recreating
     };
-  }, [wells, mapLoaded, showProduction]);
+  }, [wells, mapLoaded]);
 
   // Add DLS grid sources and layers (empty initially)
   const addDLSGridLayers = useCallback((map: mapboxgl.Map) => {
@@ -454,94 +423,6 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
     }
   }, [showGrid, mapLoaded]);
 
-  // Health Heatmap + dark overlay visibility toggle
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map || !mapLoaded) return;
-
-    setHealthHeatmapVisibility(map, showProduction);
-
-    if (map.getLayer(DARK_OVERLAY_LAYER)) {
-      map.setPaintProperty(DARK_OVERLAY_LAYER, 'fill-opacity', showProduction ? 0.5 : 0);
-    }
-  }, [showProduction, mapLoaded]);
-
-  // Toggle parcel visibility
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map || !mapLoaded) return;
-    setParcelVisibility(map, showLand);
-  }, [showLand, mapLoaded]);
-
-  // Compute parcel health, generate synthetic parcels for orphans, update map
-  const runHealthComputation = useCallback((map: mapboxgl.Map, currentWells: WellEnriched[], opStatusMap?: Map<string, string>) => {
-    const mineralRights = mineralRightsRef.current;
-    if (!mineralRights) return;
-
-    // Step 1: Assign wells to real mineral rights parcels
-    const { healthMap, orphanWells } = assignWellsToParcels(currentWells, mineralRights);
-
-    // Step 2: Generate synthetic parcels at runtime for orphan wells
-    const syntheticCollection = generateSyntheticParcels(orphanWells);
-    const syntheticFeatures = syntheticCollection.features.map((f) => ({
-      ...f,
-      geometry: {
-        type: 'MultiPolygon' as const,
-        coordinates: [f.geometry.coordinates] as GeoJSON.Position[][][],
-      },
-    }));
-
-    // Step 3: Merge mineral rights + synthetic parcels
-    const merged: GeoJSON.FeatureCollection = {
-      type: 'FeatureCollection',
-      features: [...mineralRights.features, ...syntheticFeatures],
-    };
-    parcelsRef.current = merged;
-
-    // Step 4: Update map source with merged data (Mapbox reassigns generateId IDs)
-    updateParcelData(map, merged);
-
-    // Step 5: Add health entries for orphan wells (each synthetic parcel has exactly 1 well)
-    const baseIndex = mineralRights.features.length;
-    for (let i = 0; i < orphanWells.length; i++) {
-      const well = orphanWells[i];
-      const featureId = baseIndex + i;
-      healthMap.set(featureId, {
-        wellCount: 1,
-        wellFiCount: well.wellfi_device != null && well.wellfi_device.is_active ? 1 : 0,
-        avgMonthsRunning: well.months_running ?? 0,
-        maxMonthsRunning: well.months_running ?? 0,
-        hasUpcomingChange: well.active_pump_change != null,
-        wells: [{
-          id: well.id,
-          name: well.name,
-          wellId: well.well_id,
-          monthsRunning: well.months_running ?? 0,
-          hasWellfi: well.wellfi_device != null && well.wellfi_device.is_active,
-          riskLevel: well.risk_level,
-          formation: well.formation,
-        }],
-      });
-    }
-    healthMapRef.current = healthMap;
-
-    // Step 6: Compute centroids and enrich labels
-    const centroids = computeParcelCentroids(merged);
-    for (const feature of centroids.features) {
-      const id = feature.properties?.featureIndex as number;
-      const h = healthMap.get(id);
-      if (h && h.wellCount > 0) {
-        feature.properties = {
-          ...feature.properties,
-          label: `${h.wellCount} wells | ${h.avgMonthsRunning.toFixed(1)}mo${h.wellFiCount > 0 ? ` | ${h.wellFiCount} WF` : ''}`,
-        };
-      } else {
-        feature.properties = { ...feature.properties, label: '' };
-      }
-    }
-
-    updateParcelHealth(map, healthMap, centroids, opStatusMap);
-  }, []);
 
   const hideMonitoringPopup = useCallback(() => {
     popupRef.current?.remove();
@@ -679,48 +560,6 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
     [hideMonitoringPopup, moveMonitoredAlertLayersToTop, showMonitoringPopup],
   );
 
-  // Load mineral rights and add parcel layers (synthetic parcels generated at runtime)
-  const loadParcels = useCallback((map: mapboxgl.Map) => {
-    fetch('/data/obsidian-mineral-rights.geojson')
-      .then((r) => r.json())
-      .then((mineralRights: GeoJSON.FeatureCollection) => {
-        // Normalize all geometries to MultiPolygon for consistency
-        for (const feature of mineralRights.features) {
-          if (feature.geometry.type === 'Polygon') {
-            feature.geometry = {
-              type: 'MultiPolygon',
-              coordinates: [(feature.geometry as GeoJSON.Polygon).coordinates],
-            };
-          }
-        }
-
-        // Store mineral rights (synthetic parcels added dynamically in runHealthComputation)
-        mineralRightsRef.current = mineralRights;
-
-        // Add parcel layers with mineral rights only initially
-        const centroids = computeParcelCentroids(mineralRights);
-        addParcelLayers(map, mineralRights, centroids, DLS_TWP_LINES);
-        moveMonitoredAlertLayersToTop(map);
-
-        // Set up parcel interaction (hover + click)
-        setupParcelInteraction(map, {
-          onWellClick: (wellId: string) => {
-            const well = wellsRef.current.find((w) => w.id === wellId);
-            if (well) onWellClickRef.current(well);
-          },
-          getParcelHealth: (featureId: number) => healthMapRef.current.get(featureId),
-          getOpStatusByWellId: () => opStatusRef.current,
-        });
-
-        // Run initial health computation if wells are already available
-        if (wellsRef.current.length > 0) {
-          runHealthComputation(map, wellsRef.current, opStatusRef.current);
-        }
-      })
-      .catch((err) => {
-        console.warn('[WellFi] Failed to load parcels:', err);
-      });
-  }, [moveMonitoredAlertLayersToTop, runHealthComputation]);
 
   // Add source helper (wells-source only, no dot layers)
   const addSourceAndLayers = useCallback((map: mapboxgl.Map) => {
@@ -741,26 +580,12 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
     }
   }, [geojsonData, mapLoaded]);
 
-  // Recompute parcel health when wells or operational statuses change
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map || !mapLoaded || !mineralRightsRef.current || wells.length === 0) return;
-
-    runHealthComputation(map, wells, opStatusByWellId);
-  }, [wells, mapLoaded, opStatusByWellId, runHealthComputation]);
-
   // Apply filters when filters change
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !mapLoaded) return;
 
-    const filterExpr = buildBaseWellFilter(filters);
     const monitoredAlertFilter = buildMonitoredAlertFilter(filters);
-
-    // Apply filter to health heatmap layer
-    if (map.getLayer(HEALTH_HEATMAP_LAYER)) {
-      map.setFilter(HEALTH_HEATMAP_LAYER, filterExpr);
-    }
 
     for (const layerId of MONITORED_ALERT_LAYER_IDS) {
       if (map.getLayer(layerId)) {
@@ -841,16 +666,6 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
     setShowGrid((s) => !s);
   }, []);
 
-  // Toggle health heatmap glow
-  const toggleProduction = useCallback(() => {
-    setShowProduction((s) => !s);
-  }, []);
-
-  // Toggle parcel land overlay
-  const toggleLand = useCallback(() => {
-    setShowLand((s) => !s);
-  }, []);
-
   // Apply glass-themed colors to DLS grid layers
   const applyGlassGridColors = useCallback((map: mapboxgl.Map) => {
     if (map.getLayer(DLS_TWP_LINES)) {
@@ -883,47 +698,6 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
 
       {/* Top-right controls — glassmorphic, responsive */}
       <div className="absolute top-3 right-3 z-10 flex gap-1 sm:gap-1.5">
-        {/* Land (parcel health) toggle */}
-        <button
-          onClick={toggleLand}
-          className={`min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 px-2 sm:px-3 py-2 sm:py-1.5 rounded-lg text-xs font-medium border backdrop-blur-md transition-all duration-200 flex items-center justify-center ${
-            showLand
-              ? 'bg-wellfi-cyan/15 text-wellfi-cyan border-wellfi-cyan/25 shadow-[0_0_15px_-3px_rgba(0,212,255,0.15)]'
-              : 'bg-white/[0.04] text-gray-500 border-white/[0.08] hover:bg-white/[0.06] hover:text-gray-300'
-          }`}
-          title="Toggle parcel health overlay"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block sm:mr-1 -mt-0.5">
-            <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z" />
-            <circle cx="12" cy="10" r="3" />
-          </svg>
-          <span className="hidden sm:inline">Land</span>
-        </button>
-
-        {/* Health Heatmap Glow toggle */}
-        <button
-          onClick={toggleProduction}
-          className={`min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 px-2 sm:px-3 py-2 sm:py-1.5 rounded-lg text-xs font-medium border backdrop-blur-md transition-all duration-200 flex items-center justify-center ${
-            showProduction
-              ? 'bg-wellfi-cyan/15 text-wellfi-cyan border-wellfi-cyan/25 shadow-[0_0_15px_-3px_rgba(0,212,255,0.15)]'
-              : 'bg-white/[0.04] text-gray-500 border-white/[0.08] hover:bg-white/[0.06] hover:text-gray-300'
-          }`}
-          title="Toggle health heatmap glow"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block sm:mr-1 -mt-0.5">
-            <circle cx="12" cy="12" r="5" />
-            <line x1="12" x2="12" y1="1" y2="3" />
-            <line x1="12" x2="12" y1="21" y2="23" />
-            <line x1="4.22" x2="5.64" y1="4.22" y2="5.64" />
-            <line x1="18.36" x2="19.78" y1="18.36" y2="19.78" />
-            <line x1="1" x2="3" y1="12" y2="12" />
-            <line x1="21" x2="23" y1="12" y2="12" />
-            <line x1="4.22" x2="5.64" y1="19.78" y2="18.36" />
-            <line x1="18.36" x2="19.78" y1="5.64" y2="4.22" />
-          </svg>
-          <span className="hidden sm:inline">Glow</span>
-        </button>
-
         {/* Grid toggle */}
         <button
           onClick={toggleGrid}
@@ -1002,40 +776,39 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
         </div>
       </div>
 
-      {/* Legend — bottom left — glassmorphic (pushed up on mobile to avoid FAB overlap) */}
+      {/* Legend — bottom left — glassmorphic */}
       <div className="absolute bottom-20 lg:bottom-6 left-3 z-10 bg-[#080D16]/90 backdrop-blur-xl border border-white/[0.06] rounded-xl p-3 text-xs shadow-2xl shadow-black/30">
         <div className="text-gray-500 font-semibold mb-2 text-[10px] uppercase tracking-wider">
-          Health Zones
+          Production Glow
         </div>
         <div className="flex flex-col gap-1.5">
-          {HEALTH_LEVEL_LABELS.filter(item => item.level < 10).map((item) => (
-            <div key={item.label} className="flex items-center gap-2">
-              <span
-                className="inline-block w-2.5 h-2.5 rounded-sm shrink-0"
-                style={{ background: item.color }}
-              />
-              <span className="text-gray-400">{item.label}</span>
-            </div>
-          ))}
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: '#22C55E' }} />
+            <span className="text-gray-400">Clearwater</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: '#F59E0B' }} />
+            <span className="text-gray-400">Bluesky</span>
+          </div>
         </div>
         {/* Operational status legend */}
         <div className="border-t border-white/[0.06] mt-2.5 pt-2.5">
           <div className="text-gray-500 font-semibold mb-2 text-[10px] uppercase tracking-wider">
-            Operational
+            Well Status
           </div>
           <div className="flex flex-col gap-1.5">
-            {HEALTH_LEVEL_LABELS.filter(item => item.level >= 10).map((item) => (
-              <div key={item.label} className="flex items-center gap-2">
-                <span
-                  className="inline-block w-2.5 h-2.5 rounded-full shrink-0"
-                  style={{ background: item.color }}
-                />
-                <span className="text-gray-400">{item.label}</span>
-              </div>
-            ))}
-          </div>
-          <div className="mt-2 text-[10px] leading-relaxed text-gray-500">
-            Alert dots appear only on wells with an active WellFi device.
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-2.5 h-2.5 rounded-full shrink-0 border-2 border-blue-500" style={{ background: 'transparent' }} />
+              <span className="text-gray-400">Watch</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-2.5 h-2.5 rounded-full shrink-0 border-2 border-red-500" style={{ background: 'transparent' }} />
+              <span className="text-gray-400">Warning</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-2.5 h-2.5 rounded-full shrink-0 bg-gray-600" style={{ background: '#6B7280' }} />
+              <span className="text-gray-400">Well Down (hidden)</span>
+            </div>
           </div>
         </div>
       </div>

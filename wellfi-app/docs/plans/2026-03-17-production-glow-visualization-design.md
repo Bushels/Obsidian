@@ -203,12 +203,26 @@ Convert CSV → `.geojson` at build time (or as a static file in `public/data/`)
 
 Wells with `recent_oil = 0` or null: weight = 0 (invisible in heatmap), but still appear as dots when zoomed in. They represent wells that exist but aren't currently producing oil.
 
+## What This Replaced
+
+The production glow visualization replaced the following Session 6-7 systems:
+
+- **ParcelLayers.ts** — 5-layer parcel health polygon system (green/yellow/orange/red filled mineral rights parcels). Removed from WellMap.tsx; files kept for reference.
+- **HealthHeatmap.ts** — Gaussian green glow weighted by pump age (months_running). Removed from WellMap.tsx; file kept for reference.
+- **"Land" toggle button** — controlled parcel visibility. Replaced by CW/BS formation toggles.
+- **"Glow" toggle button** — controlled health heatmap. Replaced by CW/BS formation toggles.
+- **Health Zones legend** — replaced by Production Glow legend (Clearwater/Bluesky) + Well Status legend (Watch/Warning/Down).
+
+Files removed from rendering but NOT deleted (available for reference):
+- `src/components/map/HealthHeatmap.ts`
+- `src/components/map/ParcelLayers.ts`
+- `src/lib/parcelHealth.ts`
+
 ## What This Does NOT Change
 
-- Obsidian's existing 210-well parcel system (parcels, health colors, op status forms)
-- Existing HealthHeatmap.ts (will be evaluated for removal/replacement later)
 - Existing DLS grid, terrain, dark overlay layers
 - Auth system, admin panels, device inventory
+- Monitored alert dots (glow + points for WellFi-equipped wells)
 
 ## Implementation Notes
 
@@ -217,3 +231,35 @@ Wells with `recent_oil = 0` or null: weight = 0 (invisible in heatmap), but stil
 - Fluid type filter: only "Crude Oil" and "Crude Bitumen" (exclude Gas, Water wells)
 - op_status: defaults to "normal" — future integration with operational_statuses table
 - Performance: 6,064 points is trivial for Mapbox heatmap layer (GPU-accelerated KDE)
+
+## Troubleshooting & Lessons Learned
+
+### Race condition on async GeoJSON fetch
+**Problem:** `addProductionGlow()` fetches GeoJSON via `fetch()`. If the user toggles Glass/Satellite mode during the fetch, the map instance is destroyed and `map.addSource()` throws.
+**Fix:** After `await fetch()`, check `map.getStyle()` inside a try/catch. If the map is gone, return early. Also re-check `map.getSource(SOURCE_ID)` after the async gap.
+
+### Independent normalization prevents visual bias
+**Problem:** Clearwater's max production (4,991 bbl/day) is 3.4x higher than Bluesky's max (1,482). A shared normalization scale makes Bluesky look washed out.
+**Fix:** Each formation normalizes against its own max: CW uses `sqrt(5000)=70.7`, BS uses `sqrt(1500)=38.7`. Both formations get full visual intensity range.
+
+### Stroke-based status preserves formation identity
+**Problem:** If op_status overrides the dot fill color (blue for watch, red for warning), you lose which formation the well belongs to.
+**Fix:** Dot fill always = formation color (green/amber). Op status is communicated via stroke border color instead.
+
+### Popup ref conflicts between layers
+**Problem:** Production dots and monitored alert points share the same `popupRef.current`. Fast mouse movement between layers can create ghost popups.
+**Status:** Known issue, deferred. Future fix: separate popup refs per layer, or a popup manager.
+
+### NaN rendering in tooltips
+**Problem:** If a CSV field contains non-numeric text (e.g., "N/A"), `Number(value)` returns NaN, and `NaN.toFixed(1)` renders as "NaN" in the popup.
+**Fix:** Use `Number(value) || 0` pattern (falsy coalescing) instead of `Number(value ?? 0)` (null coalescing only).
+
+### CSV quoted field parsing
+**Problem:** The CSV has multi-formation entries like `"Bluesky, Gething, Cadomin"` where commas inside quotes break simple `split(',')` parsing.
+**Fix:** Custom `parseCSVLine()` function that tracks quote state. Run as build-time script, not runtime.
+
+### Brainstorming pivot saved complexity
+**Lesson:** Started with 3D extruded cylinders (deck.gl/Three.js), pivoted to native Mapbox heatmap after clarifying the real need. The heatmap approach: (1) zero new dependencies, (2) follows existing HealthHeatmap.ts pattern, (3) GPU-accelerated KDE for free, (4) ~350 lines vs estimated ~1000+ for 3D.
+
+### Gemini as design auditor
+**Lesson:** Having Gemini audit the design doc before implementation caught two critical issues (normalization bias, color blending in overlap zones) that would have required post-implementation rework. Cost: one API call. Saved: hours of visual debugging.
