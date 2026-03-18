@@ -610,20 +610,25 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords, oper
   }, [flyToCoords, mapLoaded]);
 
   // Reload production layers when operator context changes
+  // AbortController prevents race conditions from rapid operator switching
   useEffect(() => {
     if (!mapRef.current || !mapLoaded) return;
     const map = mapRef.current;
+    const abortController = new AbortController();
 
-    // Remove existing production layers
     removeProductionGlow(map);
 
-    // Re-add with new operator context
     const beforeLayer = map.getLayer('parcel-health-glow') ? 'parcel-health-glow' :
       map.getLayer('mineral-rights-glow') ? 'mineral-rights-glow' :
       undefined;
 
-    addProductionGlow(map, operatorSlug, isAdmin, beforeLayer)
-      .catch((err) => console.warn('ProductionGlow reload failed:', err));
+    addProductionGlow(map, operatorSlug, isAdmin, beforeLayer, abortController.signal)
+      .catch((err) => {
+        if (err instanceof DOMException && err.name === 'AbortError') return;
+        console.warn('ProductionGlow reload failed:', err);
+      });
+
+    return () => { abortController.abort(); };
   }, [operatorSlug, isAdmin, mapLoaded]);
 
   // Add terrain DEM hillshade to reveal Peace River valley topography

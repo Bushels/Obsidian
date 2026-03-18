@@ -85,6 +85,7 @@ export async function addProductionGlow(
   operatorSlug: string | null,
   isAdmin: boolean,
   beforeLayerId?: string,
+  signal?: AbortSignal,
 ): Promise<void> {
   // Skip if source already exists (idempotent)
   if (map.getSource(SOURCE_ID)) return;
@@ -94,13 +95,16 @@ export async function addProductionGlow(
     ? '/data/operators/_all/production.geojson'
     : `/data/operators/${operatorSlug}/production.geojson`;
 
-  // Fetch pre-processed GeoJSON
-  const response = await fetch(geojsonUrl);
+  // Fetch pre-processed GeoJSON (abortable for rapid operator switching)
+  const response = await fetch(geojsonUrl, { signal });
   if (!response.ok) {
     console.warn(`ProductionGlow: failed to load ${geojsonUrl} (${response.status})`);
     return;
   }
   const geojson = await response.json();
+
+  // Bail if this request was superseded by a newer operator switch
+  if (signal?.aborted) return;
 
   // Guard: map may have been destroyed while fetch was in-flight
   try { map.getStyle(); } catch { return; }

@@ -16,14 +16,16 @@ export default function OperatorSelector({ selectedSlug, onSelect }: OperatorSel
   const [operators, setOperators] = useState<Operator[]>([]);
 
   useEffect(() => {
+    let cancelled = false;
     supabase
       .from('operators' as never)
       .select('id, slug, display_name')
       .eq('status', 'active')
       .order('display_name')
       .then(({ data }) => {
-        if (data) setOperators(data as unknown as Operator[]);
+        if (!cancelled && data) setOperators(data as unknown as Operator[]);
       });
+    return () => { cancelled = true; };
   }, []);
 
   return (
