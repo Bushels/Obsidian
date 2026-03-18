@@ -32,7 +32,17 @@ for (let i = 1; i < lines.length; i++) {
   const isClearwater = formation.includes('Clearwater');
   const isBluesky = formation.includes('Bluesky');
   if (!isClearwater && !isBluesky) continue;
-  if (fluidType !== 'Crude Oil' && fluidType !== 'Crude Bitumen') continue;
+
+  // Determine fluid category
+  const isOil = fluidType === 'Crude Oil' || fluidType === 'Crude Bitumen';
+  const isGas = fluidType === 'Gas';
+  if (!isOil && !isGas) continue;
+
+  // Filter out zero-production wells
+  const recentOil = parseFloat(row[idx['recent_oil']]) || 0;
+  const recentGas = parseFloat(row[idx['recent_gas']]) || 0;
+  if (isOil && recentOil <= 0) continue;
+  if (isGas && recentGas <= 0) continue;
 
   const lat = parseFloat(row[idx['surface_latitude']]);
   const lng = parseFloat(row[idx['surface_longitude']]);
@@ -49,10 +59,11 @@ for (let i = 1; i < lines.length; i++) {
       formation: canonicalFormation,
       field_name: row[idx['field_name']] || '',
       well_fluid_type: fluidType,
+      fluid_type: isOil ? 'oil' : 'gas',
       well_status: row[idx['well_status']] || '',
-      recent_oil: parseFloat(row[idx['recent_oil']]) || 0,
+      recent_oil: recentOil,
       cumulative_oil: parseFloat(row[idx['cumulative_oil']]) || 0,
-      recent_gas: parseFloat(row[idx['recent_gas']]) || 0,
+      recent_gas: recentGas,
       recent_water: parseFloat(row[idx['recent_water']]) || 0,
       recent_steam_injection: parseFloat(row[idx['recent_steam_injection']]) || 0,
       last_production_date: row[idx['last_production_date']] || '',
@@ -65,7 +76,14 @@ for (let i = 1; i < lines.length; i++) {
 const geojson = { type: 'FeatureCollection', features };
 fs.writeFileSync(OUT_PATH, JSON.stringify(geojson));
 
+const oilWells = features.filter(f => f.properties.fluid_type === 'oil');
+const gasWells = features.filter(f => f.properties.fluid_type === 'gas');
+
 console.log(`Written ${features.length} features to ${OUT_PATH}`);
-console.log(`  Clearwater: ${features.filter(f => f.properties.formation === 'Clearwater').length}`);
-console.log(`  Bluesky: ${features.filter(f => f.properties.formation === 'Bluesky').length}`);
+console.log(`  Oil/Bitumen: ${oilWells.length}`);
+console.log(`    Clearwater: ${oilWells.filter(f => f.properties.formation === 'Clearwater').length}`);
+console.log(`    Bluesky: ${oilWells.filter(f => f.properties.formation === 'Bluesky').length}`);
+console.log(`  Gas: ${gasWells.length}`);
+console.log(`    Clearwater: ${gasWells.filter(f => f.properties.formation === 'Clearwater').length}`);
+console.log(`    Bluesky: ${gasWells.filter(f => f.properties.formation === 'Bluesky').length}`);
 console.log(`  File size: ${(fs.statSync(OUT_PATH).size / 1024 / 1024).toFixed(2)} MB`);
