@@ -40,6 +40,12 @@ const __dirname = path.dirname(__filename);
 const DEFAULT_SOURCE_PATH = path.resolve(__dirname, '..', '..', 'Data', 'active_clearwater_bluesky_recent_prod_ab_sk.csv');
 const DEFAULT_MANIFEST_PATH = path.resolve(__dirname, '..', '..', 'Data', 'operator_rollout_manifest_clearwater_bluesky.csv');
 
+// Operator aliases: subsidiary → parent slug mapping
+// CNUL is a subsidiary of CNRL — their wells should merge under one operator
+const OPERATOR_SLUG_ALIASES: Record<string, string> = {
+  'canadian-natural-upgrading-limited': 'canadian-natural-resources-limited',
+};
+
 function printHelp() {
   process.stdout.write(
     [
@@ -216,7 +222,9 @@ async function main() {
   const sourceRows = parseRows<SourceRow>(options.sourcePath);
   const matchedSourceRows = sourceRows.filter((row) => {
     const operatorName = normalize(row.operator_licensee);
-    return operatorName === sourceOperatorName || slugifyOperator(operatorName) === options.operatorSlug;
+    const operatorNameSlug = slugifyOperator(operatorName);
+    const resolvedSlug = OPERATOR_SLUG_ALIASES[operatorNameSlug] ?? operatorNameSlug;
+    return operatorName === sourceOperatorName || resolvedSlug === options.operatorSlug;
   });
   const activeRows = matchedSourceRows.filter(isActive);
 
