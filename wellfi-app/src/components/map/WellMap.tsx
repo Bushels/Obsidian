@@ -784,11 +784,19 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-2">
             <span className="inline-block w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: '#22C55E' }} />
-            <span className="text-gray-400">Clearwater</span>
+            <span className="text-gray-400">Clearwater Oil</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: '#86EFAC' }} />
+            <span className="text-gray-400">Clearwater Gas</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="inline-block w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: '#F59E0B' }} />
-            <span className="text-gray-400">Bluesky</span>
+            <span className="text-gray-400">Bluesky Oil</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: '#FCD34D' }} />
+            <span className="text-gray-400">Bluesky Gas</span>
           </div>
         </div>
         {/* Operational status legend */}
