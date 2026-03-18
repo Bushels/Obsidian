@@ -15,10 +15,14 @@ const GEOJSON_URL = '/data/bluesky-clearwater-production.geojson';
 const LAYER_CW_HEATMAP = 'clearwater-production-heatmap';
 const LAYER_BS_HEATMAP = 'bluesky-production-heatmap';
 const LAYER_DOTS = 'production-well-dots';
+const LAYER_CW_GAS_HEATMAP = 'clearwater-gas-heatmap';
+const LAYER_BS_GAS_HEATMAP = 'bluesky-gas-heatmap';
 
 // Normalization: sqrt(max_production) per formation
 const CW_SQRT_MAX = 70.7;  // sqrt(5000)
 const BS_SQRT_MAX = 38.7;  // sqrt(1500)
+const CW_GAS_SQRT_MAX = 18.2;  // sqrt(331)
+const BS_GAS_SQRT_MAX = 83.4;  // sqrt(6948)
 
 // ─── Color Ramps ───────────────────────────────────────────────────────────
 
@@ -42,12 +46,34 @@ const BLUESKY_RAMP = [
   1.0,  'rgba(161, 98, 7, 0.70)',        // rich amber
 ];
 
+const CLEARWATER_GAS_RAMP = [
+  'interpolate', ['linear'], ['heatmap-density'],
+  0,    'rgba(134, 239, 172, 0)',
+  0.15, 'rgba(134, 239, 172, 0.10)',
+  0.35, 'rgba(134, 239, 172, 0.18)',
+  0.55, 'rgba(74, 222, 128, 0.28)',
+  0.75, 'rgba(34, 197, 94, 0.38)',
+  1.0,  'rgba(22, 163, 74, 0.50)',
+];
+
+const BLUESKY_GAS_RAMP = [
+  'interpolate', ['linear'], ['heatmap-density'],
+  0,    'rgba(253, 224, 71, 0)',
+  0.15, 'rgba(253, 224, 71, 0.10)',
+  0.35, 'rgba(252, 211, 77, 0.18)',
+  0.55, 'rgba(250, 204, 21, 0.28)',
+  0.75, 'rgba(234, 179, 8, 0.38)',
+  1.0,  'rgba(202, 138, 4, 0.50)',
+];
+
 // ─── Dot Colors ────────────────────────────────────────────────────────────
 
 const CW_DOT_COLOR = '#22C55E';  // green-500
 const BS_DOT_COLOR = '#F59E0B';  // amber-500
 const WATCH_STROKE = '#3B82F6';  // blue-500
 const WARNING_STROKE = '#EF4444'; // red-500
+const CW_GAS_DOT_COLOR = '#86EFAC';  // green-300
+const BS_GAS_DOT_COLOR = '#FCD34D';  // amber-300
 
 // ─── Public API ────────────────────────────────────────────────────────────
 
@@ -77,6 +103,84 @@ export async function addProductionGlow(
     generateId: true,
   });
 
+  // ── Clearwater GAS heatmap (below oil) ──────────────────────────────────
+  map.addLayer(
+    {
+      id: LAYER_CW_GAS_HEATMAP,
+      type: 'heatmap',
+      source: SOURCE_ID,
+      maxzoom: 15,
+      filter: ['all', ['==', ['get', 'formation'], 'Clearwater'], ['==', ['get', 'fluid_type'], 'gas']],
+      paint: {
+        'heatmap-weight': [
+          'min', 1,
+          ['interpolate', ['linear'],
+            ['sqrt', ['get', 'recent_gas']],
+            0, 0,
+            CW_GAS_SQRT_MAX, 1,
+          ],
+        ] as unknown as number,
+        'heatmap-intensity': [
+          'interpolate', ['linear'], ['zoom'],
+          0, 1,
+          9, 3,
+        ] as unknown as number,
+        'heatmap-color': CLEARWATER_GAS_RAMP as unknown as string,
+        'heatmap-radius': [
+          'interpolate', ['linear'], ['zoom'],
+          0, 4,
+          9, 40,
+          13, 60,
+        ] as unknown as number,
+        'heatmap-opacity': [
+          'interpolate', ['linear'], ['zoom'],
+          7, 0.5,
+          14, 0,
+        ] as unknown as number,
+      },
+    },
+    beforeLayerId,
+  );
+
+  // ── Bluesky GAS heatmap (below oil) ─────────────────────────────────────
+  map.addLayer(
+    {
+      id: LAYER_BS_GAS_HEATMAP,
+      type: 'heatmap',
+      source: SOURCE_ID,
+      maxzoom: 15,
+      filter: ['all', ['==', ['get', 'formation'], 'Bluesky'], ['==', ['get', 'fluid_type'], 'gas']],
+      paint: {
+        'heatmap-weight': [
+          'min', 1,
+          ['interpolate', ['linear'],
+            ['sqrt', ['get', 'recent_gas']],
+            0, 0,
+            BS_GAS_SQRT_MAX, 1,
+          ],
+        ] as unknown as number,
+        'heatmap-intensity': [
+          'interpolate', ['linear'], ['zoom'],
+          0, 1,
+          9, 3,
+        ] as unknown as number,
+        'heatmap-color': BLUESKY_GAS_RAMP as unknown as string,
+        'heatmap-radius': [
+          'interpolate', ['linear'], ['zoom'],
+          0, 4,
+          9, 40,
+          13, 60,
+        ] as unknown as number,
+        'heatmap-opacity': [
+          'interpolate', ['linear'], ['zoom'],
+          7, 0.5,
+          14, 0,
+        ] as unknown as number,
+      },
+    },
+    beforeLayerId,
+  );
+
   // ── Clearwater heatmap ──────────────────────────────────────────────────
 
   map.addLayer(
@@ -85,7 +189,7 @@ export async function addProductionGlow(
       type: 'heatmap',
       source: SOURCE_ID,
       maxzoom: 15,
-      filter: ['==', ['get', 'formation'], 'Clearwater'],
+      filter: ['all', ['==', ['get', 'formation'], 'Clearwater'], ['==', ['get', 'fluid_type'], 'oil']],
       paint: {
         'heatmap-weight': [
           'min', 1,
@@ -125,7 +229,7 @@ export async function addProductionGlow(
       type: 'heatmap',
       source: SOURCE_ID,
       maxzoom: 15,
-      filter: ['==', ['get', 'formation'], 'Bluesky'],
+      filter: ['all', ['==', ['get', 'formation'], 'Bluesky'], ['==', ['get', 'fluid_type'], 'oil']],
       paint: {
         'heatmap-weight': [
           'min', 1,
@@ -169,8 +273,13 @@ export async function addProductionGlow(
       paint: {
         'circle-color': [
           'case',
-          ['==', ['get', 'formation'], 'Clearwater'], CW_DOT_COLOR,
+          ['all', ['==', ['get', 'formation'], 'Clearwater'], ['==', ['get', 'fluid_type'], 'gas']],
+          CW_GAS_DOT_COLOR,
+          ['all', ['==', ['get', 'formation'], 'Bluesky'], ['==', ['get', 'fluid_type'], 'gas']],
+          BS_GAS_DOT_COLOR,
+          ['==', ['get', 'formation'], 'Bluesky'],
           BS_DOT_COLOR,
+          CW_DOT_COLOR,
         ] as unknown as string,
         'circle-radius': [
           'interpolate', ['linear'], ['zoom'],
@@ -210,7 +319,7 @@ export async function addProductionGlow(
  * Remove all production glow layers and source.
  */
 export function removeProductionGlow(map: MapboxMap): void {
-  for (const id of [LAYER_DOTS, LAYER_BS_HEATMAP, LAYER_CW_HEATMAP]) {
+  for (const id of [LAYER_DOTS, LAYER_BS_HEATMAP, LAYER_CW_HEATMAP, LAYER_BS_GAS_HEATMAP, LAYER_CW_GAS_HEATMAP]) {
     if (map.getLayer(id)) map.removeLayer(id);
   }
   if (map.getSource(SOURCE_ID)) map.removeSource(SOURCE_ID);
@@ -224,10 +333,11 @@ export function setFormationHeatmapVisibility(
   formation: 'Clearwater' | 'Bluesky',
   visible: boolean,
 ): void {
-  const layerId = formation === 'Clearwater' ? LAYER_CW_HEATMAP : LAYER_BS_HEATMAP;
-  if (map.getLayer(layerId)) {
-    map.setLayoutProperty(layerId, 'visibility', visible ? 'visible' : 'none');
-  }
+  const oilLayer = formation === 'Clearwater' ? LAYER_CW_HEATMAP : LAYER_BS_HEATMAP;
+  const gasLayer = formation === 'Clearwater' ? LAYER_CW_GAS_HEATMAP : LAYER_BS_GAS_HEATMAP;
+  const vis = visible ? 'visible' : 'none';
+  if (map.getLayer(oilLayer)) map.setLayoutProperty(oilLayer, 'visibility', vis);
+  if (map.getLayer(gasLayer)) map.setLayoutProperty(gasLayer, 'visibility', vis);
 }
 
 /**
@@ -248,6 +358,8 @@ export function setProductionDotsVisibility(
 export const PRODUCTION_LAYER_IDS = {
   clearwaterHeatmap: LAYER_CW_HEATMAP,
   blueskyHeatmap: LAYER_BS_HEATMAP,
+  clearwaterGasHeatmap: LAYER_CW_GAS_HEATMAP,
+  blueskyGasHeatmap: LAYER_BS_GAS_HEATMAP,
   dots: LAYER_DOTS,
   source: SOURCE_ID,
 } as const;
