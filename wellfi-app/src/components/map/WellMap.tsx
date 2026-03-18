@@ -8,7 +8,7 @@ import { wellsToGeoJSON } from '@/lib/mapUtils';
 import { generateDLSGrid } from '@/lib/dlsGrid';
 import { applyGlassmorphicStyle, GLASS_COLORS } from './glassmorphicStyle';
 import { wellPopupHTML } from './WellPopup';
-import { addProductionGlow, setFormationHeatmapVisibility, PRODUCTION_LAYER_IDS } from './ProductionGlow';
+import { addProductionGlow, removeProductionGlow, setFormationHeatmapVisibility, PRODUCTION_LAYER_IDS } from './ProductionGlow';
 import { productionDotPopupHTML } from './ProductionPopup';
 
 interface WellMapProps {
@@ -16,6 +16,8 @@ interface WellMapProps {
   onWellClick: (well: WellEnriched) => void;
   filters: MapFilters;
   flyToCoords?: { lng: number; lat: number } | null;
+  operatorSlug: string | null;
+  isAdmin: boolean;
 }
 
 const STYLES = {
@@ -110,7 +112,7 @@ function buildMonitoredAlertFilter(filters: MapFilters): mapboxgl.Expression {
   return baseFilter ? ['all', MONITORED_ALERT_BASE_FILTER, baseFilter] : MONITORED_ALERT_BASE_FILTER;
 }
 
-export default function WellMap({ wells, onWellClick, filters, flyToCoords }: WellMapProps) {
+export default function WellMap({ wells, onWellClick, filters, flyToCoords, operatorSlug, isAdmin }: WellMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const popupRef = useRef<mapboxgl.Popup | null>(null);
@@ -163,7 +165,7 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
         map.getLayer('parcel-health-glow') ? 'parcel-health-glow' :
         map.getLayer('mineral-rights-glow') ? 'mineral-rights-glow' :
         undefined;
-      addProductionGlow(map, productionBeforeLayer)
+      addProductionGlow(map, operatorSlug, isAdmin, productionBeforeLayer)
         .then(() => {
           // ── Production dot hover ──────────────────────────────────────
           map.on('mouseenter', PRODUCTION_LAYER_IDS.dots, (e) => {
@@ -606,6 +608,23 @@ export default function WellMap({ wells, onWellClick, filters, flyToCoords }: We
       curve: 1.42,
     });
   }, [flyToCoords, mapLoaded]);
+
+  // Reload production layers when operator context changes
+  useEffect(() => {
+    if (!mapRef.current || !mapLoaded) return;
+    const map = mapRef.current;
+
+    // Remove existing production layers
+    removeProductionGlow(map);
+
+    // Re-add with new operator context
+    const beforeLayer = map.getLayer('parcel-health-glow') ? 'parcel-health-glow' :
+      map.getLayer('mineral-rights-glow') ? 'mineral-rights-glow' :
+      undefined;
+
+    addProductionGlow(map, operatorSlug, isAdmin, beforeLayer)
+      .catch((err) => console.warn('ProductionGlow reload failed:', err));
+  }, [operatorSlug, isAdmin, mapLoaded]);
 
   // Add terrain DEM hillshade to reveal Peace River valley topography
   const addHillshade = useCallback((map: mapboxgl.Map) => {

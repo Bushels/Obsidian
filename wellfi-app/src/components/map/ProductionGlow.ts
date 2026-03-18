@@ -10,7 +10,6 @@ import type { Map as MapboxMap } from 'mapbox-gl';
 // ─── Constants ─────────────────────────────────────────────────────────────
 
 const SOURCE_ID = 'bluesky-clearwater-production-source';
-const GEOJSON_URL = '/data/bluesky-clearwater-production.geojson';
 
 const LAYER_CW_HEATMAP = 'clearwater-production-heatmap';
 const LAYER_BS_HEATMAP = 'bluesky-production-heatmap';
@@ -83,13 +82,24 @@ const BS_GAS_DOT_COLOR = '#FCD34D';  // amber-300
  */
 export async function addProductionGlow(
   map: MapboxMap,
+  operatorSlug: string | null,
+  isAdmin: boolean,
   beforeLayerId?: string,
 ): Promise<void> {
   // Skip if source already exists (idempotent)
   if (map.getSource(SOURCE_ID)) return;
 
+  // Derive operator-scoped GeoJSON URL
+  const geojsonUrl = isAdmin || !operatorSlug
+    ? '/data/operators/_all/production.geojson'
+    : `/data/operators/${operatorSlug}/production.geojson`;
+
   // Fetch pre-processed GeoJSON
-  const response = await fetch(GEOJSON_URL);
+  const response = await fetch(geojsonUrl);
+  if (!response.ok) {
+    console.warn(`ProductionGlow: failed to load ${geojsonUrl} (${response.status})`);
+    return;
+  }
   const geojson = await response.json();
 
   // Guard: map may have been destroyed while fetch was in-flight

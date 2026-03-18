@@ -13,6 +13,7 @@ import { OperatorOverviewCard } from '@/components/panels/OperatorOverviewCard';
 import { LoadingMap } from '@/components/ui/LoadingMap';
 import { Badge } from '@/components/ui/badge';
 import { CommandPalette } from '@/components/ui/CommandPalette';
+import OperatorSelector from '@/components/admin/OperatorSelector';
 
 const WellMap = lazy(() => import('@/components/map/WellMap'));
 const RightPanel = lazy(() => import('@/components/panels/RightPanel'));
@@ -36,6 +37,8 @@ export default function MapPage() {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [flyTarget, setFlyTarget] = useState<{ lng: number; lat: number } | null>(null);
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  const [adminOperatorSlug, setAdminOperatorSlug] = useState<string | null>(null);
+  const effectiveOperatorSlug = isAdmin ? adminOperatorSlug : (user?.operatorSlug ?? null);
 
   const updateSelectedWellParam = useCallback(
     (well: WellEnriched | null) => {
@@ -316,6 +319,12 @@ export default function MapPage() {
 
           {user && (
             <div className="flex items-center gap-2">
+              {isAdmin && (
+                <OperatorSelector
+                  selectedSlug={adminOperatorSlug}
+                  onSelect={setAdminOperatorSlug}
+                />
+              )}
               <div className="hidden md:flex flex-col leading-tight">
                 <span className="text-sm text-gray-300 font-medium">{user.displayName}</span>
                 {!isAdmin && user.operatorDisplayName && (
@@ -383,6 +392,8 @@ export default function MapPage() {
                 onWellClick={handleWellClick}
                 filters={filters}
                 flyToCoords={flyTarget}
+                operatorSlug={effectiveOperatorSlug}
+                isAdmin={isAdmin}
               />
             </Suspense>
           )}
