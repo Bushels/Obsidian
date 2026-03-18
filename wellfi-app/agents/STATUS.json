@@ -1,6 +1,6 @@
 {
   "project": "wellfi-app",
-  "last_updated": "2026-03-11T00:00:00Z",
+  "last_updated": "2026-03-18T00:00:00Z",
   "sessions": {
     "1": {
       "status": "completed",
@@ -55,7 +55,7 @@
     "wells_seeded": 211,
     "edge_functions": ["notify-operational-status"]
   },
-  "notes": "Sessions 1-8 COMPLETE. Session 8: Operational Status system (Watch/Warning/Well Down), RiskOverview dashboard, UWI search, map op-status overlays. 9 agents across 4 phases. Build passes with zero Session 8 TS errors.",
+  "notes": "Sessions 1-10 COMPLETE. Session 9: Device Inventory lifecycle (incoming→in_stock→assigned→installed), admin RLS, InventoryOverview + DeviceAssignment UI. Session 10: Production Glow visualization — 6,932 wells (oil+gas), 5 heatmap layers, zoom crossfade dots, HTML-escaped popups.",
   "session_5": {
     "label": "Innovation + Perfection",
     "status": "completed",
@@ -98,5 +98,39 @@
     "files_created": 6,
     "files_modified": 9,
     "critic_fixes": 3
+  },
+  "session_9": {
+    "label": "Device Inventory & Assignment",
+    "status": "completed",
+    "gate_requires": ["1", "2", "3", "4", "8"],
+    "started_at": "2026-02-19T00:00:00Z",
+    "completed_at": "2026-03-10T00:00:00Z",
+    "features": {
+      "device_inventory_table": "Supabase table with admin-only RLS, CHECK constraints, partial unique index",
+      "lifecycle": "incoming → in_stock → assigned → installed with timestamp tracking",
+      "inventory_overview": "4 colored counts in left sidebar (all users, admin gets Manage link)",
+      "device_assignment": "RightPanel section for assigning devices to flagged wells",
+      "inventory_management": "Admin-only dialog for adding/managing devices",
+      "migrations": "001-007 all synced with remote"
+    }
+  },
+  "session_10": {
+    "label": "Production Glow Visualization",
+    "status": "completed",
+    "gate_requires": ["1", "2", "3", "4", "8"],
+    "started_at": "2026-03-17T00:00:00Z",
+    "completed_at": "2026-03-18T00:00:00Z",
+    "features": {
+      "build_pipeline": "CSV → GeoJSON (6,932 features, 3.32 MB), zero-production filtered",
+      "heatmap_layers": "5 layers: CW/BS oil (green/gold) + CW/BS gas (light green/light gold)",
+      "well_dots": "Circle layer with zoom crossfade, 4-shade formation+fluid colors",
+      "popup": "Gas/oil badge, fluid-type-aware colors, HTML-escaped fields",
+      "legend": "4 production glow entries + 3 well status entries",
+      "toggles": "CW/BS buttons control both oil AND gas per formation"
+    },
+    "design_docs": [
+      "docs/plans/2026-03-17-production-glow-visualization-design.md",
+      "docs/plans/2026-03-18-gas-well-visualization-design.md"
+    ]
   }
 }
