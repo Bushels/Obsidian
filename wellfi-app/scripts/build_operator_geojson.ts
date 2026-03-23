@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import XLSX from 'xlsx';
+import { dedupeMonthlySnapshotRows } from './lib/monthly_snapshot.js';
 
 interface SourceRow {
   uwi?: string;
@@ -54,6 +55,36 @@ interface GeoJsonCollection {
 
 interface CliOptions {
   inputPath: string;
+  cleanOutput: boolean;
+}
+
+export interface BuildOperatorGeojsonOptions {
+  inputPath: string;
+  outputBase?: string;
+  cleanOutput?: boolean;
+  logger?: (message: string) => void;
+}
+
+export interface OperatorGeojsonSummaryEntry {
+  slug: string;
+  operator: string;
+  featureCount: number;
+}
+
+export interface BuildOperatorGeojsonSummary {
+  generatedAt: string;
+  inputPath: string;
+  outputBase: string;
+  cleanOutput: boolean;
+  sourceRows: number;
+  uniqueSnapshotRows: number;
+  duplicateRowsCollapsed: number;
+  duplicateWellCount: number;
+  skippedCoords: number;
+  skippedZeroProd: number;
+  totalFeatures: number;
+  operatorCount: number;
+  operators: OperatorGeojsonSummaryEntry[];
 }
 
 const OPERATOR_ALIASES: Record<string, string> = {
@@ -63,14 +94,14 @@ const OPERATOR_ALIASES: Record<string, string> = {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const DEFAULT_INPUT_PATH = path.resolve(
+export const DEFAULT_INPUT_PATH = path.resolve(
   __dirname,
   '..',
   '..',
   'Data',
   'active_clearwater_bluesky_recent_prod_ab_sk.csv',
 );
-const OUTPUT_BASE = path.resolve(__dirname, '..', 'public', 'data', 'operators');
+export const OUTPUT_BASE = path.resolve(__dirname, '..', 'public', 'data', 'operators');
 
 function diag(message: string): void {
   process.stderr.write(`${message}\n`);
@@ -85,6 +116,7 @@ function printHelp(): void {
       '',
       'Options:',
       '  --input <path>  Source CSV (default: ../../Data/active_clearwater_bluesky_recent_prod_ab_sk.csv)',
+      '  --no-clean      Keep any existing operator output directories instead of rebuilding cleanly',
       '  --help          Show this message',
       '',
     ].join('\n'),
@@ -93,6 +125,7 @@ function printHelp(): void {
 
 function parseArgs(argv: string[]): CliOptions {
   let inputPath = DEFAULT_INPUT_PATH;
+  let cleanOutput = true;
 
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
@@ -105,10 +138,14 @@ function parseArgs(argv: string[]): CliOptions {
       index += 1;
       continue;
     }
+    if (arg === '--no-clean') {
+      cleanOutput = false;
+      continue;
+    }
     throw new Error(`Unknown argument: ${arg}`);
   }
 
-  return { inputPath };
+  return { inputPath, cleanOutput };
 }
 
 function normalize(value: unknown): string {
@@ -201,16 +238,32 @@ function writeGeoJson(filePath: string, collection: GeoJsonCollection): void {
   fs.writeFileSync(filePath, JSON.stringify(collection), 'utf8');
 }
 
-function main(): void {
-  const options = parseArgs(process.argv.slice(2));
+export function buildOperatorGeojson(
+  options: BuildOperatorGeojsonOptions,
+): BuildOperatorGeojsonSummary {
+  const inputPath = path.resolve(options.inputPath);
+  const outputBase = path.resolve(options.outputBase ?? OUTPUT_BASE);
+  const cleanOutput = options.cleanOutput ?? true;
+  const logger = options.logger ?? diag;
 
-  if (!fs.existsSync(options.inputPath)) {
-    throw new Error(`Input file not found: ${options.inputPath}`);
+  if (!fs.existsSync(inputPath)) {
+    throw new Error(`Input file not found: ${inputPath}`);
   }
 
-  diag(`Reading ${options.inputPath}...`);
-  const rows = parseRows(options.inputPath);
-  diag(`Source rows: ${rows.length}`);
+  logger(`Reading ${inputPath}...`);
+  const rawRows = parseRows(inputPath);
+  const { rows, summary: dedupeSummary } = dedupeMonthlySnapshotRows(rawRows);
+  logger(`Source rows: ${rawRows.length}`);
+  if (dedupeSummary.duplicateRowsCollapsed > 0) {
+    logger(
+      `Collapsed ${dedupeSummary.duplicateRowsCollapsed} duplicate snapshot row(s) across ${dedupeSummary.duplicateWellCount} well(s) before building overlays.`,
+    );
+  }
+
+  if (cleanOutput) {
+    fs.rmSync(outputBase, { recursive: true, force: true });
+    logger(`Cleaned ${outputBase}`);
+  }
 
   // Convert rows to features, filtering invalid/zero-production
   const allFeatures: GeoJsonFeature[] = [];
@@ -240,9 +293,9 @@ function main(): void {
     }
   }
 
-  diag(`Skipped (missing coords): ${skippedCoords}`);
-  diag(`Skipped (zero production): ${skippedZeroProd}`);
-  diag(`Features after filtering: ${allFeatures.length}`);
+  logger(`Skipped (missing coords): ${skippedCoords}`);
+  logger(`Skipped (zero production): ${skippedZeroProd}`);
+  logger(`Features after filtering: ${allFeatures.length}`);
 
   // Group by operator slug
   const operatorGroups = new Map<string, { operator: string; features: GeoJsonFeature[] }>();
@@ -261,9 +314,10 @@ function main(): void {
 
   // Write per-operator GeoJSON
   const sortedSlugs = [...operatorGroups.keys()].sort();
+  const operatorSummaries: OperatorGeojsonSummaryEntry[] = [];
 
-  diag('');
-  diag('Per-operator feature counts:');
+  logger('');
+  logger('Per-operator feature counts:');
 
   for (const slug of sortedSlugs) {
     const group = operatorGroups.get(slug)!;
@@ -271,9 +325,14 @@ function main(): void {
       type: 'FeatureCollection',
       features: group.features,
     };
-    const outPath = path.join(OUTPUT_BASE, slug, 'production.geojson');
+    const outPath = path.join(outputBase, slug, 'production.geojson');
     writeGeoJson(outPath, collection);
-    diag(`  ${slug}: ${group.features.length} (${group.operator})`);
+    operatorSummaries.push({
+      slug,
+      operator: group.operator,
+      featureCount: group.features.length,
+    });
+    logger(`  ${slug}: ${group.features.length} (${group.operator})`);
   }
 
   // Write _all combined
@@ -281,18 +340,44 @@ function main(): void {
     type: 'FeatureCollection',
     features: allFeatures,
   };
-  const allPath = path.join(OUTPUT_BASE, '_all', 'production.geojson');
+  const allPath = path.join(outputBase, '_all', 'production.geojson');
   writeGeoJson(allPath, allCollection);
 
-  diag('');
-  diag(`Total operators: ${operatorGroups.size}`);
-  diag(`Total features (_all): ${allFeatures.length}`);
-  diag(`Wrote ${sortedSlugs.length + 1} GeoJSON files to ${OUTPUT_BASE}`);
+  logger('');
+  logger(`Total operators: ${operatorGroups.size}`);
+  logger(`Total features (_all): ${allFeatures.length}`);
+  logger(`Wrote ${sortedSlugs.length + 1} GeoJSON files to ${outputBase}`);
+
+  return {
+    generatedAt: new Date().toISOString(),
+    inputPath,
+    outputBase,
+    cleanOutput,
+    sourceRows: rawRows.length,
+    uniqueSnapshotRows: dedupeSummary.uniqueRows,
+    duplicateRowsCollapsed: dedupeSummary.duplicateRowsCollapsed,
+    duplicateWellCount: dedupeSummary.duplicateWellCount,
+    skippedCoords,
+    skippedZeroProd,
+    totalFeatures: allFeatures.length,
+    operatorCount: operatorGroups.size,
+    operators: operatorSummaries,
+  };
 }
 
-try {
-  main();
-} catch (error: unknown) {
-  process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);
-  process.exit(1);
+function main(): void {
+  const options = parseArgs(process.argv.slice(2));
+  buildOperatorGeojson({
+    inputPath: options.inputPath,
+    cleanOutput: options.cleanOutput,
+  });
+}
+
+if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
+  try {
+    main();
+  } catch (error: unknown) {
+    process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);
+    process.exit(1);
+  }
 }

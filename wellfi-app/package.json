@@ -11,7 +11,11 @@
     "operators:audit": "tsx scripts/build_operator_inventory.ts",
     "operators:provision": "tsx scripts/provision_operator_users.ts",
     "operators:import": "tsx scripts/import_operator_basin_wells.ts",
+    "production:normalize-imperial": "tsx scripts/normalize_imperial_monthly_snapshot.ts",
     "build:operator-geojson": "npx tsx scripts/build_operator_geojson.ts",
+    "production:refresh": "tsx scripts/refresh_monthly_production.ts",
+    "production:sync": "tsx scripts/sync_monthly_production.ts",
+    "production:verify": "tsx scripts/verify_monthly_production_sync.ts",
     "stackdx:refresh": "tsx scripts/stackdx_refresh.ts",
     "stackdx:install-browser": "playwright install chromium"
   },

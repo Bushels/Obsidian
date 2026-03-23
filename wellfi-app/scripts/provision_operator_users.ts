@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import XLSX from 'xlsx';
 import { createClient } from '@supabase/supabase-js';
+import { loadScriptEnv } from './lib/load_script_env.js';
 
 interface RolloutRow {
   operator_slug?: string;
@@ -26,6 +27,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const DEFAULT_MANIFEST_PATH = path.resolve(__dirname, '..', '..', 'Data', 'operator_rollout_manifest_clearwater_bluesky.csv');
 const VALID_ONBOARDING_STATUSES = new Set(['inventory', 'planned', 'pilot', 'ready', 'paused']);
+
+loadScriptEnv();
 
 function printHelp() {
   process.stdout.write(

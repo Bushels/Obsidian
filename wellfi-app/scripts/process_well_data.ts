@@ -21,8 +21,11 @@
 import fs from 'fs';
 import XLSX from 'xlsx';
 import { createClient } from '@supabase/supabase-js';
+import { loadScriptEnv } from './lib/load_script_env.js';
 
 // ---- Config ----
+loadScriptEnv();
+
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'https://opxptteradsvptjyxxfr.supabase.co';
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const JSON_PATH = 'c:/Users/kyle/MPS/Obsidian/obsidian_bluesky_clearwater_last2years.json';
