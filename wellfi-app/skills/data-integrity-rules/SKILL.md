@@ -8,9 +8,13 @@ description: WellFi-specific data integrity rules and gotchas. Use this skill wh
 Reference guide for common data pitfalls in the WellFi codebase. Check these rules before shipping any data-related change.
 
 ## Rule 1: Zero-Production Filter
-Oil wells with `recent_oil <= 0` and gas wells with `recent_gas <= 0` are excluded from the production GeoJSON at build time. If well counts don't match expectations, check this filter first.
-- Build script: `scripts/build-production-geojson.js`
-- Current counts: 5,501 oil + 1,431 gas = 6,932 total
+The monthly production snapshot is not a destructive full-replacement well-master source.
+
+- `scripts/build_operator_geojson.ts` excludes rows only when both `recent_oil` and `recent_gas` are `0`.
+- `scripts/refresh_monthly_production.ts` rebuilds overlay output only. It does not delete wells from Supabase.
+- `scripts/sync_monthly_production.ts` can insert missing active wells and safely sync a limited set of well fields into Supabase, but it still does not delete wells missing from the latest snapshot.
+- Missing-from-snapshot wells should lose the cloud after overlay rebuild, not disappear from the base well map.
+- If counts look low, check the zero-production filter before assuming tenant leakage or map bugs.
 
 ## Rule 2: Independent Normalization Per Formation Per Fluid Type
 Each of the 4 heatmap layers has its own `SQRT_MAX` normalization constant derived from actual data:
@@ -21,14 +25,25 @@ Each of the 4 heatmap layers has its own `SQRT_MAX` normalization constant deriv
 
 **If the CSV data changes, re-derive these constants.** Run:
 ```bash
-node -e "const d=JSON.parse(require('fs').readFileSync('wellfi-app/public/data/bluesky-clearwater-production.geojson','utf8'));['Clearwater','Bluesky'].forEach(f=>['oil','gas'].forEach(t=>{const w=d.features.filter(x=>x.properties.formation===f&&x.properties.fluid_type===t);const field=t==='oil'?'recent_oil':'recent_gas';const max=Math.max(...w.map(x=>x.properties[field]));console.log(f,t,': count='+w.length+', max='+max+', sqrt='+Math.sqrt(max).toFixed(1))}))"
+node -e "const d=JSON.parse(require('fs').readFileSync('wellfi-app/public/data/operators/_all/production.geojson','utf8'));['Clearwater','Bluesky'].forEach(f=>['oil','gas'].forEach(t=>{const w=d.features.filter(x=>x.properties.formation===f&&x.properties.fluid_type===t);const field=t==='oil'?'recent_oil':'recent_gas';const max=Math.max(...w.map(x=>x.properties[field]));console.log(f,t,': count='+w.length+', max='+max+', sqrt='+Math.sqrt(max).toFixed(1))}))"
 ```
 
-## Rule 3: CSV Line Endings
-Always split CSV on `/\r?\n/` (not just `\n`). Windows-origin CSVs from StackDX have CRLF line endings. A bare `\n` split leaves `\r` on the last field, corrupting values.
+## Rule 3: Prefer XLSX Parsing For Monthly Snapshots
+Use `xlsx` for the monthly basin snapshot. Do not hand-roll CSV parsing for this workflow unless the source format changes and you intentionally replace the parser.
 
-## Rule 4: CSV Quoted Fields
-Operator names and formation names can contain commas inside quotes (e.g., `"Bluesky, Gething, Cadomin"`). The custom `parseCSVLine()` handles this but does NOT handle escaped quotes (`""`). If you encounter `""` in CSV data, switch to `csv-parse` library.
+## Rule 4: Validate Required Snapshot Columns
+Before rebuilding overlays, validate the snapshot includes:
+
+- `uwi`
+- `operator_licensee`
+- `producing_formation`
+- `well_fluid_type`
+- `surface_latitude`
+- `surface_longitude`
+- `recent_oil`
+- `recent_gas`
+
+Use `scripts/refresh_monthly_production.ts` for the standard validation path.
 
 ## Rule 5: Formation Canonicalization
 CSV `producing_formation` values vary: "Clearwater", "Clearwater A", "Clearwater B", etc. The build script uses `.includes('Clearwater')` and `.includes('Bluesky')` to catch all variants. Do NOT use strict equality.
@@ -53,7 +68,7 @@ Mapbox GL JS expressions don't match TypeScript types. Always cast:
 ```
 
 ## Rule 10: HTML Escaping in Popups
-All string fields interpolated into popup HTML MUST be escaped with `escapeHTML()` (in `ProductionPopup.ts`). Operator names contain `&` characters. Never use raw string interpolation for user-facing HTML.
+All string fields interpolated into popup HTML MUST be escaped with `escapeHtml()` in the popup helper that renders them, for example `src/components/map/WellPopup.tsx`. Operator names contain `&` characters. Never use raw string interpolation for user-facing HTML.
 
 ## Rule 11: Abandoned Well Filter
 The Supabase `useWells` hook filters out abandoned wells at query level (`well_status != 'Abandoned'`). Current count: 211 total seed → 210 active. If a well count is off by 1, check this filter.
@@ -66,8 +81,17 @@ This has caused 14+ TypeScript errors in the past. Always verify depth.
 ## Rule 13: Fluid Type Property
 The GeoJSON `fluid_type` property is `'oil'` or `'gas'` (lowercase). The `well_fluid_type` property is the raw CSV value (`'Crude Oil'`, `'Crude Bitumen'`, `'Gas'`). Use `fluid_type` for layer filters, `well_fluid_type` for display.
 
-## Rule 14: Heatmap Layer Ordering
-Gas heatmaps MUST render below oil heatmaps. In `ProductionGlow.ts`, gas layers are added BEFORE oil layers. With Mapbox `addLayer(layer, beforeId)`, sequential calls with the same `beforeId` stack in insertion order (first added = lowest).
+## Rule 14: Overlay Layer Ordering
+Gas heatmaps MUST render below oil heatmaps. Live base-well dots from `WellMap.tsx` must sit above the heatmap layers but below the close-range production handoff dots. Close-range production dot glow MUST render below production dots, and monitored alert layers must remain above all of them.
 
 ## Rule 15: Toggle Scope
-CW/BS toggle buttons control BOTH oil AND gas layers for that formation. The `setFormationHeatmapVisibility()` function toggles 2 layers per call. If adding new layer types per formation, update this function.
+CW/BS toggle buttons control BOTH oil AND gas layers for that formation across BOTH handoff states. The `setFormationHeatmapVisibility()` function must toggle the heatmap layer, gas heatmap layer, production dot glow, and production dots for that formation together.
+
+## Rule 16: Handoff Color Match
+Close-range production dots MUST use the same formation/fluid palette as the production heatmap:
+- Clearwater oil -> green
+- Clearwater gas -> light green
+- Bluesky oil -> amber
+- Bluesky gas -> yellow
+
+This is intentional so users can visually track a production area from basin-scale heatmap into well-scale dots without re-learning the legend at close zoom.

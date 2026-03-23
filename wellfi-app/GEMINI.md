@@ -1,4 +1,4 @@
-# WellFi App - Claude Project Guide
+# WellFi App - Gemini Project Guide
 
 ## Project Summary
 

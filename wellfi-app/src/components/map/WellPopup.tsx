@@ -18,6 +18,16 @@ const PUMP_CHANGE_LABELS: Record<string, { label: string; color: string }> = {
   cancelled: { label: 'Pump Change Cancelled', color: '#64748B' },
 };
 
+const FULFILLMENT_LABELS: Record<string, { label: string; color: string }> = {
+  unassigned: { label: 'Unassigned', color: '#94A3B8' },
+  tool_reserved: { label: 'Tool Reserved', color: '#22C55E' },
+  scheduled: { label: 'Scheduled', color: '#0EA5E9' },
+  dispatched: { label: 'Dispatched', color: '#8B5CF6' },
+  on_site: { label: 'On Site', color: '#F97316' },
+  completed: { label: 'Completed', color: '#14B8A6' },
+  cancelled: { label: 'Cancelled', color: '#64748B' },
+};
+
 /**
  * Generates an HTML string for a mapboxgl.Popup.
  * Receives the GeoJSON feature properties (not a full Well object).
@@ -40,16 +50,49 @@ export function wellPopupHTML(
   const cumulativeOil = asNumber(properties.cumulative_oil);
   const hasWellfi = properties.has_wellfi === true;
   const opStatus = asNullableString(properties.op_status);
+  const eventExpectedDownDate = asNullableString(properties.event_expected_down_date);
+  const eventExpectedStartDate = asNullableString(properties.event_expected_start_date);
+  const eventExpectedEndDate = asNullableString(properties.event_expected_end_date);
+  const eventSupportRequested = properties.event_support_requested === true;
+  const requestedOrAssignedTool = asNullableString(properties.requested_or_assigned_tool);
+  const fulfillmentStatus = asNullableString(properties.fulfillment_status);
+  const plannedServiceDate = asNullableString(properties.planned_service_date);
+  const assignedTechName = asNullableString(properties.assigned_tech_name);
   const pumpChangeStatus = asNullableString(properties.pump_change_status);
   const pumpChangeDate = asNullableString(properties.pump_change_date);
   const pumpChangeNotes = asNullableString(properties.pump_change_notes);
+  const latestSnapshotMonth = asNullableString(properties.latest_production_snapshot_month);
+  const latestSnapshotStatus = asNullableString(properties.latest_production_snapshot_status);
   const id = asString(properties.id, '');
 
   const riskBadgeColor = riskColor(riskLevel);
   const monitorStage = opStatus ? MONITOR_STAGE_LABELS[opStatus] : null;
+  const fulfillmentStage = fulfillmentStatus ? FULFILLMENT_LABELS[fulfillmentStatus] : null;
   const pumpChangeStage = pumpChangeStatus ? PUMP_CHANGE_LABELS[pumpChangeStatus] : null;
+  const snapshotStatusLabel =
+    latestSnapshotStatus === 'present'
+      ? 'Present in latest snapshot'
+      : latestSnapshotStatus === 'missing'
+        ? 'Missing from latest snapshot'
+        : latestSnapshotStatus === 'unknown'
+          ? 'Unknown'
+          : null;
   const detailRows = [
+    latestSnapshotMonth ? renderDetailRow('Snapshot month', formatMonth(latestSnapshotMonth)) : '',
+    snapshotStatusLabel ? renderDetailRow('Snapshot status', snapshotStatusLabel) : '',
     renderDetailRow('Stage', monitorStage?.label ?? '-'),
+    requestedOrAssignedTool ? renderDetailRow('Tool', requestedOrAssignedTool) : '',
+    plannedServiceDate ? renderDetailRow('Planned service', formatDate(plannedServiceDate)) : '',
+    assignedTechName ? renderDetailRow('Assigned tech', assignedTechName) : '',
+    eventExpectedDownDate ? renderDetailRow('Expected down', formatDate(eventExpectedDownDate)) : '',
+    eventExpectedStartDate || eventExpectedEndDate
+      ? renderDetailRow(
+        'Expected window',
+        `${formatDate(eventExpectedStartDate ?? 'Not set')} to ${formatDate(eventExpectedEndDate ?? 'Not set')}`,
+      )
+      : '',
+    eventSupportRequested ? renderDetailRow('Support', 'Requested') : '',
+    fulfillmentStage ? renderDetailRow('Fulfillment', fulfillmentStage.label) : '',
     pumpChangeStage ? renderDetailRow('Pump change', pumpChangeStage.label) : '',
     pumpChangeDate ? renderDetailRow('Pump change date', formatDate(pumpChangeDate)) : '',
   ].filter(Boolean).join('');
@@ -68,6 +111,7 @@ export function wellPopupHTML(
   <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;">
     ${renderBadge(riskLevel, riskBadgeColor)}
     ${monitorStage ? renderBadge(monitorStage.label, monitorStage.color) : ''}
+    ${fulfillmentStage ? renderBadge(fulfillmentStage.label, fulfillmentStage.color, `${fulfillmentStage.color}20`, fulfillmentStage.color) : ''}
     ${pumpChangeStage ? renderBadge(pumpChangeStage.label, pumpChangeStage.color) : ''}
     ${hasWellfi ? renderBadge('WellFi Monitored', '#00D4FF', '#03141C', '#67E8F9') : ''}
   </div>
@@ -77,7 +121,7 @@ export function wellPopupHTML(
     ${renderMetric('Field', field)}
     ${renderMetric('Days Operating (12mo)', operatingDays != null ? formatInteger(operatingDays) : 'N/A')}
     ${renderMetric('Uptime', annualUptime != null ? `${formatNumber(annualUptime, 1)}%` : 'N/A')}
-    ${renderMetric('Dec Rate', decRate != null ? `${formatNumber(decRate, 1)} bbl/d` : 'N/A')}
+    ${renderMetric('Latest Oil Rate', decRate != null ? `${formatNumber(decRate, 1)} bbl/d` : 'N/A')}
     ${renderMetric('Cumulative Oil', cumulativeOil != null ? `${formatInteger(cumulativeOil)} bbl` : 'N/A')}
   </div>
 
@@ -158,7 +202,7 @@ function formatInteger(value: number): string {
 }
 
 function formatDate(value: string): string {
-  const parsed = new Date(value);
+  const parsed = parseDateInput(value);
   if (Number.isNaN(parsed.getTime())) {
     return value;
   }
@@ -167,6 +211,29 @@ function formatDate(value: string): string {
     month: 'short',
     day: 'numeric',
   });
+}
+
+function formatMonth(value: string): string {
+  const parsed = parseDateInput(value);
+  if (Number.isNaN(parsed.getTime())) {
+    return value;
+  }
+  return parsed.toLocaleDateString('en-CA', {
+    year: 'numeric',
+    month: 'short',
+  });
+}
+
+function parseDateInput(value: string): Date {
+  const trimmed = value.trim();
+  const dateOnlyMatch = trimmed.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+  if (dateOnlyMatch) {
+    const [, year, month, day] = dateOnlyMatch;
+    return new Date(Number(year), Number(month) - 1, Number(day));
+  }
+
+  return new Date(trimmed);
 }
 
 function truncate(value: string, maxLength: number): string {

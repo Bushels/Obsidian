@@ -1,0 +1,4 @@
+interface:
+  display_name: "Monthly Production Sync"
+  short_description: "Validate the basin CSV, sync production state, zero missing wells for the month, and verify the result."
+  default_prompt: "Run the verified monthly production sync workflow for the latest Clearwater and Bluesky production snapshot."

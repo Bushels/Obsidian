@@ -8,6 +8,21 @@ This is the Codex-facing project guide for `wellfi-app`.
 - Primary v1 workflows: operator-scoped map access, basin inventory review, field and formation filtering, basic well detail review, plus Obsidian-only internal workflows for pump changes, operational statuses, devices, and notifications.
 - Engineers, not the model, decide when a pump is down or when a change should be scheduled.
 
+## Current State
+
+- WellFi is now a multi-operator Clearwater / Bluesky portal with Obsidian retaining the richer internal workflow.
+- The live rollout boundary is **15 provisioned operators** in Supabase today.
+- Base well dots come from live Supabase well data.
+- Production overlay comes from monthly CSV-derived overlay GeoJSON: heatmap at basin scale, then formation/fluid production dots at close zoom using the same colors as the heatmap for easier visual handoff.
+- Standard monthly workflow: `npm run production:sync -- "<csv-path>"`.
+
+See also:
+
+- `docs/current-state.md`
+- `docs/agent-workflows.md`
+- `CLAUDE.md`
+- `GEMINI.md`
+
 ## Repo map
 
 - `src/pages/MapPage.tsx`: main dashboard shell.
@@ -16,11 +31,16 @@ This is the Codex-facing project guide for `wellfi-app`.
 - `src/components/forms/`: operator forms for status, pump-change, and device workflows.
 - `src/hooks/useWells.ts`: joined well/device/pump-change/operational-status data for the UI.
 - `scripts/build_operator_inventory.ts`: basin inventory audit and manifest generation.
+- `scripts/sync_monthly_production.ts`: standard monthly snapshot sync for overlay rebuild + active well reconciliation.
 - `scripts/provision_operator_users.ts`: per-operator tenant and login provisioning.
 - `scripts/import_operator_basin_wells.ts`: per-operator basin well import path.
 - `supabase/functions/notify-operational-status/`: Slack and email alert delivery.
 - `skills/`: portable repo skills for repeated validation or workflow execution.
 - `TESTING_PROTOCOL.md`: release and smoke checklist.
+- `docs/current-state.md`: concise current implementation and rollout status.
+- `docs/agent-workflows.md`: agent/skill catalog for future Codex, Claude, and Gemini sessions.
+- `CLAUDE.md`: Claude-facing project entrypoint.
+- `GEMINI.md`: Gemini-facing project entrypoint.
 - `code_review.md`: review rubric for `/review`.
 - `PLANS.md`: execution-plan template for longer or cross-cutting tasks.
 - `agents/`: historical swarm coordination artifacts. These are not production runtime code.
@@ -32,6 +52,12 @@ This is the Codex-facing project guide for `wellfi-app`.
 - Production build: `npm run build`
 - Lint: `npm run lint`
 - Preview build: `npm run preview`
+- Monthly snapshot sync: `npm run production:sync -- "<csv-path>"`
+- Overlay-only refresh: `npm run production:refresh -- "<csv-path>"`
+- Live monthly sync prerequisite: keep `SUPABASE_SERVICE_ROLE_KEY` in `wellfi-app/.env.local` so the scripts can auto-load it.
+- Current rollout model: monthly sync writes for provisioned operators and reports unprovisioned operators as rollout gaps instead of failing the entire run.
+- Preferred documentation workflow after major changes: `skills/docs-maintainer`.
+- Cross-model rule: when workflow discovery changes, keep `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `docs/agent-workflows.md` aligned in the same pass.
 
 ## Working rules
 

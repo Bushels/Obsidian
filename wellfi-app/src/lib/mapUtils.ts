@@ -1,6 +1,12 @@
-import type { Well } from '@/types';
-import type { OperationalStatus } from '@/types/operationalStatus';
+import type { WellEnriched } from '@/types/operationalStatus';
 import type { FeatureCollection, Feature, Point } from 'geojson';
+import {
+  getRequestedOrAssignedToolSummary,
+  getWellEventOperationalStatus,
+  hasScheduledSupport,
+  isWellDownNow,
+  needsToolAssignment,
+} from '@/lib/wellEventSelectors';
 
 /** Mapbox GL expression type alias (avoids namespace import issues with verbatimModuleSyntax) */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -60,11 +66,28 @@ export interface WellFeatureProperties {
   operating_days_12mo: number | null;
   has_wellfi: boolean;
   has_upcoming_change: boolean;
+  has_active_event: boolean;
+  needs_tool_assignment: boolean;
+  scheduled_support: boolean;
+  is_down_now: boolean;
   show_monitoring_alert: boolean;
   op_status: string | null;
+  event_state: string | null;
+  event_expected_down_date: string | null;
+  event_expected_start_date: string | null;
+  event_expected_end_date: string | null;
+  event_support_requested: boolean;
+  requested_or_assigned_tool: string | null;
+  fulfillment_status: string | null;
+  planned_service_date: string | null;
+  assigned_tool_serial: string | null;
+  assigned_tool_type: string | null;
+  assigned_tech_name: string | null;
   pump_change_status: string | null;
   pump_change_date: string | null;
   pump_change_notes: string | null;
+  latest_production_snapshot_month: string | null;
+  latest_production_snapshot_status: 'present' | 'missing' | 'unknown' | null;
 }
 
 // Health level legend labels — monochromatic green palette
@@ -81,13 +104,28 @@ export const HEALTH_LEVEL_LABELS: { level: number; color: string; label: string 
   { level: 12, color: '#EF4444', label: 'Well Down (operational)' },
 ];
 
-type MappableWell = Well & {
-  operational_status?: OperationalStatus | null;
+type MappableWell = WellEnriched & {
+  latest_production_snapshot_month?: string | null;
+  latest_production_snapshot_status?: 'present' | 'missing' | 'unknown' | null;
 };
+
+function dedupeMappableWells(wells: MappableWell[]): MappableWell[] {
+  const uniqueWells = new Map<string, MappableWell>();
+
+  for (const well of wells) {
+    const key = (well.well_id ?? '').trim().toUpperCase() || well.id;
+    if (!key || uniqueWells.has(key)) {
+      continue;
+    }
+    uniqueWells.set(key, well);
+  }
+
+  return [...uniqueWells.values()];
+}
 
 // Convert Well[] to GeoJSON FeatureCollection
 export function wellsToGeoJSON(wells: MappableWell[]): FeatureCollection<Point, WellFeatureProperties> {
-  const features: Feature<Point, WellFeatureProperties>[] = wells.map((w) => ({
+  const features: Feature<Point, WellFeatureProperties>[] = dedupeMappableWells(wells).map((w) => ({
     type: 'Feature' as const,
     geometry: { type: 'Point' as const, coordinates: [w.lon, w.lat] },
     properties: {
@@ -107,20 +145,34 @@ export function wellsToGeoJSON(wells: MappableWell[]): FeatureCollection<Point, 
       operating_days_12mo:
         w.total_downtime_days != null ? Math.max(0, 365 - w.total_downtime_days) : null,
       has_wellfi: !!w.wellfi_device?.is_active,
-      has_upcoming_change: !!(
+      has_upcoming_change: hasScheduledSupport(w) || !!(
         w.active_pump_change &&
         ['warning', 'scheduled', 'in_progress'].includes(w.active_pump_change.status)
       ),
+      has_active_event: !!w.active_well_event?.is_active,
+      needs_tool_assignment: needsToolAssignment(w),
+      scheduled_support: hasScheduledSupport(w),
+      is_down_now: isWellDownNow(w),
       show_monitoring_alert:
-        !!w.wellfi_device?.is_active && !!(w.operational_status?.is_active || w.active_pump_change),
-      op_status:
-        w.operational_status?.is_active && w.operational_status.status
-          ? w.operational_status.status
-          : null,
+        !!(getWellEventOperationalStatus(w) || w.active_pump_change),
+      op_status: getWellEventOperationalStatus(w),
+      event_state: w.active_well_event?.state ?? null,
+      event_expected_down_date: w.active_well_event?.expected_down_date ?? null,
+      event_expected_start_date: w.active_well_event?.expected_start_date ?? null,
+      event_expected_end_date: w.active_well_event?.expected_end_date ?? null,
+      event_support_requested: w.active_well_event?.support_requested ?? false,
+      requested_or_assigned_tool: getRequestedOrAssignedToolSummary(w),
+      fulfillment_status: w.well_event_fulfillment?.status ?? null,
+      planned_service_date: w.well_event_fulfillment?.planned_service_date ?? null,
+      assigned_tool_serial: w.assigned_tool?.serial_number ?? null,
+      assigned_tool_type: w.assigned_tool?.tool_type ?? null,
+      assigned_tech_name: w.well_event_fulfillment?.assigned_tech_name ?? null,
       pump_change_status: w.active_pump_change?.status ?? null,
       pump_change_date:
         w.active_pump_change?.scheduled_date ?? w.active_pump_change?.actual_date ?? null,
       pump_change_notes: w.active_pump_change?.notes ?? null,
+      latest_production_snapshot_month: w.latest_production_snapshot_month ?? null,
+      latest_production_snapshot_status: w.latest_production_snapshot_status ?? null,
     },
   }));
 
