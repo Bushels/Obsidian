@@ -7,6 +7,11 @@
 
 import type { Well } from '@/types';
 import type { DeviceInventoryItem } from '@/types/deviceInventory';
+import type {
+  ToolInventoryItem as WellEventToolInventoryItem,
+  WellEvent,
+  WellEventFulfillment,
+} from '@/types/wellEvents';
 
 // ─── Core Types ──────────────────────────────────────────────
 
@@ -34,6 +39,9 @@ export interface OperationalStatus {
 export type WellEnriched = Well & {
   operational_status?: OperationalStatus | null;
   assigned_device?: DeviceInventoryItem | null;
+  active_well_event?: WellEvent | null;
+  well_event_fulfillment?: WellEventFulfillment | null;
+  assigned_tool?: WellEventToolInventoryItem | null;
 };
 
 // ─── Config & Colors ──────────────────────────────────────────

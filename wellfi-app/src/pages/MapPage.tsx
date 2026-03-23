@@ -1,15 +1,25 @@
 import { lazy, Suspense, useState, useCallback, useMemo, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import wellfiLogo from '@/assets/wellfi-logo.png';
-import type { MapFilters } from '@/types';
 import type { WellEnriched } from '@/types/operationalStatus';
 import { useWells } from '@/hooks/useWells';
+import { useProductionSnapshot } from '@/hooks/useProductionSnapshot';
 import { useAuth } from '@/lib/auth-context';
+import {
+  hasScheduledSupport,
+  isWellDownNow,
+  isWellFlagged,
+  needsToolAssignment,
+} from '@/lib/wellEventSelectors';
+import { supabase } from '@/lib/supabase';
+import { DEFAULT_DASHBOARD_FILTERS, type DashboardFilters } from '@/types/mapFilters';
 import FilterBar from '@/components/panels/FilterBar';
 import UpcomingList from '@/components/panels/UpcomingList';
 import { RiskOverview } from '@/components/panels/RiskOverview';
 import { InventoryOverview } from '@/components/panels/InventoryOverview';
 import { OperatorOverviewCard } from '@/components/panels/OperatorOverviewCard';
+import { AdminProductionDeck } from '@/components/panels/AdminProductionDeck';
 import { LoadingMap } from '@/components/ui/LoadingMap';
 import { Badge } from '@/components/ui/badge';
 import { CommandPalette } from '@/components/ui/CommandPalette';
@@ -18,27 +28,97 @@ import OperatorSelector from '@/components/admin/OperatorSelector';
 const WellMap = lazy(() => import('@/components/map/WellMap'));
 const RightPanel = lazy(() => import('@/components/panels/RightPanel'));
 
-const DEFAULT_FILTERS: MapFilters = {
-  riskLevels: [],
-  formations: [],
-  fields: [],
-  showWellFiOnly: false,
-  showUpcomingOnly: false,
-  minRateBblD: 0,
+type ScopedWell = WellEnriched & {
+  operator_id?: string | null;
 };
+
+interface ActiveOperator {
+  id: string;
+  slug: string;
+  display_name: string;
+  basin_scope: string | null;
+}
+
+function formatBasinScope(value: string | null | undefined): string {
+  return value?.replace(/\|/g, ' / ') ?? 'Clearwater / Bluesky';
+}
 
 export default function MapPage() {
   const { data: wells = [], isLoading, error } = useWells();
   const { user, isAdmin, signOut } = useAuth();
+  const { data: operators = [] } = useQuery({
+    queryKey: ['operators', isAdmin ? 'admin' : 'viewer'],
+    enabled: isAdmin,
+    queryFn: async (): Promise<ActiveOperator[]> => {
+      const { data, error: operatorsError } = await supabase
+        .from('operators' as never)
+        .select('id, slug, display_name, basin_scope')
+        .eq('status', 'active')
+        .order('display_name');
+
+      if (operatorsError) {
+        throw operatorsError;
+      }
+
+      return (data ?? []) as unknown as ActiveOperator[];
+    },
+    staleTime: 5 * 60 * 1000,
+  });
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedWell, setSelectedWell] = useState<WellEnriched | null>(null);
-  const [filters, setFilters] = useState<MapFilters>(DEFAULT_FILTERS);
+  const [filters, setFilters] = useState<DashboardFilters>(DEFAULT_DASHBOARD_FILTERS);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [flyTarget, setFlyTarget] = useState<{ lng: number; lat: number } | null>(null);
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [adminOperatorSlug, setAdminOperatorSlug] = useState<string | null>(null);
   const effectiveOperatorSlug = isAdmin ? adminOperatorSlug : (user?.operatorSlug ?? null);
+  const allScopedWells = wells as ScopedWell[];
+  const selectedOperator = useMemo(
+    () => operators.find((operator) => operator.slug === adminOperatorSlug) ?? null,
+    [adminOperatorSlug, operators],
+  );
+  const operatorNameById = useMemo(
+    () => new Map(operators.map((operator) => [operator.id, operator.display_name])),
+    [operators],
+  );
+  const scopedWells = useMemo(() => {
+    if (!isAdmin || !selectedOperator) {
+      return allScopedWells;
+    }
+
+    return allScopedWells.filter((well) => well.operator_id === selectedOperator.id);
+  }, [allScopedWells, isAdmin, selectedOperator]);
+  const loadedOperatorNames = useMemo(
+    () =>
+      [
+        ...new Set(
+          allScopedWells
+            .map((well) => (well.operator_id ? operatorNameById.get(well.operator_id) ?? null : null))
+            .filter((value): value is string => Boolean(value)),
+        ),
+      ].sort(),
+    [allScopedWells, operatorNameById],
+  );
+  const loadedOperatorNameSet = useMemo(
+    () => new Set(loadedOperatorNames),
+    [loadedOperatorNames],
+  );
+  const activeWellFiUwis = useMemo(
+    () =>
+      scopedWells
+        .filter((well) => well.wellfi_device?.is_active)
+        .map((well) => well.well_id),
+    [scopedWells],
+  );
+  const loadedOperatorCount = isAdmin && selectedOperator
+    ? (scopedWells.length > 0 ? 1 : 0)
+    : loadedOperatorNames.length;
+  const canShowScopedProduction = !selectedOperator || loadedOperatorNameSet.has(selectedOperator.display_name);
+  const { data: productionFeatures = [], isLoading: isProductionLoading } = useProductionSnapshot(
+    isAdmin && loadedOperatorNames.length > 0,
+    loadedOperatorNames,
+  );
 
   const updateSelectedWellParam = useCallback(
     (well: WellEnriched | null) => {
@@ -75,12 +155,12 @@ export default function MapPage() {
 
   const handleUpcomingWellClick = useCallback(
     (wellId: string) => {
-      const found = wells.find((well) => well.id === wellId);
+      const found = scopedWells.find((well) => well.id === wellId);
       if (found) {
         selectWell(found, { flyTo: true });
       }
     },
-    [selectWell, wells],
+    [scopedWells, selectWell],
   );
 
   const handleClosePanel = useCallback(() => {
@@ -110,7 +190,10 @@ export default function MapPage() {
     filters.formations.length > 0 ||
     filters.fields.length > 0 ||
     filters.showWellFiOnly ||
-    filters.showUpcomingOnly ||
+    filters.showFlaggedOnly ||
+    filters.showNeedsToolOnly ||
+    filters.showScheduledSupportOnly ||
+    filters.showDownNowOnly ||
     filters.minRateBblD > 0;
 
   const activeFilterCount = useMemo(() => {
@@ -119,15 +202,18 @@ export default function MapPage() {
     if (filters.formations.length > 0) count++;
     if (filters.fields.length > 0) count++;
     if (filters.showWellFiOnly) count++;
-    if (filters.showUpcomingOnly) count++;
+    if (filters.showFlaggedOnly) count++;
+    if (filters.showNeedsToolOnly) count++;
+    if (filters.showScheduledSupportOnly) count++;
+    if (filters.showDownNowOnly) count++;
     if (filters.minRateBblD > 0) count++;
     return count;
   }, [filters]);
 
   const filteredWells = useMemo(() => {
-    if (!hasActiveFilters) return wells;
+    if (!hasActiveFilters) return scopedWells;
 
-    return wells.filter((well) => {
+    return scopedWells.filter((well) => {
       if (
         filters.riskLevels.length > 0 &&
         !filters.riskLevels.includes(well.risk_level ?? 'UNKNOWN')
@@ -146,17 +232,23 @@ export default function MapPage() {
         return false;
       }
 
-      if (filters.showWellFiOnly && !well.wellfi_device) {
+      if (filters.showWellFiOnly && !well.wellfi_device?.is_active) {
         return false;
       }
 
-      if (
-        filters.showUpcomingOnly &&
-        !(
-          well.active_pump_change &&
-          ['warning', 'scheduled', 'in_progress'].includes(well.active_pump_change.status)
-        )
-      ) {
+      if (filters.showFlaggedOnly && !isWellFlagged(well)) {
+        return false;
+      }
+
+      if (filters.showNeedsToolOnly && !needsToolAssignment(well)) {
+        return false;
+      }
+
+      if (filters.showScheduledSupportOnly && !hasScheduledSupport(well)) {
+        return false;
+      }
+
+      if (filters.showDownNowOnly && !isWellDownNow(well)) {
         return false;
       }
 
@@ -169,24 +261,71 @@ export default function MapPage() {
 
       return true;
     });
-  }, [filters, hasActiveFilters, wells]);
+  }, [filters, hasActiveFilters, scopedWells]);
 
+  const totalScopedWells = scopedWells.length;
   const filteredCount = filteredWells.length;
-  const operatorLabel = user?.operatorDisplayName ?? 'All Operators';
-  const basinLabel = user?.basinScope?.replace(/\|/g, ' / ') ?? 'Clearwater / Bluesky';
+  const selectedWellInScope = useMemo(
+    () => {
+      if (!selectedWell) {
+        return null;
+      }
+
+      return scopedWells.find((well) => well.id === selectedWell.id) ?? null;
+    },
+    [scopedWells, selectedWell],
+  );
+  const activeFieldCount = useMemo(
+    () =>
+      new Set(
+        scopedWells.map((well) => well.field).filter((field): field is string => Boolean(field)),
+      ).size,
+    [scopedWells],
+  );
+  const headerOperatorLabel = isAdmin
+    ? selectedOperator?.display_name ?? 'MPS Multi-Operator View'
+    : user?.operatorDisplayName ?? 'Operator Dashboard';
+  const basinLabel = isAdmin
+    ? formatBasinScope(selectedOperator?.basin_scope)
+    : formatBasinScope(user?.basinScope);
+  const roleBadgeLabel = isAdmin ? 'MPS Admin' : 'Operator Viewer';
+  const operatorCoverageLabel = `${loadedOperatorCount} loaded | ${operators.length} provisioned`;
   const headerStatus = isLoading
     ? 'Loading wells...'
     : isAdmin
-      ? hasActiveFilters
-        ? `${filteredCount} of ${wells.length} Wells · ${basinLabel} · All operators`
-        : `${wells.length} Wells · ${basinLabel} · All operators`
+      ? selectedOperator
+        ? hasActiveFilters
+          ? `${filteredCount} of ${totalScopedWells} Wells | ${selectedOperator.display_name}`
+          : `${totalScopedWells} Wells | ${selectedOperator.display_name} | ${basinLabel}`
+        : hasActiveFilters
+          ? `${filteredCount} of ${totalScopedWells} Wells | ${operatorCoverageLabel}`
+          : `${totalScopedWells} Wells | ${basinLabel} | ${operatorCoverageLabel}`
       : hasActiveFilters
-        ? `${filteredCount} of ${wells.length} Wells · ${operatorLabel}`
-        : `${wells.length} Wells · ${operatorLabel}`;
+        ? `${filteredCount} of ${totalScopedWells} Wells | ${headerOperatorLabel}`
+        : `${totalScopedWells} Wells | ${headerOperatorLabel}`;
+
+  const overviewHeading = isAdmin
+    ? selectedOperator
+      ? 'Operator Dashboard'
+      : 'MPS Dashboard'
+    : 'Operator Overview';
+  const overviewContextMetricLabel = isAdmin && !selectedOperator ? 'Loaded Operators' : 'Active Fields';
+  const overviewContextMetricValue = isAdmin && !selectedOperator ? loadedOperatorCount : activeFieldCount;
+  const overviewScopeDescription = isAdmin
+    ? selectedOperator
+      ? 'Scoped to one operator for dashboard review.'
+      : `${loadedOperatorCount} of ${operators.length} provisioned operators currently have live wells loaded in Supabase.`
+    : 'Map results are already scoped to your company account.';
+
+  useEffect(() => {
+    if (selectedWell && !selectedWellInScope) {
+      updateSelectedWellParam(null);
+    }
+  }, [selectedWell, selectedWellInScope, updateSelectedWellParam]);
 
   useEffect(() => {
     const isSmallScreen = window.innerWidth < 1024;
-    const isSheetOpen = mobileFilterOpen || selectedWell !== null;
+    const isSheetOpen = mobileFilterOpen || selectedWellInScope !== null;
     if (isSmallScreen && isSheetOpen) {
       document.body.classList.add('sheet-open');
     } else {
@@ -196,18 +335,18 @@ export default function MapPage() {
     return () => {
       document.body.classList.remove('sheet-open');
     };
-  }, [mobileFilterOpen, selectedWell]);
+  }, [mobileFilterOpen, selectedWellInScope]);
 
   useEffect(() => {
     const requestedWellId = searchParams.get('well_id');
-    if (!requestedWellId || wells.length === 0) {
+    if (!requestedWellId || scopedWells.length === 0) {
       return;
     }
 
     const normalizedRequestedId = requestedWellId.trim().toLowerCase();
     const matchesSelectedWell =
-      selectedWell &&
-      [selectedWell.id, selectedWell.well_id, selectedWell.formatted_id]
+      selectedWellInScope &&
+      [selectedWellInScope.id, selectedWellInScope.well_id, selectedWellInScope.formatted_id]
         .filter((value): value is string => Boolean(value))
         .some((value) => value.trim().toLowerCase() === normalizedRequestedId);
 
@@ -215,7 +354,7 @@ export default function MapPage() {
       return;
     }
 
-    const matchedWell = wells.find((well) =>
+    const matchedWell = scopedWells.find((well) =>
       [well.id, well.well_id, well.formatted_id]
         .filter((value): value is string => Boolean(value))
         .some((value) => value.trim().toLowerCase() === normalizedRequestedId),
@@ -231,7 +370,7 @@ export default function MapPage() {
     });
 
     return () => cancelAnimationFrame(frame);
-  }, [searchParams, selectedWell, wells]);
+  }, [scopedWells, searchParams, selectedWellInScope]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -253,8 +392,8 @@ export default function MapPage() {
 
       if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && filteredWells.length > 0) {
         event.preventDefault();
-        const currentIndex = selectedWell
-          ? filteredWells.findIndex((well) => well.id === selectedWell.id)
+        const currentIndex = selectedWellInScope
+          ? filteredWells.findIndex((well) => well.id === selectedWellInScope.id)
           : -1;
 
         let nextIndex: number;
@@ -270,7 +409,7 @@ export default function MapPage() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [filteredWells, handleClosePanel, selectWell, selectedWell]);
+  }, [filteredWells, handleClosePanel, selectWell, selectedWellInScope]);
 
   return (
     <div className="h-screen flex flex-col bg-[#06090F] text-white">
@@ -311,7 +450,8 @@ export default function MapPage() {
             </svg>
             <span className="hidden md:inline">Search wells</span>
             <kbd className="hidden md:inline-flex items-center gap-0.5 ml-1 px-1.5 py-0.5 text-[10px] font-medium text-gray-600 bg-white/[0.04] border border-white/[0.08] rounded">
-              <span className="text-xs">{navigator.platform?.includes('Mac') ? '⌘' : 'Ctrl+'}</span>K
+              <span className="text-xs">{navigator.platform?.includes('Mac') ? 'Cmd' : 'Ctrl'}</span>
+              <span>K</span>
             </kbd>
           </button>
 
@@ -331,8 +471,8 @@ export default function MapPage() {
                   <span className="text-[11px] text-gray-500">{user.operatorDisplayName}</span>
                 )}
               </div>
-              <Badge variant="outline" className="text-xs capitalize">
-                {user.role}
+              <Badge variant="outline" className="text-xs">
+                {roleBadgeLabel}
               </Badge>
               <button
                 type="button"
@@ -348,31 +488,35 @@ export default function MapPage() {
 
       <div className="flex flex-1 overflow-hidden relative">
         <aside className="hidden lg:flex w-72 shrink-0 flex-col border-r border-white/[0.06] bg-[#080D16]/80 backdrop-blur-xl overflow-y-auto">
-          {isAdmin ? (
-            <>
-              <div className="border-b border-white/[0.06] p-4">
-                <UpcomingList onWellClick={handleUpcomingWellClick} />
-              </div>
-              <div className="p-3 pb-0">
-                <RiskOverview wells={filteredWells} />
-              </div>
-              <div className="px-3 pt-2">
-                <InventoryOverview />
-              </div>
-            </>
-          ) : (
-            <div className="p-3 pb-0">
-              <OperatorOverviewCard
-                wells={wells}
-                operatorName={operatorLabel}
-                basinScope={user?.basinScope}
-                filteredCount={filteredCount}
-                hasActiveFilters={hasActiveFilters}
+          <div className="p-3 pb-0 space-y-2">
+            <OperatorOverviewCard
+              wells={scopedWells}
+              heading={overviewHeading}
+              badgeLabel={roleBadgeLabel}
+              operatorName={headerOperatorLabel}
+              scopeDescription={overviewScopeDescription}
+              contextMetricLabel={overviewContextMetricLabel}
+              contextMetricValue={overviewContextMetricValue}
+              basinScope={isAdmin ? selectedOperator?.basin_scope : user?.basinScope}
+              filteredCount={filteredCount}
+              hasActiveFilters={hasActiveFilters}
+            />
+            {isAdmin && (
+              <AdminProductionDeck
+                features={canShowScopedProduction ? productionFeatures : []}
+                isLoading={isProductionLoading}
+                selectedOperatorName={selectedOperator?.display_name ?? null}
+                loadedOperatorCount={loadedOperatorCount}
+                provisionedOperatorCount={operators.length}
+                activeWellFiUwis={activeWellFiUwis}
               />
-            </div>
-          )}
+            )}
+            <UpcomingList wells={filteredWells} onWellClick={handleUpcomingWellClick} />
+            {isAdmin && <RiskOverview wells={filteredWells} />}
+            {isAdmin && <InventoryOverview />}
+          </div>
 
-          <FilterBar filters={filters} onChange={setFilters} wells={wells} />
+          <FilterBar filters={filters} onChange={setFilters} wells={scopedWells} />
         </aside>
 
         <main className="flex-1 relative bg-[#06090F]">
@@ -388,21 +532,28 @@ export default function MapPage() {
           ) : (
             <Suspense fallback={<LoadingMap />}>
               <WellMap
-                wells={wells}
+                wells={scopedWells}
                 onWellClick={handleWellClick}
                 filters={filters}
                 flyToCoords={flyTarget}
                 operatorSlug={effectiveOperatorSlug}
-                isAdmin={isAdmin}
+                showProductionOverlay={isAdmin && canShowScopedProduction}
+                allowedProductionOperators={loadedOperatorNames}
               />
             </Suspense>
           )}
         </main>
 
         <aside className="hidden lg:flex w-96 shrink-0 flex-col border-l border-white/[0.06] bg-[#080D16]/80 backdrop-blur-xl">
-          {selectedWell ? (
+          {selectedWellInScope ? (
             <Suspense fallback={rightPanelFallback}>
-              <RightPanel well={selectedWell} onClose={handleClosePanel} canEdit={isAdmin} />
+              <RightPanel
+                well={selectedWellInScope}
+                onClose={handleClosePanel}
+                canEdit={isAdmin}
+                canManageWellEvents={!!user}
+                showProduction={isAdmin}
+              />
             </Suspense>
           ) : (
             rightPanelPlaceholder
@@ -436,7 +587,7 @@ export default function MapPage() {
             <div className="absolute bottom-0 left-0 right-0 max-h-[80vh] mobile-sheet-landscape overflow-y-auto bg-[#080D16]/95 backdrop-blur-xl rounded-t-2xl border-t border-white/[0.08] animate-slide-up safe-area-bottom">
               <div className="drag-handle" />
               <div className="sticky top-0 z-10 bg-[#080D16]/95 backdrop-blur-xl px-4 py-3 border-b border-white/[0.06] flex items-center justify-between">
-                <span className="text-sm font-semibold">Filters & Overview</span>
+                <span className="text-sm font-semibold">Filters and Overview</span>
                 <button
                   type="button"
                   className="flex h-8 w-8 items-center justify-center rounded-md text-gray-500 hover:text-white hover:bg-white/[0.06] transition-all duration-200"
@@ -447,35 +598,46 @@ export default function MapPage() {
                 </button>
               </div>
 
-              {isAdmin ? (
-                <div className="px-3 pt-3 space-y-2">
-                  <UpcomingList
-                    onWellClick={(wellId) => {
-                      handleUpcomingWellClick(wellId);
-                      setMobileFilterOpen(false);
-                    }}
+              <div className="px-3 pt-3 space-y-2">
+                <OperatorOverviewCard
+                  wells={scopedWells}
+                  heading={overviewHeading}
+                  badgeLabel={roleBadgeLabel}
+                  operatorName={headerOperatorLabel}
+                  scopeDescription={overviewScopeDescription}
+                  contextMetricLabel={overviewContextMetricLabel}
+                  contextMetricValue={overviewContextMetricValue}
+                  basinScope={isAdmin ? selectedOperator?.basin_scope : user?.basinScope}
+                  filteredCount={filteredCount}
+                  hasActiveFilters={hasActiveFilters}
+                />
+                {isAdmin && (
+                  <AdminProductionDeck
+                    features={canShowScopedProduction ? productionFeatures : []}
+                    isLoading={isProductionLoading}
+                    selectedOperatorName={selectedOperator?.display_name ?? null}
+                    loadedOperatorCount={loadedOperatorCount}
+                    provisionedOperatorCount={operators.length}
+                    activeWellFiUwis={activeWellFiUwis}
                   />
-                  <RiskOverview wells={filteredWells} />
-                  <InventoryOverview />
-                </div>
-              ) : (
-                <div className="px-3 pt-3">
-                  <OperatorOverviewCard
-                    wells={wells}
-                    operatorName={operatorLabel}
-                    basinScope={user?.basinScope}
-                    filteredCount={filteredCount}
-                    hasActiveFilters={hasActiveFilters}
-                  />
-                </div>
-              )}
+                )}
+                <UpcomingList
+                  wells={filteredWells}
+                  onWellClick={(wellId) => {
+                    handleUpcomingWellClick(wellId);
+                    setMobileFilterOpen(false);
+                  }}
+                />
+                {isAdmin && <RiskOverview wells={filteredWells} />}
+                {isAdmin && <InventoryOverview />}
+              </div>
 
-              <FilterBar filters={filters} onChange={setFilters} wells={wells} />
+              <FilterBar filters={filters} onChange={setFilters} wells={scopedWells} />
             </div>
           </div>
         )}
 
-        {selectedWell && (
+        {selectedWellInScope && (
           <div className="lg:hidden fixed inset-0 z-40">
             <div
               className="absolute inset-0 bg-black/50"
@@ -483,7 +645,13 @@ export default function MapPage() {
             />
             <div className="absolute bottom-0 left-0 right-0 max-h-[80vh] mobile-sheet-landscape overflow-y-auto bg-[#080D16]/95 backdrop-blur-xl rounded-t-2xl border-t border-white/[0.08] animate-slide-up safe-area-bottom">
               <Suspense fallback={rightPanelFallback}>
-                <RightPanel well={selectedWell} onClose={handleClosePanel} canEdit={isAdmin} />
+                <RightPanel
+                  well={selectedWellInScope}
+                  onClose={handleClosePanel}
+                  canEdit={isAdmin}
+                  canManageWellEvents={!!user}
+                  showProduction={isAdmin}
+                />
               </Suspense>
             </div>
           </div>
@@ -491,7 +659,7 @@ export default function MapPage() {
       </div>
 
       <CommandPalette
-        wells={wells}
+        wells={scopedWells}
         open={commandPaletteOpen}
         onClose={() => setCommandPaletteOpen(false)}
         onSelect={handleCommandPaletteSelect}

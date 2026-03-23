@@ -21,6 +21,7 @@ import type { Well } from '@/types';
 
 interface DownholeModel3DProps {
   well: Well;
+  canEdit?: boolean;
 }
 
 interface DownholePlacement {
@@ -539,7 +540,7 @@ function buildToolStack(placement: DownholePlacement, hasInstalledWellFi: boolea
   ];
 }
 
-function DownholeModel3DComponent({ well }: DownholeModel3DProps) {
+function DownholeModel3DComponent({ well, canEdit = false }: DownholeModel3DProps) {
   const [expandedOpen, setExpandedOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [view, setView] = useState<SceneViewState>(DEFAULT_VIEW);
@@ -1338,15 +1339,17 @@ function DownholeModel3DComponent({ well }: DownholeModel3DProps) {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <CardTitle className="text-sm font-semibold uppercase tracking-wide text-muted-foreground flex items-center gap-2">
             Downhole 3D View
-            <Button
-              variant="outline"
-              size="icon"
-              className="h-6 w-6 text-slate-400 hover:text-slate-200 border-slate-700/50 hover:bg-slate-800"
-              onClick={() => setEditOpen(true)}
-              title="Edit Configuration"
-            >
-              <FileEdit className="h-3 w-3" />
-            </Button>
+            {canEdit && (
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-6 w-6 text-slate-400 hover:text-slate-200 border-slate-700/50 hover:bg-slate-800"
+                onClick={() => setEditOpen(true)}
+                title="Edit Configuration"
+              >
+                <FileEdit className="h-3 w-3" />
+              </Button>
+            )}
           </CardTitle>
           <div className="flex items-center gap-2">
             <div className="inline-flex h-8 items-center rounded-md border border-slate-700/70 bg-slate-900/70 p-0.5">
@@ -1443,137 +1446,139 @@ function DownholeModel3DComponent({ well }: DownholeModel3DProps) {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={editOpen} onOpenChange={setEditOpen}>
-        <DialogContent className="max-w-2xl border-slate-700 bg-slate-950 text-slate-100">
-          <DialogHeader>
-            <DialogTitle>Edit Downhole Equipment</DialogTitle>
-            <DialogDescription>
-              Configure the exact top and bottom depths for each tool. These values will override schematic and estimated depths.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-6 py-4">
-            <div className="grid grid-cols-[1fr_120px_120px] gap-4 items-end">
-              <div className="text-sm font-medium text-slate-400 pb-2">Component</div>
-              <div className="text-sm font-medium text-slate-400 pb-2">Top Depth (m)</div>
-              <div className="text-sm font-medium text-slate-400 pb-2">Bottom Depth (m)</div>
+      {canEdit && (
+        <Dialog open={editOpen} onOpenChange={setEditOpen}>
+          <DialogContent className="max-w-2xl border-slate-700 bg-slate-950 text-slate-100">
+            <DialogHeader>
+              <DialogTitle>Edit Downhole Equipment</DialogTitle>
+              <DialogDescription>
+                Configure the exact top and bottom depths for each tool. These values will override schematic and estimated depths.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-6 py-4">
+              <div className="grid grid-cols-[1fr_120px_120px] gap-4 items-end">
+                <div className="text-sm font-medium text-slate-400 pb-2">Component</div>
+                <div className="text-sm font-medium text-slate-400 pb-2">Top Depth (m)</div>
+                <div className="text-sm font-medium text-slate-400 pb-2">Bottom Depth (m)</div>
 
-              <div className="flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full bg-amber-400" />
-                <Label htmlFor="pump-top" className="text-slate-200">Stator / Pump</Label>
-              </div>
-              <Input
-                id="pump-top"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.pump_top_depth_m}
-                onChange={(e) => setFormData({ ...formData, pump_top_depth_m: e.target.value })}
-              />
-              <Input
-                id="pump-bottom"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.pump_bottom_depth_m}
-                onChange={(e) => setFormData({ ...formData, pump_bottom_depth_m: e.target.value })}
-              />
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 rounded-full bg-amber-400" />
+                  <Label htmlFor="pump-top" className="text-slate-200">Stator / Pump</Label>
+                </div>
+                <Input
+                  id="pump-top"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.pump_top_depth_m}
+                  onChange={(e) => setFormData({ ...formData, pump_top_depth_m: e.target.value })}
+                />
+                <Input
+                  id="pump-bottom"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.pump_bottom_depth_m}
+                  onChange={(e) => setFormData({ ...formData, pump_bottom_depth_m: e.target.value })}
+                />
 
-              <div className="flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full bg-sky-300" />
-                <Label htmlFor="stb-top" className="text-slate-200">Slotted Tag Bar</Label>
-              </div>
-              <Input
-                id="stb-top"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.slotted_tag_bar_top_depth_m}
-                onChange={(e) => setFormData({ ...formData, slotted_tag_bar_top_depth_m: e.target.value })}
-              />
-              <Input
-                id="stb-bottom"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.slotted_tag_bar_bottom_depth_m}
-                onChange={(e) => setFormData({ ...formData, slotted_tag_bar_bottom_depth_m: e.target.value })}
-              />
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 rounded-full bg-sky-300" />
+                  <Label htmlFor="stb-top" className="text-slate-200">Slotted Tag Bar</Label>
+                </div>
+                <Input
+                  id="stb-top"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.slotted_tag_bar_top_depth_m}
+                  onChange={(e) => setFormData({ ...formData, slotted_tag_bar_top_depth_m: e.target.value })}
+                />
+                <Input
+                  id="stb-bottom"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.slotted_tag_bar_bottom_depth_m}
+                  onChange={(e) => setFormData({ ...formData, slotted_tag_bar_bottom_depth_m: e.target.value })}
+                />
 
-              <div className="flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full bg-gray-400" />
-                <Label htmlFor="wellfi-top" className="text-slate-200">WellFi Tool</Label>
-              </div>
-              <Input
-                id="wellfi-top"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.wellfi_tool_top_depth_m}
-                onChange={(e) => setFormData({ ...formData, wellfi_tool_top_depth_m: e.target.value })}
-              />
-              <Input
-                id="wellfi-bottom"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.wellfi_tool_bottom_depth_m}
-                onChange={(e) => setFormData({ ...formData, wellfi_tool_bottom_depth_m: e.target.value })}
-              />
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 rounded-full bg-gray-400" />
+                  <Label htmlFor="wellfi-top" className="text-slate-200">WellFi Tool</Label>
+                </div>
+                <Input
+                  id="wellfi-top"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.wellfi_tool_top_depth_m}
+                  onChange={(e) => setFormData({ ...formData, wellfi_tool_top_depth_m: e.target.value })}
+                />
+                <Input
+                  id="wellfi-bottom"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.wellfi_tool_bottom_depth_m}
+                  onChange={(e) => setFormData({ ...formData, wellfi_tool_bottom_depth_m: e.target.value })}
+                />
 
-              <div className="flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full bg-indigo-300" />
-                <Label htmlFor="noturn-top" className="text-slate-200">No Turn Tool</Label>
-              </div>
-              <Input
-                id="noturn-top"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.no_turn_tool_top_depth_m}
-                onChange={(e) => setFormData({ ...formData, no_turn_tool_top_depth_m: e.target.value })}
-              />
-              <Input
-                id="noturn-bottom"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.no_turn_tool_bottom_depth_m}
-                onChange={(e) => setFormData({ ...formData, no_turn_tool_bottom_depth_m: e.target.value })}
-              />
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 rounded-full bg-indigo-300" />
+                  <Label htmlFor="noturn-top" className="text-slate-200">No Turn Tool</Label>
+                </div>
+                <Input
+                  id="noturn-top"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.no_turn_tool_top_depth_m}
+                  onChange={(e) => setFormData({ ...formData, no_turn_tool_top_depth_m: e.target.value })}
+                />
+                <Input
+                  id="noturn-bottom"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.no_turn_tool_bottom_depth_m}
+                  onChange={(e) => setFormData({ ...formData, no_turn_tool_bottom_depth_m: e.target.value })}
+                />
 
-              <div className="flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full bg-slate-300" />
-                <Label htmlFor="collar-top" className="text-slate-200">Collar</Label>
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 rounded-full bg-slate-300" />
+                  <Label htmlFor="collar-top" className="text-slate-200">Collar</Label>
+                </div>
+                <Input
+                  id="collar-top"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.collar_top_depth_m}
+                  onChange={(e) => setFormData({ ...formData, collar_top_depth_m: e.target.value })}
+                />
+                <Input
+                  id="collar-bottom"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.collar_bottom_depth_m}
+                  onChange={(e) => setFormData({ ...formData, collar_bottom_depth_m: e.target.value })}
+                />
               </div>
-              <Input
-                id="collar-top"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.collar_top_depth_m}
-                onChange={(e) => setFormData({ ...formData, collar_top_depth_m: e.target.value })}
-              />
-              <Input
-                id="collar-bottom"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.collar_bottom_depth_m}
-                onChange={(e) => setFormData({ ...formData, collar_bottom_depth_m: e.target.value })}
-              />
             </div>
-          </div>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="ghost">Cancel</Button>
-            </DialogClose>
-            <Button onClick={handleSaveConfiguration} disabled={isSaving}>
-              {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Save Changes
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="ghost">Cancel</Button>
+              </DialogClose>
+              <Button onClick={handleSaveConfiguration} disabled={isSaving}>
+                {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Save Changes
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </Card>
   );
 }

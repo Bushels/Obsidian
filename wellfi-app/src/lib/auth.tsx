@@ -74,12 +74,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let mounted = true;
+    let bootstrapSettled = false;
+    let timeout: ReturnType<typeof setTimeout> | null = null;
 
-    // Use onAuthStateChange with INITIAL_SESSION event — this is the
+    const settleBootstrap = () => {
+      if (bootstrapSettled) return;
+      bootstrapSettled = true;
+      if (timeout) {
+        clearTimeout(timeout);
+        timeout = null;
+      }
+    };
+
+    // Use onAuthStateChange with INITIAL_SESSION event - this is the
     // Supabase-recommended approach. It fires once immediately with the
     // current session (or null), then again on every auth state change.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, currentSession) => {
+      async (_event, currentSession) => {
         if (!mounted) return;
 
         setSession(currentSession);
@@ -91,37 +102,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setTimeout(async () => {
             if (!mounted) return;
             const appUser = await fetchAppUser(currentSession.user);
-            if (mounted) {
-              setUser(appUser);
-              setIsLoading(false);
-            }
+            if (!mounted) return;
+            setUser(appUser);
+            settleBootstrap();
+            setIsLoading(false);
           }, 0);
-        } else {
-          setUser(null);
-          setIsLoading(false);
+          return;
         }
 
-        // INITIAL_SESSION means we've loaded the stored session (or lack thereof)
-        if (event === 'INITIAL_SESSION') {
-          // If no session, mark loading done immediately (setTimeout above handles the session case)
-          if (!currentSession) {
-            setIsLoading(false);
-          }
-        }
+        setUser(null);
+        settleBootstrap();
+        setIsLoading(false);
       },
     );
 
     // Safety timeout: if auth never resolves within 5 seconds, stop loading
-    const timeout = setTimeout(() => {
-      if (mounted) {
-        console.warn('[WellFi] Auth init timed out — proceeding without session');
-        setIsLoading(false);
-      }
+    timeout = setTimeout(() => {
+      if (!mounted || bootstrapSettled) return;
+      settleBootstrap();
+      console.warn('[WellFi] Auth init timed out - proceeding without session');
+      setIsLoading(false);
     }, 5000);
 
     return () => {
       mounted = false;
-      clearTimeout(timeout);
+      if (timeout) {
+        clearTimeout(timeout);
+      }
       subscription.unsubscribe();
     };
   }, []);

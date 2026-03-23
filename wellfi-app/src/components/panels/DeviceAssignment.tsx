@@ -46,6 +46,7 @@ export function DeviceAssignment({ well, canEdit }: DeviceAssignmentProps) {
 
   // Don't render if no operational status and no device assigned
   if (!hasOpStatus && !assignedDevice) return null;
+  if (!canEdit && !assignedDevice) return null;
 
   const handleAssign = () => {
     if (!selectedDeviceId || !user) return;
@@ -198,24 +199,6 @@ export function DeviceAssignment({ well, canEdit }: DeviceAssignmentProps) {
               No devices in stock. Add devices via inventory management.
             </p>
           )}
-        </CardContent>
-      </Card>
-    );
-  }
-
-  // Has op status, no device, viewer role
-  if (hasOpStatus && !canEdit) {
-    return (
-      <Card>
-        <CardHeader className="pb-2 pt-3 px-4">
-          <CardTitle className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-            Device Assignment
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="px-4 pb-3">
-          <p className="text-xs text-muted-foreground text-center py-1">
-            No device assigned yet
-          </p>
         </CardContent>
       </Card>
     );
