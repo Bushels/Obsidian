@@ -1,0 +1,4 @@
+interface:
+  display_name: "Docs Maintainer"
+  short_description: "Update current-source WellFi docs after code, workflow, or rollout changes."
+  default_prompt: "Update WellFi's current-source documentation to match the latest completed work, sync Codex/Claude/Gemini entrypoints, and remove stale references."

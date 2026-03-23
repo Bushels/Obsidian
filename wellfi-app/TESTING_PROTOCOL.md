@@ -24,6 +24,14 @@ Expected result:
 - `build` must pass.
 - `lint` should pass before release. If it does not, log the remaining issues and decide whether they are existing debt or a new regression.
 
+If the release includes a monthly CSV update, also run:
+
+```bash
+npm run production:sync -- --dry-run "C:\Users\kyle\MPS\Obsidian\Data\active_clearwater_bluesky_recent_prod_ab_sk.csv"
+```
+
+Confirm the report completes and review `output/monthly-production-sync/latest.json`.
+
 ## 3. Browser Smoke Test
 
 Open the app in a real browser and confirm:
@@ -104,7 +112,16 @@ Confirm with one or two sample wells:
 - No unexpected wells disappear after filtering or refresh.
 - Operator viewers cannot see another operator's wells.
 
-## 11. Release Decision
+## 11. Monthly Sync Verification
+
+If the release includes a new monthly production snapshot, verify:
+
+1. `output/monthly-production-sync/latest.json` was regenerated
+2. inserted / updated / missing-from-snapshot counts look plausible
+3. skipped unprovisioned operators are expected for the current rollout boundary
+4. one admin and one provisioned operator still see the correct map state after the refresh
+
+## 12. Release Decision
 
 Release only when:
 

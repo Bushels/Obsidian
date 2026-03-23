@@ -32,18 +32,18 @@ grep -rn "showLand\|toggleLand\|showProduction\|toggleProduction\|HEALTH_LEVEL_L
 **Pass criteria:** Zero matches. These are removed features.
 
 ## Check 5: HTML Escaping
-Any string interpolated into popup HTML must use `escapeHTML()`:
+Any string interpolated into popup HTML must use the popup helper escape function, for example `escapeHtml()` in `WellPopup.tsx`:
 ```bash
-grep -n "properties\." wellfi-app/src/components/map/ProductionPopup.ts | grep -v "escapeHTML\|Number\|String"
+grep -n "escapeHtml" wellfi-app/src/components/map/WellPopup.tsx
 ```
-**Pass criteria:** No unescaped string properties in HTML template literals.
+**Pass criteria:** Popup helpers use explicit HTML escaping before interpolating user or data values into HTML.
 
 ## Check 6: GeoJSON Freshness
-If `scripts/build-production-geojson.js` was modified, regenerate:
+If the monthly production sync scripts were modified, rerun the current workflow:
 ```bash
-node scripts/build-production-geojson.js
+npm run production:sync -- --dry-run "C:\Users\kyle\MPS\Obsidian\Data\active_clearwater_bluesky_recent_prod_ab_sk.csv"
 ```
-Verify output counts match expectations. Commit both script AND generated GeoJSON.
+Verify output counts match expectations and review the generated report.
 
 ## Check 7: Git Diff Review
 ```bash
