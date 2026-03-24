@@ -1,0 +1,5067 @@
+{
+  "100151306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "ESSO 83 B3-2 COLDLK 15-13-65-4"
+  },
+  "100101306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "ESSO 83 B3-3 COLDLK 10-13-65-4"
+  },
+  "102101306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "ESSO 83 B3-4 COLDLK 10-13-65-4"
+  },
+  "103101306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "ESSO 83 B3-5 COLDLK 10-13-65-4"
+  },
+  "104111306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "ESSO 83 B3-6 COLDLK 11-13-65-4"
+  },
+  "104101306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "ESSO 83 B3-8 COLDLK 10-13-65-4"
+  },
+  "105101306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "ESSO 83 B3-9 COLDLK 10-13-65-4"
+  },
+  "106101306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "ESSO 83 B3-10 COLDLK 10-13-65-4"
+  },
+  "107111306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "ESSO 83 B3-12 COLDLK 11-13-65-4"
+  },
+  "108111306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "ESSO 83 B3-13 COLDLK 11-13-65-4"
+  },
+  "107101306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "ESSO 83 B3-14 COLDLK 10-13-65-4"
+  },
+  "100071306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "ESSO 83 B3-15 COLDLK 7-13-65-4"
+  },
+  "109111306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "ESSO 83 B3-16 COLDLK 11-13-65-4"
+  },
+  "109061306504W402": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "ESSO 83 B3-17 COLDLK 6-13-65-4"
+  },
+  "110061306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "ESSO 83 B3-18 COLDLK 6-13-65-4"
+  },
+  "111061306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "ESSO 83 B3-19 COLDLK 6-13-65-4"
+  },
+  "1AK010806503W400": {
+    "wellType": "Observation",
+    "wellFluid": "Oil",
+    "name": "ESSO S8 LEMING ETHEL EX 1-8-65-3"
+  },
+  "102051305805W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "PENGROWTH LIND 5-13-58-5"
+  },
+  "1W0120406704W402": {
+    "wellType": "Observation",
+    "wellFluid": "Steam",
+    "name": "AMOCO 9CG MOORE EX 12-4-67-4"
+  },
+  "1AB010506503W400": {
+    "wellType": "Observation",
+    "wellFluid": "Oil",
+    "name": "ESSO 84 EE 19 LEM COLDLK EX 1-5-65-3"
+  },
+  "102091106504W402": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "ESSO 85 D2-2 COLDLK 9-11-65-4"
+  },
+  "100011106504W402": {
+    "wellType": "Observation",
+    "wellFluid": "Oil",
+    "name": "ESSO 85 D21-11 COLDLK 1-11-65-4"
+  },
+  "1W0041206504W402": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 85 D21-13 COLD LK 4-12-65-4"
+  },
+  "111161106504W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "ESSO 85 D3 0B1 COLDLK 16-11-65-4"
+  },
+  "112161106504W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "ESSO 85 D3 0B2 COLDLK 16-11-65-4"
+  },
+  "113161106504W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "ESSO 85 D3 0B4 COLDLK 16-11-65-4"
+  },
+  "1AA131608122W402": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "CS HOOLE EX 13-16-81-22"
+  },
+  "1AA121608122W402": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "CS HOOLE EX 12-16-81-22"
+  },
+  "100073608410W400": {
+    "wellType": "Observation",
+    "wellFluid": "Gas",
+    "name": "GROC HANGSTN 7-36-84-10"
+  },
+  "100061807805W602": {
+    "wellType": "Disposal",
+    "wellFluid": "Waste",
+    "name": "PDS  RYCROFT 6-18-78-5"
+  },
+  "103133606404W400": {
+    "wellType": "Observation",
+    "wellFluid": "Oil",
+    "name": "ESSO 87 D51-10 COLDLK 13-36-64-4"
+  },
+  "100152606504W400": {
+    "wellType": "Observation",
+    "wellFluid": "Oil",
+    "name": "ESSO 87 M6-8 COLDLK 15-26-65-4"
+  },
+  "100110606702W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL ET AL PRIM 11-6-67-2"
+  },
+  "108081406703W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "CNRL ET AL 06H PRIMROSE 8-14-67-3"
+  },
+  "100142708012W602": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "KELT EXP PCOUPE 14-27-80-12"
+  },
+  "100100607004W400": {
+    "wellType": "Observation",
+    "wellFluid": "Gas",
+    "name": "CVE FISHER 10-6-70-4"
+  },
+  "100070806704W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "AMOCO 11 PRIMROSE 7C-8-67-4"
+  },
+  "100061207005W400": {
+    "wellType": "Observation",
+    "wellFluid": "Gas",
+    "name": "CVE FISHER 6-12-70-5"
+  },
+  "100050609708W602": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "CNRL CHNCHAGA 5-6-97-8"
+  },
+  "100103408706W602": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "VENTURION OIL  WORSLEY 10-34-87-6"
+  },
+  "100103607912W403": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "LOGAN ET AL THORNBURY 10-36-79-12"
+  },
+  "103100806704W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "AMOCO ET AL 0B 5 PRIM 10B-8-67-4"
+  },
+  "100042706605W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "AMOCO HWP1 OB1 WOLF LAKE 4-27-66-5"
+  },
+  "100012806605W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "AMOCO HWPI OB2 WOLF LAKE 1-28-66-5"
+  },
+  "100093408108W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL HANGSTN 9-34-81-8"
+  },
+  "100010606704W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "AMOCO 0B53 PRIMROSE 1-6-67-4"
+  },
+  "102042706605W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "AMOCO OBC1 WOLF LAKE 4-27-66-5"
+  },
+  "102080506704W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "AMOCO 0B54 PRIMROSE 8-5-67-4"
+  },
+  "100031807907W402": {
+    "wellType": "Disposal",
+    "wellFluid": "Waste",
+    "name": "RAX SWD LEISMER 3-18-79-7"
+  },
+  "104150806704W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "AMOCO OB58 PRIMROSE 15-8-67-4"
+  },
+  "110141206606W400": {
+    "wellType": "Observation",
+    "wellFluid": "Oil",
+    "name": "AMOCO WHWP2 B WOLF LAKE 14-12-66-6"
+  },
+  "100031306606W400": {
+    "wellType": "Observation",
+    "wellFluid": "Oil",
+    "name": "AMOCO WHWP2 C WOLF LAKE 3-13-66-6"
+  },
+  "110021306606W400": {
+    "wellType": "Observation",
+    "wellFluid": "Oil",
+    "name": "AMOCO WHWP2 D WOLF LAKE 2-13-66-6"
+  },
+  "114121306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Solvent",
+    "name": "IMP 95 B02-28 COLDLK 12-13-65-4"
+  },
+  "115121306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Solvent",
+    "name": "IMP 95 B02-29 COLDLK 12-13-65-4"
+  },
+  "117121306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Solvent",
+    "name": "IMP 95 B02-33 COLDLK 12-13-65-4"
+  },
+  "118121306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Solvent",
+    "name": "IMP 95 B02-34 COLDLK 12-13-65-4"
+  },
+  "112042406504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 95 B05-31 COLDLK 4-24-65-4"
+  },
+  "114131306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 95 B05-36 COLDLK 13-13-65-4"
+  },
+  "107022406504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 95 B05-25 COLDLK 2-24-65-4"
+  },
+  "115131306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 95 B05-37 COLDLK 13-13-65-4"
+  },
+  "108022406504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 95 B05-46 COLDLK 2-24-65-4"
+  },
+  "108032406504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 95 B05-22 COLDLK 3-24-65-4"
+  },
+  "109032406504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 95 B05-23 COLDLK 3-24-65-4"
+  },
+  "110032406504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 95 B05-24 COLDLK 3-24-65-4"
+  },
+  "112141306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 95 B05-30 COLDLK 14-13-65-4"
+  },
+  "111032406504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 95 B05-26 COLDLK 3-24-65-4"
+  },
+  "113141306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 95 B05-32 COLDLK 14-13-65-4"
+  },
+  "114141306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 95 B05-33 COLDLK 14-13-65-4"
+  },
+  "112032406504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 95 B05-27 COLDLK 3-24-65-4"
+  },
+  "115141306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 95 B05-34 COLDLK 14-13-65-4"
+  },
+  "113032406504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 95 B05-28 COLDLK 3-24-65-4"
+  },
+  "116141306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 95 B05-35 COLDLK 14-13-65-4"
+  },
+  "117141306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 95 B05-38 COLDLK 14-13-65-4"
+  },
+  "118141306504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 95 B05-39 COLDLK 14-13-65-4"
+  },
+  "100010610011W600": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CANHUNTER ET AL PEDGRE 1-6-100-11"
+  },
+  "100032306703W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL ET AL OB2 PRIM 3-23-67-3"
+  },
+  "102032306703W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL ET AL OB4 PRIM 3-23-67-3"
+  },
+  "104131706403W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "OPC I1 ETHELLK 13-17-64-3"
+  },
+  "100163608219W402": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRES DEADMAN 16-36-82-19"
+  },
+  "100162008618W502": {
+    "wellType": "Observation",
+    "wellFluid": "Gas",
+    "name": "CNUL RE CADOTTE 16-20-86-18"
+  },
+  "100043108221W402": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRES BRINTNELL 4-31-82-21"
+  },
+  "100100408314W503": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "BAYTEX SEAL 10-4-83-14"
+  },
+  "100031707003W400": {
+    "wellType": "Observation",
+    "wellFluid": "Gas",
+    "name": "CVE FCCL FISHER 3-17-70-3"
+  },
+  "110020606503W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 99 Y34-05 COLDLK 2-6-65-3"
+  },
+  "104103106403W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 99 Y34-14 COLDLK 10-31-64-3"
+  },
+  "107131706403W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "OPC I3 ETHELLK 13-17-64-3"
+  },
+  "102012207004W400": {
+    "wellType": "Observation",
+    "wellFluid": "Gas",
+    "name": "CVE FCCL D1 FISHER 1-22-70-4"
+  },
+  "102131507004W400": {
+    "wellType": "Observation",
+    "wellFluid": "Gas",
+    "name": "CVE FCCL C13 FISHER 13-15-70-4"
+  },
+  "102062207004W400": {
+    "wellType": "Observation",
+    "wellFluid": "Gas",
+    "name": "CVE FCCL B6 FISHER 6-22-70-4"
+  },
+  "102082206704W400": {
+    "wellType": "Observation",
+    "wellFluid": "Oil",
+    "name": "CNRES 4D21 PRIMROSE 8-22-67-4"
+  },
+  "100082106704W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRES OBS MOORE 8-21-67-4"
+  },
+  "102052206704W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRES OBS MOORE 5-22-67-4"
+  },
+  "100131006803W402": {
+    "wellType": "Observation",
+    "wellFluid": "Gas",
+    "name": "CNRES MOORE 13-10-68-3"
+  },
+  "100071306804W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRES FISHER 7-13-68-4"
+  },
+  "100121506704W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRES OBS MOORE 12-15-67-4"
+  },
+  "102062207003W400": {
+    "wellType": "Observation",
+    "wellFluid": "Gas",
+    "name": "CVE FCCL 102 FISHER 6-22-70-3"
+  },
+  "100091606704W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRES OBS MOORE 9-16-67-4"
+  },
+  "102103306804W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRES 102 PRIMROSE 10-33-68-4"
+  },
+  "100111806204W400": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "BAYTEX 11C FTKENT 11-18-62-4"
+  },
+  "100100409312W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "PC OB13 DOVER 10-4-93-12"
+  },
+  "100050409312W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "PC OB11 DOVER 5-4-93-12"
+  },
+  "103110409312W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "PC OB05 DOVER 11-4-93-12"
+  },
+  "103120409312W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "PC OB04 DOVER 12-4-93-12"
+  },
+  "105110409312W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "PC OB02 DOVER 11-4-93-12"
+  },
+  "100102408306W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "COPRC 100 OBS NEWBY 10-24-83-6"
+  },
+  "104061006704W400": {
+    "wellType": "Observation",
+    "wellFluid": "Miscellaneous",
+    "name": "CNRL 104 OBS MOORE 6-10-67-4"
+  },
+  "100081606704W400": {
+    "wellType": "Observation",
+    "wellFluid": "Miscellaneous",
+    "name": "CNRL OBS MOORE 8-16-67-4"
+  },
+  "102131006704W400": {
+    "wellType": "Observation",
+    "wellFluid": "Miscellaneous",
+    "name": "CNRL OBS MOORE 13-10-67-4"
+  },
+  "102160906704W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL 102 OBS MOORE 16-9-67-4"
+  },
+  "100051506704W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OBS MOORE 5-15-67-4"
+  },
+  "100080906704W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OBS MOORE 8-9-67-4"
+  },
+  "103043206403W402": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 01 T09-01 COLDLK 4-32-64-3"
+  },
+  "100013306605W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRES OBS LEMING 1-33-66-5"
+  },
+  "100123508519W505": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Oil",
+    "name": "CNUL CADOTTE 12-35-85-19"
+  },
+  "100092906404W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Oil",
+    "name": "SRL TUCKLK 9-29-64-4"
+  },
+  "100083206404W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Oil",
+    "name": "SRL TUCKLK 8-32-64-4"
+  },
+  "100113206404W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Oil",
+    "name": "SRL TUCKLK 11-32-64-4"
+  },
+  "102153206404W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Oil",
+    "name": "SRL TUCKLK 15-32-64-4"
+  },
+  "100163206404W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Oil",
+    "name": "SRL TUCKLK 16-32-64-4"
+  },
+  "100093206404W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Oil",
+    "name": "SRL TUCKLK 9-32-64-4"
+  },
+  "100023206404W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "SRL TUCKLK 2-32-64-4"
+  },
+  "100013206404W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "SRL TUCKLK 1-32-64-4"
+  },
+  "103030906503W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 01 U05-12 COLDLK 3-9-65-3"
+  },
+  "100050406503W403": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 01 U04-06 COLDLK 5-4-65-3"
+  },
+  "102152806404W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "SRL TUCKLK 15-28-64-4"
+  },
+  "100142806404W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "SRL TUCKLK 14-28-64-4"
+  },
+  "102103206804W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRES 102 FISHER 10-32-68-4"
+  },
+  "100162706805W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRES FISHER 16-27-68-5"
+  },
+  "1AM101006504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 02 HRZ D07-H2 COLDLK 10-10-65-4"
+  },
+  "102140807805W600": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "PDS RYCROFT  14-8-78-5"
+  },
+  "107150306604W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 02 CEW-27  LEMING 15-3-66-4"
+  },
+  "100052606704W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "CNRES 6B29 PRIMROSE 5-26-67-4"
+  },
+  "100111808518W500": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNUL CADOTTE 11-18-85-18"
+  },
+  "102043506704W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "CNRES 6B30 PRIMROSE 4-35-67-4"
+  },
+  "102142706504W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 03 H41-02 COLDLK 14-27-65-4"
+  },
+  "102023406403W402": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 03 V04-11 COLDLK 2-34-64-3"
+  },
+  "107043506403W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 03 V09-14 COLD LK 4-35-64-3"
+  },
+  "100053206404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 5-32-64-4"
+  },
+  "100152906404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 15-29-64-4"
+  },
+  "102040206804W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "CNRL 6B31 PRIMROSE 4-2-68-4"
+  },
+  "100071606605W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OBS LEMING 7-16-66-5"
+  },
+  "100081108619W500": {
+    "wellType": "Storage",
+    "wellFluid": "Gas",
+    "name": "CNUL CADOTTE 8-11-86-19"
+  },
+  "100081108619W502": {
+    "wellType": "Injection",
+    "wellFluid": "Gas",
+    "name": "CNUL CADOTTE 8-11-86-19"
+  },
+  "100100506804W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "CNRL 4B51 PRIMROSE 10-5-68-4"
+  },
+  "100012208315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX SLAVE 1-22-83-15"
+  },
+  "106101706503W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 04 HRZ FF-H04 COLD LK 10-17-65-3"
+  },
+  "107101706503W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP O4 HRZ FF-H05 COLD LK 10-17-65-3"
+  },
+  "114111706503W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 04 HRZ FF-H03 COLD LK 11-17-65-3"
+  },
+  "112111706503W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 04 HRZ FF-H02 COLD LK 11-17-65-3"
+  },
+  "102053206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL COLD LK 5-32-64-4"
+  },
+  "105053206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 5-32-64-4"
+  },
+  "110123206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 12-32-64-4"
+  },
+  "108123206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 12-32-64-4"
+  },
+  "109123206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 12-32-64-4"
+  },
+  "106123206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL COLD LK 12-32-64-4"
+  },
+  "107123206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 12-32-64-4"
+  },
+  "104133206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL COLD LK 13-32-64-4"
+  },
+  "103133206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 13-32-64-4"
+  },
+  "107133206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 13-32-64-4"
+  },
+  "102043206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 4-32-64-4"
+  },
+  "107043206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 4-32-64-4"
+  },
+  "108043206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 4-32-64-4"
+  },
+  "108053206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 5-32-64-4"
+  },
+  "100110806804W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "CNRL 6B52 PRIMROSE 11-8-68-4"
+  },
+  "102060806804W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "CNRL 3B52 PRIMROSE 6-8-68-4"
+  },
+  "103060806804W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "CNRL 5B52 PRIMROSE 6-8-68-4"
+  },
+  "109053206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 5-32-64-4"
+  },
+  "110053206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 5-32-64-4"
+  },
+  "102163206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL COLD LK 16-32-64-4"
+  },
+  "111053206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 5-32-64-4"
+  },
+  "104163206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 16-32-64-4"
+  },
+  "105163206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL COLD LK 16-32-64-4"
+  },
+  "108163206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL COLD LK 16-32-64-4"
+  },
+  "104073206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 7-32-64-4"
+  },
+  "107083206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL C10SP TUCKLK 8-32-64-4"
+  },
+  "105043206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 4-32-64-4"
+  },
+  "109132906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 13-29-64-4"
+  },
+  "104061706804W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "CNRL 3B53 PRIMROSE 6-17-68-4"
+  },
+  "100071807207W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "ATLAS ET AL RWE HZ MOONEY 7-18-72-7"
+  },
+  "100092108318W403": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "CVE GRANOR 9-21-83-18"
+  },
+  "102090906604W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 05 H58-21 COLD LK 9-9-66-4"
+  },
+  "102062006804W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "CNRL PAD 54 3B54 PRIMROSE 6-20-68-4"
+  },
+  "104110306503W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 05 U07-28 COLD LK 11-3-65-3"
+  },
+  "100090707207W503": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "ATLAS RWE HZ MOONEY 11-7-72-7"
+  },
+  "100121307208W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "ATLAS RWE HZ MOONEY 12-13-72-8"
+  },
+  "100081706403W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Oil",
+    "name": "OPC OBS ETHELLK 8-17-64-3"
+  },
+  "102151508315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX  15-15-83-15"
+  },
+  "100141508315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX  14-15-83-15"
+  },
+  "103013207920W504": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "BAYTEX 14-28 2HZ KIMIWAN 4-28-79-20"
+  },
+  "102141508315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX  14-15-83-15"
+  },
+  "100071606403W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Oil",
+    "name": "OPC OBS ETHELLK 7-16-64-3"
+  },
+  "100090906403W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Oil",
+    "name": "OPC OBS ETHELLK 9-9-64-3"
+  },
+  "113111706503W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 05 HRZ FF-H01 COLD LK 11-17-65-3"
+  },
+  "100141008315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX  14-10-83-15"
+  },
+  "100151008315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX  15-10-83-15"
+  },
+  "102151008315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX  15-10-83-15"
+  },
+  "100111008315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX  11-10-83-15"
+  },
+  "100111207208W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "ATLAS RWE HZ MOONEY 11-12-72-8"
+  },
+  "100023506403W402": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 06 V10-06 COLD LK 2-35-64-3"
+  },
+  "103093506403W402": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 06 V10-20 COLD LK 9-35-64-3"
+  },
+  "100041506403W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Oil",
+    "name": "OPC OBS ETHELLK 4-15-64-3"
+  },
+  "100151006403W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Oil",
+    "name": "OPC OBS ETHELLK 15-10-64-3"
+  },
+  "103141508315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX  14-15-83-15"
+  },
+  "102080707207W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "ATLAS 102 RWE HZ MOONEY 8-7-72-7"
+  },
+  "100051307208W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "ATLAS RWE HZ MOONEY 5-13-72-8"
+  },
+  "100083006804W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "CNRL 3B55 PRIMROSE 8-30-68-4"
+  },
+  "100131207208W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "ATLAS RWE HZ MOONEY 13-12-72-8"
+  },
+  "100041307208W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "ATLAS RWE HZ MOONEY 4-13-72-8"
+  },
+  "100011807207W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "ATLAS RWE HZ MOONEY 1-18-72-7"
+  },
+  "100162408419W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "PENN WEST PEACE RIVER 16-24-84-19"
+  },
+  "105112906404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 11-29-64-4"
+  },
+  "108143206404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 14-32-64-4"
+  },
+  "103093206404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 9-32-64-4"
+  },
+  "106112906404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 11-29-64-4"
+  },
+  "100102906404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 10-29-64-4"
+  },
+  "103153206404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 15-32-64-4"
+  },
+  "100163009112W502": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "SIGNET ET AL   SAWN LK 16-30-91-12"
+  },
+  "111030206503W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 06 U09-13 COLD LK 3-2-65-3"
+  },
+  "102091807207W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "ATLAS 102 ET AL HZ MOONEY 9-18-72-7"
+  },
+  "100010906704W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "CNRL 6C17 PRIMROSE 1-9-67-4"
+  },
+  "100011707207W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "ATLAS RWE HZ MOONEY 1-17-72-7"
+  },
+  "100081707207W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "ATLAS RWE HZ MOONEY 8-17-72-7"
+  },
+  "100041006704W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL C17 OBS 1 MOORE 4-10-67-4"
+  },
+  "102041006704W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL C17 OBS 2 MOORE 4-10-67-4"
+  },
+  "103041006704W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL C17 OBS 3 MOORE 4-10-67-4"
+  },
+  "100160707207W502": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "PEARL HZ MOONEY 13-7-72-7"
+  },
+  "100011907207W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "ATLAS ET AL HZ MOONEY 1-19-72-7"
+  },
+  "100081907207W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "ATLAS ET AL HZ MOONEY 8-19-72-7"
+  },
+  "100012007207W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "ATLAS RWE HZ MOONEY 1-20-72-7"
+  },
+  "100131307208W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "ATLAS RWE HZ MOONEY 13-13-72-8"
+  },
+  "100042407208W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "ATLAS ET AL HZ MOONEY 4-24-72-8"
+  },
+  "100052407208W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "ATLAS ET AL HZ MOONEY 5-24-72-8"
+  },
+  "107141606403W402": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P107-I3 ETHELLK 13-16-64-3"
+  },
+  "108141606403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P107-I4 ETHELLK 14-16-64-3"
+  },
+  "105091606403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P106-I1 ETHELLK 9-16-64-3"
+  },
+  "106091606403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P106-I2 ETHELLK 9-16-64-3"
+  },
+  "107091606403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P106-I3 ETHELLK 9-16-64-3"
+  },
+  "105101706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P105-I1 ETHELLK 10-17-64-3"
+  },
+  "106101706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P105-I2 ETHELLK 10-17-64-3"
+  },
+  "108101706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P105-I4 ETHELLK 10-17-64-3"
+  },
+  "109122906404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 12-29-64-4"
+  },
+  "100042906404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 4-29-64-4"
+  },
+  "109043206404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 4-32-64-4"
+  },
+  "100062906404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 6-29-64-4"
+  },
+  "100042908318W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "PENN WEST PEACE RIVER 4-29-83-18"
+  },
+  "100052007705W400": {
+    "wellType": "Observation",
+    "wellFluid": "Gas",
+    "name": "MEG HARDY 5-20-77-5"
+  },
+  "100050806904W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL FISHER 5-8-69-4"
+  },
+  "100082406905W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL FISHER 8-24-69-5"
+  },
+  "100131806904W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL FISHER 13-18-69-4"
+  },
+  "100120506904W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL FISHER 12-5-69-4"
+  },
+  "100141707604W400": {
+    "wellType": "Observation",
+    "wellFluid": "Gas",
+    "name": "MEG HARDY 14-17-76-4"
+  },
+  "100090807207W502": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "PEARL RWE HZ MOONEY 13-8-72-7"
+  },
+  "100160807207W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "ATLAS RWE HZ MOONEY 16-8-72-7"
+  },
+  "107111606403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P104-I1 ETHELLK 11-16-64-3"
+  },
+  "108111606403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P104-I2 ETHELLK 11-16-64-3"
+  },
+  "109111606403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P104-I3 ETHELLK 11-16-64-3"
+  },
+  "100061606403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P104-I4 ETHELLK 6-16-64-3"
+  },
+  "105121706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P103-I1 ETHELLK 12-17-64-3"
+  },
+  "106121706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P103-I2 ETHELLK 12-17-64-3"
+  },
+  "107121706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P103-I3 ETHELLK 12-17-64-3"
+  },
+  "108121706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P103-I4 ETHELLK 12-17-64-3"
+  },
+  "109141606403W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "OPC P107-OB2 ETHELLK 14-16-64-3"
+  },
+  "100131606403W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "OPC P107-OB1 ETHELLK 13-16-64-3"
+  },
+  "102022106604W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 07 H62-04 COLD LK 2-21-66-4"
+  },
+  "104062106604W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 07 H63-21 COLD LK 6-21-66-4"
+  },
+  "100111706403W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "OPC P103-OB1 ETHELLK 11-17-64-3"
+  },
+  "102111706403W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "OPC P103-OB2 ETHELLK 11-17-64-3"
+  },
+  "109091606403W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "OPC P106-OB1 ETHELLK 9-16-64-3"
+  },
+  "110091606403W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "OPC P106-OB2 ETHELLK 9-16-64-3"
+  },
+  "103102806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 10-28-64-4"
+  },
+  "106152806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 15-28-64-4"
+  },
+  "105102806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 10-28-64-4"
+  },
+  "108152806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 15-28-64-4"
+  },
+  "107102806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 10-28-64-4"
+  },
+  "100152608218W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "PENN WEST WALRUS 15-26-82-18"
+  },
+  "100112608218W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "PENN WEST WALRUS 11-26-82-18"
+  },
+  "100013508809W500": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Oil",
+    "name": "SCCCPETROLEUM REDEARTH 1-35-88-9"
+  },
+  "104091707207W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BLACKPEARL 104 HZ MOONEY 9-17-72-7"
+  },
+  "100161807207W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "PEARL RWE HZ MOONEY 16-18-72-7"
+  },
+  "100022006403W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "IMP 07 OBS ETHELLK 2-20-64-3"
+  },
+  "100051806904W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL FISHER 5-18-69-4"
+  },
+  "100012307208W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "PEARL RWE HZ MOONEY 1-23-72-8"
+  },
+  "100033608809W500": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Oil",
+    "name": "SCCCPETROLEUM REDEARTH 3-36-88-9"
+  },
+  "100052808306W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "COPRC 100 OBS RD RESDELN 5-28-83-6"
+  },
+  "1F1133507506W400": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "CVE FCCL 13A KIRBY 13-35-75-6"
+  },
+  "105082906403W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 07 T15-07 COLD LK 8-29-64-3"
+  },
+  "105022906403W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 07 T15-09 COLD LK 2-29-64-3"
+  },
+  "100162009112W500": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "ANDORA SAWN LK 16-20-91-12"
+  },
+  "1F1133407506W403": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "CVE FCCL C KIRBY 13-34-75-6"
+  },
+  "103041206804W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "CNRL 11A66 PRIMROSE 4-12-68-4"
+  },
+  "100131508211W602": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "RIDGEBACK BONANZA 13-15-82-11"
+  },
+  "100041307920W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX N377 KIMIWAN 4-13-79-20"
+  },
+  "102112806404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 11-28-64-4"
+  },
+  "100122806404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 12-28-64-4"
+  },
+  "105072806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 7-28-64-4"
+  },
+  "100161107920W502": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "BAYTEX S388 KIMIWAN 16-11-79-20"
+  },
+  "102032806404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 3-28-64-4"
+  },
+  "102062806404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 6-28-64-4"
+  },
+  "104152106604W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP 08 H65-23 COLD LK 15-21-66-4"
+  },
+  "100051406804W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "CNRL 14A63 PRIMROSE 5-14-68-4"
+  },
+  "112163206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 16-32-64-4"
+  },
+  "114163206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 16-32-64-4"
+  },
+  "116163206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 16-32-64-4"
+  },
+  "107103406403W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "IMP 09 V05-PSW ETHELLK 10-34-64-3"
+  },
+  "103022806404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 2-28-64-4"
+  },
+  "104111706403W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Oil",
+    "name": "OPC P103-OB3 ETHELLK 11-17-64-3"
+  },
+  "100083306804W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OBS FISHER 8-33-68-4"
+  },
+  "1AA031908518W502": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNUL CADOTTE 3-19-85-18"
+  },
+  "100090905915W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "CORINTHIAN WIND 9-9-59-15"
+  },
+  "1F1152707506W400": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "CVE FCCL 15B KIRBY 15-27-75-6"
+  },
+  "1F1020307606W400": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "CVE FCCL 15B KIRBY 2-3-76-6"
+  },
+  "1F1160307606W400": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "CVE FCCL 16D KIRBY 16-3-76-6"
+  },
+  "100060606702W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OB1 MOORE 6-6-67-2"
+  },
+  "1F2011007810W400": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "ATH LEISMER 1-10-78-10"
+  },
+  "112123206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 12-32-64-4"
+  },
+  "115123206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 12-32-64-4"
+  },
+  "117123206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 12-32-64-4"
+  },
+  "118123206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 12-32-64-4"
+  },
+  "115053206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 5-32-64-4"
+  },
+  "123123206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 12-32-64-4"
+  },
+  "110133206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 13-32-64-4"
+  },
+  "114133206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 13-32-64-4"
+  },
+  "118133206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 13-32-64-4"
+  },
+  "126123206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 12-32-64-4"
+  },
+  "120133206404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 13-32-64-4"
+  },
+  "102082307208W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BRI 102 MOONEY 8-23-72-8"
+  },
+  "100161407208W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BRI 100 MOONEY 16-14-72-8"
+  },
+  "103051108223W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CVE 2B BRINT  5-11-82-23"
+  },
+  "100041108223W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CVE BRINT  4-11-82-23"
+  },
+  "100010405915W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SURGE ENERGY HZ WIND 1-4-59-15"
+  },
+  "1F2042807810W400": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "ATH LEISMER 4-28-78-10"
+  },
+  "100021608417W500": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Oil",
+    "name": "BAYTEX CLIFFD 2-16-84-17"
+  },
+  "100141806504W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "IMP 10 CSP-PSW2 LEMING 14-18-65-4"
+  },
+  "102141806504W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "IMP 10 CSP OB-3 LEMING 14-18-65-4"
+  },
+  "103141806504W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "IMP 10 CSP OB-4 LEMING 14-18-65-4"
+  },
+  "104141806504W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "IMP 10 CSP-PSW5 LEMING 14-18-65-4"
+  },
+  "103103206404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 10-32-64-4"
+  },
+  "104103206404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 10-32-64-4"
+  },
+  "127123206404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 12-32-64-4"
+  },
+  "100070608317W500": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "PENN WEST WALRUS  7-6-83-17"
+  },
+  "100100608317W500": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "PENN WEST WALRUS  10-6-83-17"
+  },
+  "100150608317W500": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "PENN WEST WALRUS  15-6-83-17"
+  },
+  "100143608218W500": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "PENN WEST WALRUS  14-36-82-18"
+  },
+  "100153608218W500": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "PENN WEST WALRUS  15-36-82-18"
+  },
+  "100020608317W500": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "PENN WEST WALRUS  2-6-83-17"
+  },
+  "128123206404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 12-32-64-4"
+  },
+  "105141806504W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "IMP 10 CSP-PSW1 LEMING 14-18-65-4"
+  },
+  "100110608317W500": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "PENN WEST WALRUS  11-6-83-17"
+  },
+  "100090908417W500": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "BAYTEX CLIFFD 9-9-84-17"
+  },
+  "100110808606W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "NEXEN OPTI VWP NEWBY 11-8-86-6"
+  },
+  "100140808606W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "NEXEN OPTI VWP NEWBY 14-8-86-6"
+  },
+  "122053206804W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OB6 FISHER 5-32-68-4"
+  },
+  "100141006703W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OBS MOORE 14-10-67-3"
+  },
+  "102122206703W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OBS MOORE 12-22-67-3"
+  },
+  "100082206703W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OBS MOORE 8-22-67-3"
+  },
+  "108112108518W500": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "CNUL CADOTTE 11-21-85-18"
+  },
+  "103161707207W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BRI HZ MOONEY 16-17-72-7"
+  },
+  "102162308315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX SLAVE 16-23-83-15"
+  },
+  "103012208315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX SLAVE 1-22-83-15"
+  },
+  "103162308315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX SLAVE 16-23-83-15"
+  },
+  "102022208315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX SLAVE 2-22-83-15"
+  },
+  "100132707506W400": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "CVE FCCL 2C KIRBY 13-27-75-6"
+  },
+  "100043507506W400": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "CVE FCCL B KIRBY 4-35-75-6"
+  },
+  "100022707506W400": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "CVE FCCL B KIRBY 2-27-75-6"
+  },
+  "100131507208W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BRI HZ MOONEY 13-15-72-8"
+  },
+  "100042107208W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BRI HZ MOONEY 4-21-72-8"
+  },
+  "100052107208W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BRI HZ MOONEY 5-21-72-8"
+  },
+  "100122107208W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BRI HZ MOONEY 12-21-72-8"
+  },
+  "100132107208W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BRI HZ MOONEY 13-21-72-8"
+  },
+  "100082207208W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BRI HZ MOONEY 8-22-72-8"
+  },
+  "102032208315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX SLAVE 3-22-83-15"
+  },
+  "104032208315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX SLAVE 3-22-83-15"
+  },
+  "103042208315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX SLAVE 4-22-83-15"
+  },
+  "104042208315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX SLAVE 4-22-83-15"
+  },
+  "100103109505W500": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "PEINC PANNY 10-31-95-5"
+  },
+  "112140106504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 11 HRZ D22-H22 COLD LK 14-1-65-4"
+  },
+  "100031008417W500": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "BAYTEX CLIFFD 3-10-84-17"
+  },
+  "102010908417W500": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "BAYTEX CLIFFD 1-9-84-17"
+  },
+  "100132808506W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "NEXEN CNOOC OBS W NEWBY 13-28-85-6"
+  },
+  "100132808506W402": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "NEXEN CNOOC OBS W NEWBY 13-28-85-6"
+  },
+  "100082908506W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "NEXEN CNOOC OBS SW NEWBY 8-29-85-6"
+  },
+  "100082908506W402": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "NEXEN CNOOC OBS SW NEWBY 8-29-85-6"
+  },
+  "102140608317W500": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "PENN WEST PEACE RIVER 14-6-83-17"
+  },
+  "100132806605W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OBS LEMING 13-28-66-5"
+  },
+  "100061206704W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OBS LEMING 6-12-67-4"
+  },
+  "100062806605W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OBS LEMING 6-28-66-5"
+  },
+  "100053308506W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "NEXEN CNOOC OBS W NEWBY 5-33-85-6"
+  },
+  "100053308506W402": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "NEXEN CNOOC OBS W NEWBY 5-33-85-6"
+  },
+  "103021508315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX SLAVE 2-15-83-15"
+  },
+  "104021508315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX SLAVE 2-15-83-15"
+  },
+  "104011508315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX SLAVE 1-15-83-15"
+  },
+  "105011508315W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "BAYTEX SLAVE 1-15-83-15"
+  },
+  "1F1013507506W400": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "CVE FCCL 1C KIRBY 1-35-75-6"
+  },
+  "100081008417W500": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "BAYTEX CLIFFD 8-10-84-17"
+  },
+  "100121806705W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OBS FISHER 12-18-67-5"
+  },
+  "100142207810W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "ATH LEISMER 14-22-78-10"
+  },
+  "100010908204W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "MEG NEWBY 1-9-82-4"
+  },
+  "107050807910W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "ATH LEISMER 5-8-79-10"
+  },
+  "100052208105W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "MEG NEWBY 5-22-81-5"
+  },
+  "106080206705W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "CNRL 3A43 OBS FSHR CK 8-2-67-5"
+  },
+  "100010106705W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "CNRL 4A42 OBS PRIMROSE 1-1-67-5"
+  },
+  "100021506705W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OBS FISHER 2-15-67-5"
+  },
+  "1F1060107606W400": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "CVE FCCL 6C KIRBY 6-1-76-6"
+  },
+  "1F1130507508W400": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "CNRL WDW HZ CW06 DEVENISH 13-5-75-8"
+  },
+  "103163009112W500": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "ANDORA 1U SAWN LK 16-30-91-12"
+  },
+  "103072806704W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OB3 MOORE 7-28-67-4"
+  },
+  "100042808506W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "NEU CNOOC VWP NEWBY 4-28-85-6"
+  },
+  "100042808506W402": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "NEU CNOOC VWP NEWBY 4-28-85-6"
+  },
+  "110081606403W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "OPC P106-I5 ETHELLK 8-16-64-3"
+  },
+  "100043308506W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "NEU CNOOC VWP S NEWBY 4-33-85-6"
+  },
+  "100152908506W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "NEU CNOOC VWP NEWBY 15-29-85-6"
+  },
+  "100150907005W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CVE FCCL D15 FISHER 15-9-70-5"
+  },
+  "100131007005W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CVE FCCL C13 FISHER 13-10-70-5"
+  },
+  "102062207507W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL 6C2 CONKLIN 6-22-75-7"
+  },
+  "100072306905W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL FISHER 7-23-69-5"
+  },
+  "100040406904W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL FISHER 4-4-69-4"
+  },
+  "105081808518W500": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "CNUL CADOTTE 8-18-85-18"
+  },
+  "103081808518W500": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "CNUL CADOTTE 8-18-85-18"
+  },
+  "104081808518W500": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "CNUL CADOTTE 8-18-85-18"
+  },
+  "103061708518W500": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "CNUL CADOTTE 6-17-85-18"
+  },
+  "105061708518W500": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "CNUL CADOTTE 6-17-85-18"
+  },
+  "105122008518W500": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNUL CADOTTE 12-20-85-18"
+  },
+  "106061708518W500": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNUL CADOTTE 6-17-85-18"
+  },
+  "105081908518W500": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "CNUL CADOTTE 8-19-85-18"
+  },
+  "106081908518W500": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "CNUL CADOTTE 8-19-85-18"
+  },
+  "104091908518W500": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "CNUL CADOTTE 9-19-85-18"
+  },
+  "106122008518W500": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "CNUL CADOTTE 12-20-85-18"
+  },
+  "106072806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 7-28-64-4"
+  },
+  "107072806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 7-28-64-4"
+  },
+  "108072806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 7-28-64-4"
+  },
+  "109072806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 7-28-64-4"
+  },
+  "110022806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 2-28-64-4"
+  },
+  "113022806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 2-28-64-4"
+  },
+  "114022806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 2-28-64-4"
+  },
+  "116022806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 2-28-64-4"
+  },
+  "117072806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 7-28-64-4"
+  },
+  "117022806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 2-28-64-4"
+  },
+  "118022806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 2-28-64-4"
+  },
+  "119022806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 2-28-64-4"
+  },
+  "120022806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 2-28-64-4"
+  },
+  "121022806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 2-28-64-4"
+  },
+  "103130106705W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL PAD 43 OBJ LEMING 13-1-67-5"
+  },
+  "102052608407W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "NEU VWP RESDELN 5-26-84-7"
+  },
+  "103062806404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 6-28-64-4"
+  },
+  "118072806404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 7-28-64-4"
+  },
+  "102052806404W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SRL TUCKLK 5-28-64-4"
+  },
+  "100111609111W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SUNCOR QMW-76 VOYAGEUR 11-16-91-11"
+  },
+  "100082109111W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SUNCOR QMW-75 VOYAGEUR 8-21-91-11"
+  },
+  "100083206804W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OBS FISHER 8-32-68-4"
+  },
+  "103121508518W500": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "CNUL CADOTTE 12-15-85-18"
+  },
+  "102152908506W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "NEU CNOOC VWP R NEWBY 15-29-85-6"
+  },
+  "108112906404W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 11-29-64-4"
+  },
+  "115122906404W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 12-29-64-4"
+  },
+  "116122906404W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 12-29-64-4"
+  },
+  "117122906404W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 12-29-64-4"
+  },
+  "111132906404W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 13-29-64-4"
+  },
+  "112132906404W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 13-29-64-4"
+  },
+  "113132906404W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 13-29-64-4"
+  },
+  "114132906404W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 13-29-64-4"
+  },
+  "102162906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 16-29-64-4"
+  },
+  "103162906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 16-29-64-4"
+  },
+  "106162906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 16-29-64-4"
+  },
+  "108162906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 16-29-64-4"
+  },
+  "110162906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 16-29-64-4"
+  },
+  "112162906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 16-29-64-4"
+  },
+  "114162906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 16-29-64-4"
+  },
+  "116162906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 16-29-64-4"
+  },
+  "100062506603W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "IMP N03 E GRM LEMING 6-25-66-3"
+  },
+  "100083606603W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "IMP N01/N02 E GRM LEMING 8-36-66-3"
+  },
+  "102012606603W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "IMP N04 W GRM LEMING 1-26-66-3"
+  },
+  "100083506603W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "IMP N01/N02 W GRM LEMING 8-35-66-3"
+  },
+  "102162606603W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "IMP N02/N03 W GRM LEMING 16-26-66-3"
+  },
+  "103042906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 4-29-64-4"
+  },
+  "107042906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 4-29-64-4"
+  },
+  "109042906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 4-29-64-4"
+  },
+  "111042906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 4-29-64-4"
+  },
+  "112042906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 4-29-64-4"
+  },
+  "103052906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 5-29-64-4"
+  },
+  "115042906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 4-29-64-4"
+  },
+  "116042906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 4-29-64-4"
+  },
+  "106052906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 5-29-64-4"
+  },
+  "110052906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 5-29-64-4"
+  },
+  "112052906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 5-29-64-4"
+  },
+  "115052906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 5-29-64-4"
+  },
+  "116052906404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL TUCKLK 5-29-64-4"
+  },
+  "100010806320W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "CRESTWYND NEWBRK 1-8-63-20"
+  },
+  "108131706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P108-I1 ETHELLK 13-17-64-3"
+  },
+  "109131706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P108-I2 ETHELLK 13-17-64-3"
+  },
+  "100051706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P204-I5 ETHELLK 5-17-64-3"
+  },
+  "107051706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P204-I6 ETHELLK 5-17-64-3"
+  },
+  "108051706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P204-I7 ETHELLK 5-17-64-3"
+  },
+  "109051706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P204-I8 ETHELLK 5-17-64-3"
+  },
+  "110051706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P204-I9 ETHELLK 5-17-64-3"
+  },
+  "111041706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P204-I10 ETHELLK 4-17-64-3"
+  },
+  "112041706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P204-I11 ETHELLK 4-17-64-3"
+  },
+  "107071706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P206-I6 ETHELLK 7-17-64-3"
+  },
+  "108071706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P206-I7 ETHELLK 7-17-64-3"
+  },
+  "109071706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P206-I8 ETHELLK 7-17-64-3"
+  },
+  "110071706403W402": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P206-I9 ETHELLK 7-17-64-3"
+  },
+  "1F1070707605W400": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "CVE FCCL 12-7 A7 HARDY 7-7-76-5"
+  },
+  "112081606403W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Oil",
+    "name": "OPC OBS ETHELLK 8-16-64-3"
+  },
+  "100131506403W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Oil",
+    "name": "OPC OBS ETHELLK 13-15-64-3"
+  },
+  "100103106804W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OBS FISHER 10-31-68-4"
+  },
+  "113081606403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P205-I5 ETHELLK 8-16-64-3"
+  },
+  "114081606403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P205-I6 ETHELLK 8-16-64-3"
+  },
+  "115081606403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P205-I7 ETHELLK 8-16-64-3"
+  },
+  "102133107606W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 13-36 HZ 102 NIPISI 13-31-76-6"
+  },
+  "102131506403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P109-I1 ETHELLK 13-15-64-3"
+  },
+  "103131506403W402": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P109-I2 ETHELLK 13-15-64-3"
+  },
+  "104131506403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P109-I3 ETHELLK 13-15-64-3"
+  },
+  "105131506403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P109-I4 ETHELLK 13-15-64-3"
+  },
+  "100121506403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "OPC P109-I5 ETHELLK 12-15-64-3"
+  },
+  "100091107526W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "HWX MARTENH 9-11-75-26"
+  },
+  "102132007425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 9-24 HZ 102 MARTENH 13-20-74-25"
+  },
+  "100151007525W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "DELTASTREAM HZ MARTENH 15-10-75-25"
+  },
+  "104010906604W402": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP H27-H31 LEMING 6-3-66-4"
+  },
+  "105150406604W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP H27-H33 LEMING 15-4-66-4"
+  },
+  "105160406604W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP H27-H32 LEMING 16-4-66-4"
+  },
+  "107090406604W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP H27-H34 LEMING 9-4-66-4"
+  },
+  "111080406604W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP H27-H36 LEMING 8-4-66-4"
+  },
+  "113080406604W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP H27-H37 LEMING 8-4-66-4"
+  },
+  "109090406604W402": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP H27-H35 LEMING 9-4-66-4"
+  },
+  "104161308409W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SUNCOR ET AL WW HANGSTN 16-13-84-9"
+  },
+  "102160207525W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "DELTASTREAM HZ MARTENH 16-2-75-25"
+  },
+  "103150207525W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "DELTASTREAM HZ102 MARTENH 15-2-75-25"
+  },
+  "100073206804W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OBS FISHER 7-32-68-4"
+  },
+  "102011107425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "DELTASTREAM HZ W MARTENH 1-11-74-25"
+  },
+  "100032607607W500": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "TAC NIPISI 3-26-76-7"
+  },
+  "104132507607W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TAC NIPISI 13-25-76-7"
+  },
+  "100150909108W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SUNCOR ML19-GT679-MR1-VW  15-9-91-8"
+  },
+  "100061609108W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SUNCOR ML19-GT676-MR2-SI 6-16-91-8"
+  },
+  "102061609108W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SUNCOR ML19-GT676-MR1-VW 6-16-91-8"
+  },
+  "100110909108W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SUNCOR ML19-GT681-MR1-VW 11-9-91-8"
+  },
+  "102110909108W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SUNCOR ML19-GT681-MR2-SI 11-9-91-8"
+  },
+  "102150909108W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SUNCOR ML19-GT679-MR2-SI   15-9-91-8"
+  },
+  "100130207525W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "DELTASTREAM W HZ MARTENH 13-2-75-25"
+  },
+  "100140207525W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "DELTASTREAM W HZ MARTENH 14-2-75-25"
+  },
+  "107143207324W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-29 HZ 107 MARTENH 14-32-73-24"
+  },
+  "102071007525W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "DELTASTREAM N HZ MARTENH 7-10-75-25"
+  },
+  "100021007525W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "DELTASTREAM N HZ MARTENH 2-10-75-25"
+  },
+  "102042009108W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SUNCOR ML19-GT672-MR1-VW 4-20-91-8"
+  },
+  "103042009108W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SUNCOR ML19-GT672-MR2-SI 4-20-91-8"
+  },
+  "100082009108W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SUNCOR ML19-GT674-MR1-VW 8-20-91-8"
+  },
+  "102082009108W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SUNCOR ML19-GT674-MR2-SI 8-20-91-8"
+  },
+  "100011909108W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SUNCOR ML19-GT688-MR1-VW 1-19-91-8"
+  },
+  "102011909108W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "SUNCOR ML19-GT688-MR2-SI 1-19-91-8"
+  },
+  "102130107525W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "DELTASTREAM MARTENH 13-1-75-25"
+  },
+  "102140107525W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "DELTASTREAM MARTENH 14-1-75-25"
+  },
+  "104113107606W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 11-36 HZ 104 NIPISI 11-31-76-6"
+  },
+  "100031107425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "DELTASTREAM MARTENH 3-11-74-25"
+  },
+  "103021107425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "DELTASTREAM MARTENH 2-11-74-25"
+  },
+  "102160307525W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "DELTASTREAM MARTENH 16-3-75-25"
+  },
+  "102150307525W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "DELTASTREAM MARTENH 15-3-75-25"
+  },
+  "102163207606W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-31 HZ 102 NIPISI 16-32-76-6"
+  },
+  "100081706603W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "IMP S03-OB01 LEMING 8-17-66-3"
+  },
+  "103162607425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX MARTENH 16-26-74-25"
+  },
+  "104162607425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX MARTENH 16-26-74-25"
+  },
+  "102163507425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX MARTENH 16-35-74-25"
+  },
+  "104122707324W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 10-29 HZ 104 MARTENH 12-27-73-24"
+  },
+  "104163207324W402": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 10-29 HZ 104 MARTENH 16-32-73-24"
+  },
+  "105132707324W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 10-29 HZ 105 MARTENH 13-27-73-24"
+  },
+  "107153207324W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 10-29 HZ 107 MARTENH 15-32-73-24"
+  },
+  "100130706321W400": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "CRESTWYND MEANOOK 13-7-63-21"
+  },
+  "100081306322W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "CRESTWYND MEANOOK 8-13-63-22"
+  },
+  "102122307425W402": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 13-24 HZ MARTENH 12-23-74-25"
+  },
+  "100142707607W509": {
+    "wellType": "Injection",
+    "wellFluid": "Gas",
+    "name": "TAC 11-22 HZ NIPISI 14-27-76-7"
+  },
+  "104092607425W403": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 15-27 HZ MARTENH 9-26-74-25"
+  },
+  "112021706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL P206-I10 ETHELLK 2-17-64-3"
+  },
+  "113021706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL P206-I11 ETHELLK 2-17-64-3"
+  },
+  "114021706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL P206-I12 ETHELLK 2-17-64-3"
+  },
+  "115021706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL P206-I13 ETHELLK 2-17-64-3"
+  },
+  "106083507425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 9-34 HZ 105 MARTENH 8-35-74-25"
+  },
+  "104083507425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 9-34 HZ 104 MARTENH 8-35-74-25"
+  },
+  "1F1113507425W400": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "HWX 9-34 HZ MARTENH 11-35-74-25"
+  },
+  "104023507425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 15-27 HZ 104 MARTENH 2-35-74-25"
+  },
+  "105023507425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 15-27 HZ 105 MARTENH 2-35-74-25"
+  },
+  "105092607425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 15-27 HZ 102 MARTENH 9-26-74-25"
+  },
+  "108162607425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 15-27 HZ MARTENH 16-26-74-25"
+  },
+  "1F1122607425W400": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "HWX 15-27 HZ MARTENH 12-26-74-25"
+  },
+  "104012507425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 4-25 HZ 102 MARTENH 1-25-74-25"
+  },
+  "1F1152307425W400": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "HWX 4-25 HZ MARTENH 15-23-74-25"
+  },
+  "104122307425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 4-25 HZ MARTENH 12-23-74-25"
+  },
+  "105122307425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 4-25 HZ 102 MARTENH 12-23-74-25"
+  },
+  "104132307425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 4-25 HZ MARTENH 13-23-74-25"
+  },
+  "1W3052607425W404": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 4-25 HZ MARTENH 5-26-74-25"
+  },
+  "1W2052607425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 4-25 HZ MARTENH 5-26-74-25"
+  },
+  "1W2042607425W402": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 4-25 HZ MARTENH 4-26-74-25"
+  },
+  "1W3042607425W402": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 4-25 HZ MARTENH 4-26-74-25"
+  },
+  "105132307425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 4-25 HZ 102 MARTENH 13-23-74-25"
+  },
+  "100151607023W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "DELTASTREAM CANAL 15-16-70-23"
+  },
+  "100091007023W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "DELTASTREAM CROOKED 9-10-70-23"
+  },
+  "100161007023W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "DELTASTREAM CROOKED 16-10-70-23"
+  },
+  "102161607023W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "DELTASTREAM CANAL 16-16-70-23"
+  },
+  "122081606403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL P205-I8 ETHELLK 8-16-64-3"
+  },
+  "117011606403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL P205-I9 ETHELLK 1-16-64-3"
+  },
+  "118011606403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL P205-I10 ETHELLK 1-16-64-3"
+  },
+  "119011606403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL P205-I11 ETHELLK 1-16-64-3"
+  },
+  "120011606403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL P205-I12 ETHELLK 1-16-64-3"
+  },
+  "106162507425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 9-26 HZ 106 MARTENH 16-25-74-25"
+  },
+  "107162507425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 9-26 HZ 107 MARTENH 16-25-74-25"
+  },
+  "108092507425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 9-26 HZ 108 MARTENH 9-25-74-25"
+  },
+  "106092507425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 9-26 HZ 106 MARTENH 9-25-74-25"
+  },
+  "107082507425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 10-26 HZ 107 MARTENH 8-25-74-25"
+  },
+  "106012507425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 10-26 HZ 106 MARTENH 1-25-74-25"
+  },
+  "1W0131907607W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 15-13 HZ NIPISI 13-19-76-7"
+  },
+  "102162407608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TAC 15-13 HZ 102 NIPISI 16-24-76-8"
+  },
+  "103162407608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TAC 15-13 HZ 103 NIPISI 16-24-76-8"
+  },
+  "104033408411W400": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "GROC DEMO DISP HANGSTN 3-34-84-11"
+  },
+  "110110506503W402": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IMP LRD-OB1 ETHELLK 11-5-65-3"
+  },
+  "105163607425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 7D-35 103 MARTENH 16-36-74-25"
+  },
+  "104093507425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 9-34 HZ 104 MARTENH 9-35-74-25"
+  },
+  "105093507425W403": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 9-34 HZ 105 MARTENH 9-35-74-25"
+  },
+  "104052307425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 5-24 HZ 104 MARTENH 5-23-74-25"
+  },
+  "100021508411W400": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "GROC HE DISP HANGSTN 2-15-84-11"
+  },
+  "102162407425W402": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 102 4HZ MARTENH 16-24-74-25"
+  },
+  "103162407425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 103 4HZ MARTENH 16-24-74-25"
+  },
+  "103092407425W403": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 103 4HZ MARTENH 9-24-74-25"
+  },
+  "107092407425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 106 4HZ MARTENH 9-24-74-25"
+  },
+  "100013307324W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "CNRL HZ MARTENH 1-33-73-24"
+  },
+  "103093307324W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "CNRL HZ 103 MARTENH 9-33-73-24"
+  },
+  "102070807706W502": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 2-5 HZ 102 NIPISI 7-8-77-6"
+  },
+  "103070807706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 2-5 HZ 103 NIPISI 7-8-77-6"
+  },
+  "104080807706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 2-5 HZ 104 NIPISI 8-8-77-6"
+  },
+  "105050907706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 1-5 HZ 105 NIPISI 5-9-77-6"
+  },
+  "106050907706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 1-5 HZ 106 NIPISI 5-9-77-6"
+  },
+  "107050907706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 2-5 HZ 107 NIPISI 5-9-77-6"
+  },
+  "104132707425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 104 5HZ MARTENH 13-27-74-25"
+  },
+  "105122707425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 105 5HZ MARTENH 12-27-74-25"
+  },
+  "106122707425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 106 5HZ MARTENH 12-27-74-25"
+  },
+  "105052707425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 105 5HZ MARTENH 5-27-74-25"
+  },
+  "106052707425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 106 5HZ MARTENH 5-27-74-25"
+  },
+  "104042707425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 104 6HZ MARTENH 4-27-74-25"
+  },
+  "100160107525W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "DELTASTREAM MARTENH 16-1-75-25"
+  },
+  "102093607425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 7D-35 102 MARTENH 9-36-74-25"
+  },
+  "104163607425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 10A-35 104 MARTENH 16-36-74-25"
+  },
+  "102013607425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 2C-35 102 MARTENH 1-36-74-25"
+  },
+  "104083607425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 2C-35 104 MARTENH 8-36-74-25"
+  },
+  "107051707425W404": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 1-13 HZ 107 MARTENH 5-17-74-25"
+  },
+  "103012607325W404": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 12-13 HZ 103 MARTENH 1-26-73-25"
+  },
+  "103022607325W402": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 12-13 HZ 103 MARTENH 2-26-73-25"
+  },
+  "104032507325W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 12-13 HZ 104 MARTENH 3-25-73-25"
+  },
+  "108162106404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL H1S TUCKLK 16-21-64-4"
+  },
+  "109162106404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL H2S TUCKLK 16-21-64-4"
+  },
+  "110162106404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL H3S TUCKLK 16-21-64-4"
+  },
+  "111162106404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL H4S TUCKLK 16-21-64-4"
+  },
+  "112162106404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL H5S TUCKLK 16-21-64-4"
+  },
+  "113162106404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL H6S TUCKLK 16-21-64-4"
+  },
+  "114162106404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL H7S TUCKLK 16-21-64-4"
+  },
+  "103092106404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL H8S TUCKLK 9-21-64-4"
+  },
+  "102011607525W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 9-15 HZ 102 MARTENH 1-16-75-25"
+  },
+  "102112607325W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 12-27 HZ 102 MARTENH 11-26-73-25"
+  },
+  "102052307325W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 12-27 HZ 102 MARTENH 5-23-73-25"
+  },
+  "103042607325W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 12-27 HZ 103 MARTENH 4-26-73-25"
+  },
+  "104052007425W406": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 1-24 HZ 104 MARTENH 5-20-74-25"
+  },
+  "102033407608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 5-3 HZ 102 NIPISI 3-34-76-8"
+  },
+  "103013307608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 5-3 HZ 103 NIPISI 1-33-76-8"
+  },
+  "100023307608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 5-3 HZ NIPISI 2-33-76-8"
+  },
+  "102043407608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 5-3 HZ 102 NIPISI 4-34-76-8"
+  },
+  "100111007708W502": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 5-3 NIPISI 11-10-77-8"
+  },
+  "100121007708W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 5-3 NIPISI 12-10-77-8"
+  },
+  "102022907606W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-32 HZ 102 NIPISI 2-29-76-6"
+  },
+  "103032907606W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-32 HZ 103 NIPISI 3-29-76-6"
+  },
+  "103042907606W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-32 HZ 103 NIPISI 4-29-76-6"
+  },
+  "104042907606W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-32 HZ 104 NIPISI 4-29-76-6"
+  },
+  "104023007606W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-31 HZ 104 NIPISI 2-30-76-6"
+  },
+  "102062407608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 3-23 HZ 102 NIPISI 6-24-76-8"
+  },
+  "103062407608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 3-23 HZ 103 NIPISI 6-24-76-8"
+  },
+  "102032407608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 3-23 HZ 102 NIPISI 3-24-76-8"
+  },
+  "103032407608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 3-23 HZ 103 NIPISI 3-24-76-8"
+  },
+  "102141307608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 3-23 HZ 102 NIPISI 14-13-76-8"
+  },
+  "100042207608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 3-23 HZ NIPISI 4-22-76-8"
+  },
+  "102042207608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 3-23 HZ 102 NIPISI 4-22-76-8"
+  },
+  "110073406504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 22 H36-H21 LEMING 7-34-65-4"
+  },
+  "112073406504W400": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 22 H36-H23 LEMING 7-34-65-4"
+  },
+  "113073406504W402": {
+    "wellType": "Injection",
+    "wellFluid": "Steam",
+    "name": "IMP 22 H36-H24 LEMING 7-34-65-4"
+  },
+  "103141907607W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 15-13 HZ 103 NIPISI 14-19-76-7"
+  },
+  "105010806503W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "IMP 23 Y01-I01 ETHELLK 1-8-65-3"
+  },
+  "106010806503W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "IMP 23 Y01-I02 ETHELLK 1-8-65-3"
+  },
+  "102150506503W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "IMP 23 Y01-I03 ETHELLK 15-5-65-3"
+  },
+  "103150506503W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "IMP 23 Y01-I04 ETHELLK 15-5-65-3"
+  },
+  "104150506503W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "IMP 23 Y01-I05 ETHELLK 15-5-65-3"
+  },
+  "105150506503W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "IMP 23 Y01-I06 ETHELLK 15-5-65-3"
+  },
+  "106150506503W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "IMP 23 Y01-I07 ETHELLK 15-5-65-3"
+  },
+  "107150506503W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "IMP 23 Y01-I08 ETHELLK 15-5-65-3"
+  },
+  "104110506503W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "IMP 23 Y01-I09 ETHELLK 11-5-65-3"
+  },
+  "105110506503W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "IMP 23 Y01-I10 ETHELLK 11-5-65-3"
+  },
+  "106110506503W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "IMP 23 Y01-I11 ETHELLK 11-5-65-3"
+  },
+  "114041706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL P204-I12 ETHELLK 4-17-64-3"
+  },
+  "115041706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL P204-P13R ETHELLK 4-17-64-3"
+  },
+  "117041706403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL P204-P13 ETHELLK 4-17-64-3"
+  },
+  "103130707602W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 103 5HZ MARTENH 13-7-76-2"
+  },
+  "103162207502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 103 HZ MARTENH 16-22-75-2"
+  },
+  "105051707324W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "CNRL HZ 105 SMITH 5-17-73-24"
+  },
+  "103152607608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 13-23 HZ 103 NIPISI 15-26-76-8"
+  },
+  "100130507524W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 9-36 HZ MARTENH 13-5-75-24"
+  },
+  "102092707608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 10-29 HZ 102 NIPISI 9-27-76-8"
+  },
+  "104162707608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 10-29 HZ 104 NIPISI 16-27-76-8"
+  },
+  "105123407425W404": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 105 HZ MARTENH 12-34-74-25"
+  },
+  "103133407425W403": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 103 HZ MARTENH 13-34-74-25"
+  },
+  "103053407425W402": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 103 HZ MARTENH 5-34-74-25"
+  },
+  "103043407425W402": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 103 HZ MARTENH 4-34-74-25"
+  },
+  "103160507424W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-32 HZ 103 MARTENH 16-5-74-24"
+  },
+  "104130507424W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-32 HZ 104 MARTENH 13-5-74-24"
+  },
+  "105140507424W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-32 HZ 105 MARTENH 14-5-74-24"
+  },
+  "102050107708W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-36 HZ 102 NIPISI 5-1-77-8"
+  },
+  "102060107708W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-36 HZ 102 NIPISI 6-1-77-8"
+  },
+  "102070107708W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-36 HZ 102 NIPISI 7-1-77-8"
+  },
+  "102032507608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-36 HZ 102 NIPISI 3-25-76-8"
+  },
+  "103022507608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-36 HZ 103 NIPISI 2-25-76-8"
+  },
+  "103032507608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-36 HZ 103 NIPISI 3-25-76-8"
+  },
+  "102012707606W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 7-34 HZ 102 NIPISI 1-27-76-6"
+  },
+  "102022707606W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 7-34 HZ 102 NIPISI 2-27-76-6"
+  },
+  "103022707606W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 7-34 HZ 103 NIPISI 2-27-76-6"
+  },
+  "103032707606W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 7-34 HZ 103 NIPISI 3-27-76-6"
+  },
+  "102093407325W402": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 10-27 HZ 102 MARTENH 9-34-73-25"
+  },
+  "103143407325W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 10-27 HZ 103 MARTENH 14-34-73-25"
+  },
+  "104123007324W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 11-26 104 MARTENH 12-30-73-24"
+  },
+  "102123507325W402": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 11-26 HZ 102 MARTENH 12-35-73-25"
+  },
+  "103053007324W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 11-26 HZ 103 MARTENH 5-30-73-24"
+  },
+  "105140707602W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 105 7HZ MARTENH 14-7-76-2"
+  },
+  "100012507608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 3-31 HZ NIPISI 1-25-76-8"
+  },
+  "100023007607W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-31 HZ NIPISI 2-30-76-7"
+  },
+  "100043007607W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-31 HZ NIPISI 4-30-76-7"
+  },
+  "100033007607W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 3-31 HZ NIPISI 3-30-76-7"
+  },
+  "102043007607W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 3-31 HZ 102 NIPISI 4-30-76-7"
+  },
+  "102121308306W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "COPRC 102 OBS NEWBY 12-13-83-6"
+  },
+  "104152207502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 104 HZ MARTENH 15-22-75-2"
+  },
+  "100012208307W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "COPRC 100 OBS RESDELN 1-22-83-7"
+  },
+  "104022807606W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-33 104 NIPISI 2-28-76-6"
+  },
+  "103032807606W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-33 103 NIPISI 3-28-76-6"
+  },
+  "103042807606W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-33 103 NIPISI 4-28-76-6"
+  },
+  "104042807606W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-33 104 NIPISI 4-28-76-6"
+  },
+  "103112407608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 13-23 HZ 103 NIPISI 11-24-76-8"
+  },
+  "102142407608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 13-23 HZ 102 NIPISI 14-24-76-8"
+  },
+  "103142407608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 13-23 HZ 103 NIPISI 14-24-76-8"
+  },
+  "113032708306W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "COPRC 113 OBS NEWBY 3-27-83-6"
+  },
+  "102161607608W502": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 12-27 HZ 102 NIPISI 16-16-76-8"
+  },
+  "104032807606W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-33 104 NIPISI 3-28-76-6"
+  },
+  "105132107425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 105 HZ MARTENH 13-21-74-25"
+  },
+  "106132107425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 106 HZ MARTENH 13-21-74-25"
+  },
+  "105122107425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 105 HZ MARTENH 12-21-74-25"
+  },
+  "107052107425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 107 HZ MARTENH 5-21-74-25"
+  },
+  "108052107425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 108 HZ MARTENH 5-21-74-25"
+  },
+  "105042107425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 105 HZ MARTENH 4-21-74-25"
+  },
+  "105032707606W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 7-34 105 NIPISI 3-27-76-6"
+  },
+  "103132307901W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 9-15 103 MISTAHAE 13-23-79-1"
+  },
+  "100132307901W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 9-15 MISTAHAE 13-23-79-1"
+  },
+  "103160707602W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 103 HZ MARTENH 16-7-76-2"
+  },
+  "105150707602W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 105 HZ MARTENH 15-7-76-2"
+  },
+  "100033406703W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OBS MOORE 3-34-67-3"
+  },
+  "103162006404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL CS1S TUCKLK 16-20-64-4"
+  },
+  "109082006404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL CS2S TUCKLK 8-20-64-4"
+  },
+  "110082006404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL CS3S TUCKLK 8-20-64-4"
+  },
+  "111082006404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL CS4S TUCKLK 8-20-64-4"
+  },
+  "112082006404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL CS5S TUCKLK 8-20-64-4"
+  },
+  "113082006404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL CS6S TUCKLK 8-20-64-4"
+  },
+  "114082006404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL CS7S TUCKLK 8-20-64-4"
+  },
+  "115082006404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL CS8S TUCKLK 8-20-64-4"
+  },
+  "100063406703W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OBS MOORE 6-34-67-3"
+  },
+  "100152708012W600": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "KELT EXP HZ PCOUPE 15-27-80-12"
+  },
+  "115163607618W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IPCCAN PORTAGE 16-36-76-18"
+  },
+  "119153607618W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IPCCAN 102 PORTAGE 15-36-76-18"
+  },
+  "100133607618W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IPCCAN PORTAGE 13-36-76-18"
+  },
+  "100113607618W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IPCCAN PORTAGE 11-36-76-18"
+  },
+  "100093607618W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IPCCAN PORTAGE 9-36-76-18"
+  },
+  "100053607618W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IPCCAN PORTAGE 5-36-76-18"
+  },
+  "100063607618W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IPCCAN 102 PORTAGE 6-36-76-18"
+  },
+  "100092507618W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IPCCAN PORTAGE 9-25-76-18"
+  },
+  "100012507618W400": {
+    "wellType": "Observation",
+    "wellFluid": "Crude Bitumen",
+    "name": "IPCCAN PORTAGE 1-25-76-18"
+  },
+  "103072407916W500": {
+    "wellType": "Storage",
+    "wellFluid": "Gas",
+    "name": "BAYTEX 103 DAWSON 7-24-79-16"
+  },
+  "100162107502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX HZ MARTENH 16-21-75-2"
+  },
+  "100132207502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX HZ MARTENH 13-22-75-2"
+  },
+  "103043507608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 3-2 103 NIPISI 4-35-76-8"
+  },
+  "104043507608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 3-2 104 NIPISI 4-35-76-8"
+  },
+  "111053408411W400": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "GROC DEMO DISP 2 HANGSTN 5-34-84-11"
+  },
+  "100161707809W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 2-29 NIPISI 16-17-78-9"
+  },
+  "1W3043007809W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 2-29 1W3 NIPISI 4-30-78-9"
+  },
+  "102151707809W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 2-29 102 NIPISI 15-17-78-9"
+  },
+  "104131707605W502": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 12-15 HZ 104 MARTEN 13-17-76-5"
+  },
+  "100012407916W500": {
+    "wellType": "Storage",
+    "wellFluid": "Gas",
+    "name": "BAYTEX HZ DAWSON 1-24-79-16"
+  },
+  "103160707501W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 103 HZ MARTENH 16-7-75-1"
+  },
+  "103060407708W502": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 7-3 103 NIPISI 6-4-77-8"
+  },
+  "104060407708W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 7-3 104 NIPISI 6-4-77-8"
+  },
+  "103013407608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 7-3 103 NIPISI 1-34-76-8"
+  },
+  "103023407608W502": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 7-3 103 NIPISI 2-34-76-8"
+  },
+  "104033407608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 7-3 104 NIPISI 3-34-76-8"
+  },
+  "100122507912W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "CLEAR NORTH 100 HZ GIFT 12-25-79-12"
+  },
+  "103132507912W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "CLEAR NORTH 103 HZ GIFT 13-25-79-12"
+  },
+  "1W0050807706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-31 1W0 NIPISI 5-8-77-6"
+  },
+  "102020707706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-31 102 NIPISI 2-7-77-6"
+  },
+  "104080707706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-31 104 NIPISI 8-7-77-6"
+  },
+  "105070707706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-31 105 NIPISI 7-7-77-6"
+  },
+  "105080707706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-31 105 NIPISI 8-7-77-6"
+  },
+  "106070707706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-31 106 NIPISI 7-7-77-6"
+  },
+  "100072707608W502": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 12-27 HZ NIPISI 7-27-76-8"
+  },
+  "102072707608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 12-27 HZ 102 NIPISI 7-27-76-8"
+  },
+  "103141507425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 14-10 HZ 103 MARTENH 14-15-74-25"
+  },
+  "103021007425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 14-10 HZ 103 MARTENH 2-10-74-25"
+  },
+  "1F1031007425W400": {
+    "wellType": "Source",
+    "wellFluid": "Water",
+    "name": "TVE 14-10 HZ WSW MARTENH 3-10-74-25"
+  },
+  "103060807706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-32 103 NIPISI 6-8-77-6"
+  },
+  "104060807706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-32 104 NIPISI 6-8-77-6"
+  },
+  "107070807706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-32 107 NIPISI 7-8-77-6"
+  },
+  "108070807706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-32 108 NIPISI 7-8-77-6"
+  },
+  "109070807706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-32 109 NIPISI 7-8-77-6"
+  },
+  "102122207608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 13-23 HZ 102 NIPISI 12-22-76-8"
+  },
+  "103122207608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 13-23 HZ 103 NIPISI 12-22-76-8"
+  },
+  "102132207608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 13-23 HZ 102 NIPISI 13-22-76-8"
+  },
+  "100102307608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 13-23 HZ NIPISI 10-23-76-8"
+  },
+  "103042707608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 13-23 HZ 103 NIPISI 4-27-76-8"
+  },
+  "104052207608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 3-23 HZ 104 NIPISI 5-22-76-8"
+  },
+  "104122507912W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "CLEAR NORTH 104 HZ GIFT 12-25-79-12"
+  },
+  "102150307425W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-34 102 MARTENH 15-3-74-25"
+  },
+  "103163507325W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-34 103 MARTENH 16-35-73-25"
+  },
+  "104140307425W403": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-34 104 MARTENH 14-3-74-25"
+  },
+  "105090607524W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 9-1 105 MARTENH 9-6-75-24"
+  },
+  "105080607524W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 9-1 105 MARTENH 8-6-75-24"
+  },
+  "105010607524W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 9-1 105 MARTENH 1-6-75-24"
+  },
+  "104091607525W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 9-15 104 MARTENH 9-16-75-25"
+  },
+  "106081607525W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 9-15 106 MARTENH 8-16-75-25"
+  },
+  "103161607525W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 9-15 103 MARTENH 16-16-75-25"
+  },
+  "104041207526W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "RBY 04 HZ MARTENH 4-12-75-26"
+  },
+  "103023207608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 8-5 103 NIPISI 2-32-76-8"
+  },
+  "104023207608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 8-5 104 NIPISI 2-32-76-8"
+  },
+  "113141606403W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL P103-I5 ETHELLK 14-16-64-3"
+  },
+  "120112207005W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "CVE W19I01-1 FISHER 11-22-70-5"
+  },
+  "121112207005W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "CVE W19I03-1 FISHER 11-22-70-5"
+  },
+  "102030407707W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 4-5 102 NIPISI 3-4-77-7"
+  },
+  "103010107708W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 4-5 103 NIPISI 1-1-77-8"
+  },
+  "102142207502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 102 HZ MARTENH 14-22-75-2"
+  },
+  "105152207502W505": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 105 HZ MARTENH 15-22-75-2"
+  },
+  "104162207502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 104 HZ MARTENH 16-22-75-2"
+  },
+  "100111507506W400": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "CNRL WDW HZ CW01 KIRBY 11-15-75-6"
+  },
+  "103132907607W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 4-5 103 NIPISI 13-29-76-7"
+  },
+  "104132907607W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 4-5 104 NIPISI 13-29-76-7"
+  },
+  "100012107502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX HZ MARTENH 1-21-75-2"
+  },
+  "100022107502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX HZ MARTENH 2-21-75-2"
+  },
+  "102022107502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 102 HZ MARTENH 2-21-75-2"
+  },
+  "100032107502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX HZ MARTENH 3-21-75-2"
+  },
+  "100042107502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX HZ MARTENH 4-21-75-2"
+  },
+  "104162707502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 104 HZ MARTENH 16-27-75-2"
+  },
+  "105162707502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 105 HZ MARTENH 16-27-75-2"
+  },
+  "103092707502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 103 HZ MARTENH 9-27-75-2"
+  },
+  "105160707501W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 105 HZ MARTENH 16-7-75-1"
+  },
+  "100041307502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX HZ MARTENH 4-13-75-2"
+  },
+  "110050907706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-10 110 NIPISI 5-9-77-6"
+  },
+  "111050907706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-10 111 NIPISI 5-9-77-6"
+  },
+  "103120907706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-10 103 NIPISI 12-9-77-6"
+  },
+  "104081107706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-10 104 NIPISI 8-11-77-6"
+  },
+  "104091107706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-10 104 NIPISI 9-11-77-6"
+  },
+  "105011107706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-10 105 NIPISI 1-11-77-6"
+  },
+  "105081107706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-10 105 NIPISI 8-11-77-6"
+  },
+  "105091107706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-10 105 NIPISI 9-11-77-6"
+  },
+  "106011107706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-10 106 NIPISI 1-11-77-6"
+  },
+  "106091107706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-10 106 NIPISI 9-11-77-6"
+  },
+  "107011107706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-10 107 NIPISI 1-11-77-6"
+  },
+  "103082707502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 103 HZ MARTENH 8-27-75-2"
+  },
+  "100072908205W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 11-21 GOODLOW 7-29-82-5"
+  },
+  "103121607608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 12-14 HZ 103 NIPISI 12-16-76-8"
+  },
+  "104131607608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 12-14 HZ 104 NIPISI 13-16-76-8"
+  },
+  "100091307608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 12-14 HZ NIPISI 9-13-76-8"
+  },
+  "105121807607W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 12-14 HZ 105 NIPISI 12-18-76-7"
+  },
+  "100051307608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 12-14 HZ NIPISI 5-13-76-8"
+  },
+  "104011408815W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 8-23 CADOTTE 104 1-14-88-15"
+  },
+  "102102707505W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-29 102 MARTEN 10-27-75-5"
+  },
+  "102152707505W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-29 102 MARTEN 15-27-75-5"
+  },
+  "102023407505W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-29 102 MARTEN 2-34-75-5"
+  },
+  "102163207505W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-29 102 MARTEN 16-32-75-5"
+  },
+  "103163207505W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-29 103 MARTEN 16-32-75-5"
+  },
+  "102133307505W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-29 102 MARTEN 13-33-75-5"
+  },
+  "100091008411W400": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "GROC HE DISP # 2  HANGSTN 9-10-84-11"
+  },
+  "102143207505W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-29 102 MARTEN 14-32-75-5"
+  },
+  "103143207505W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-29 103 MARTEN 14-32-75-5"
+  },
+  "103153207505W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-29 103 MARTEN 15-32-75-5"
+  },
+  "100101907607W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 9-18 HZ NIPISI 10-19-76-7"
+  },
+  "103151907607W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 9-18 HZ 103 NIPISI 15-19-76-7"
+  },
+  "102151307608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 9-18 HZ 102 NIPISI 15-13-76-8"
+  },
+  "103042707505W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 5-29 103 MARTEN 4-27-75-5"
+  },
+  "102122707505W502": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 5-29 102 MARTEN 12-27-75-5"
+  },
+  "103052707505W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 5-29 103 MARTEN 5-27-75-5"
+  },
+  "100092207809W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 8-28 NIPISI 9-22-78-9"
+  },
+  "102012207809W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 8-28 102 NIPISI 1-22-78-9"
+  },
+  "102012707809W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 8-28 102 NIPISI 1-27-78-9"
+  },
+  "102082707809W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 8-28 102 NIPISI 8-27-78-9"
+  },
+  "100051507809W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 8-28 NIPISI 5-15-78-9"
+  },
+  "102151507809W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 8-28 102 NIPISI 15-15-78-9"
+  },
+  "100153306703W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "CNRL OBS MOORE 15-33-67-3"
+  },
+  "102150207506W400": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "CNRL WDW HZ CW01 KIRBY 15-2-75-6"
+  },
+  "104070907706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-33 104 NIPISI 7-9-77-6"
+  },
+  "105070907706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-33 105 NIPISI 7-9-77-6"
+  },
+  "106060907706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-33 106 NIPISI 6-9-77-6"
+  },
+  "106070907706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-33 106 NIPISI 7-9-77-6"
+  },
+  "107060907706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-33 107 NIPISI 6-9-77-6"
+  },
+  "107070907706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-33 107 NIPISI 7-9-77-6"
+  },
+  "108060907706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-33 108 NIPISI 6-9-77-6"
+  },
+  "108070907706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-33 108 NIPISI 7-9-77-6"
+  },
+  "109060907706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-33 109 NIPISI 6-9-77-6"
+  },
+  "110060907706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-33 110 NIPISI 6-9-77-6"
+  },
+  "112050907706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-33 112 NIPISI 5-9-77-6"
+  },
+  "113050907706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-33 113 NIPISI 5-9-77-6"
+  },
+  "100012707912W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "CLEAR NORTH 100 HZ GIFT 1-27-79-12"
+  },
+  "105041807501W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 105 HZ MARTENH 4-18-75-1"
+  },
+  "106041807501W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 106 HZ MARTENH 4-18-75-1"
+  },
+  "104051807501W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 104 HZ MARTENH 5-18-75-1"
+  },
+  "105051807501W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 105 HZ MARTENH 5-18-75-1"
+  },
+  "106051807501W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 106 HZ MARTENH 5-18-75-1"
+  },
+  "103163307912W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "CLEAR NORTH 103 HZ GIFT 16-33-79-12"
+  },
+  "100052707912W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "CLEAR NORTH 100 HZ GIFT 5-27-79-12"
+  },
+  "100162007912W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "CLEAR NORTH 100 HZ GIFT 16-20-79-12"
+  },
+  "107121807501W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 107 HZ MARTENH 12-18-75-1"
+  },
+  "102013407505W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 5-33 102 MARTEN 1-34-75-5"
+  },
+  "103053507505W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 5-33 103 MARTEN 5-35-75-5"
+  },
+  "104053507505W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 5-33 104 MARTEN 5-35-75-5"
+  },
+  "104132607605W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 14-14 HZ 104 MARTEN 13-26-76-5"
+  },
+  "105142607605W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 14-14 HZ 105 MARTEN 14-26-76-5"
+  },
+  "106142607605W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 14-14 HZ 106 MARTEN 14-26-76-5"
+  },
+  "102162307605W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 14-14 HZ 102 MARTEN 16-23-76-5"
+  },
+  "100162307605W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 14-14 HZ MARTEN 16-23-76-5"
+  },
+  "106132607605W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 14-14 HZ 106 MARTEN 13-26-76-5"
+  },
+  "105132607605W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 14-14 HZ 105 MARTEN 13-26-76-5"
+  },
+  "107142607605W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 14-14 HZ 107 MARTEN 14-26-76-5"
+  },
+  "106152607605W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 14-14 HZ 106 MARTEN 15-26-76-5"
+  },
+  "107152607605W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 14-14 HZ 107 MARTEN 15-26-76-5"
+  },
+  "103142907502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 103 HZ MARTENH 14-29-75-2"
+  },
+  "103112907502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 103 HZ MARTENH 11-29-75-2"
+  },
+  "104112907502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 104 HZ MARTENH 11-29-75-2"
+  },
+  "102052907502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 102 HZ MARTENH 5-29-75-2"
+  },
+  "103020407602W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 103 HZ MARTENH 2-4-76-2"
+  },
+  "103011207810W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 5-8 103 NIPISI 1-12-78-10"
+  },
+  "103091207810W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 5-8 103 NIPISI 9-12-78-10"
+  },
+  "104011207810W502": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 5-8 104 NIPISI 1-12-78-10"
+  },
+  "104081207810W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 5-8 104 NIPISI 8-12-78-10"
+  },
+  "105081207810W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 5-8 105 NIPISI 8-12-78-10"
+  },
+  "102123507505W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 13-33 102 MARTEN 12-35-75-5"
+  },
+  "103133507505W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 13-33 103 MARTEN 13-35-75-5"
+  },
+  "104133507505W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 13-33 104 MARTEN 13-35-75-5"
+  },
+  "107060707706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-31 107 NIPISI 6-7-77-6"
+  },
+  "108060707706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-31 108 NIPISI 6-7-77-6"
+  },
+  "108080707706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-31 108 NIPISI 8-7-77-6"
+  },
+  "109080707706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 15-31 109 NIPISI 8-7-77-6"
+  },
+  "102051307502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 102 HZ MARTENH 5-13-75-2"
+  },
+  "102090707501W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 102 HZ MARTENH 9-7-75-1"
+  },
+  "104080707501W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 104 HZ MARTENH 8-7-75-1"
+  },
+  "105080707501W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 105 HZ MARTENH 8-7-75-1"
+  },
+  "102081507502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 102 HZ MARTENH 8-15-75-2"
+  },
+  "100011507502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX HZ MARTENH 1-15-75-2"
+  },
+  "102011507502W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 102 HZ MARTENH 1-15-75-2"
+  },
+  "108050807706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-32 108 NIPISI 5-8-77-6"
+  },
+  "109050807706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-32 109 NIPISI 5-8-77-6"
+  },
+  "109060807706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-32 109 NIPISI 6-8-77-6"
+  },
+  "110050807706W502": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-32 110 NIPISI 5-8-77-6"
+  },
+  "111050807706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-32 111 NIPISI 5-8-77-6"
+  },
+  "103051007706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 16-33 103 NIPISI 5-10-77-6"
+  },
+  "104051007706W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 16-33 104 NIPISI 5-10-77-6"
+  },
+  "102163407606W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 16-33 102 NIPISI 16-34-76-6"
+  },
+  "102051307707W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 1-15 102 NIPISI 5-13-77-7"
+  },
+  "102071607707W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 1-15 102 NIPISI 7-16-77-7"
+  },
+  "103021607707W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 1-15 103 NIPISI 2-16-77-7"
+  },
+  "103041307707W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 1-15 103 NIPISI 4-13-77-7"
+  },
+  "104150907707W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 1-15 104 NIPISI 15-9-77-7"
+  },
+  "104021607707W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 1-15 104 NIPISI 2-16-77-7"
+  },
+  "104041307707W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 1-15 104 NIPISI 4-13-77-7"
+  },
+  "105150907707W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 1-15 105 NIPISI 15-9-77-7"
+  },
+  "106150907707W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 1-15 106 NIPISI 15-9-77-7"
+  },
+  "103131207707W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 1-15 103 NIPISI 13-12-77-7"
+  },
+  "104013007324W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 9-20 104 MARTENH 1-30-73-24"
+  },
+  "106042707324W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 9-20 106 MARTENH 4-27-73-24"
+  },
+  "104161907324W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 9-20 104 SMITH 16-19-73-24"
+  },
+  "105142207324W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 9-20 105 SMITH 14-22-73-24"
+  },
+  "105132007605W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 12-22 HZ 105 MARTEN 13-20-76-5"
+  },
+  "104122007605W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 12-22 HZ 104 MARTEN 12-20-76-5"
+  },
+  "105122007605W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 12-22 HZ 105 MARTEN 12-20-76-5"
+  },
+  "105052007605W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 12-22 HZ 105 MARTEN 5-20-76-5"
+  },
+  "106042007605W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 12-22 HZ 106 MARTEN 4-20-76-5"
+  },
+  "103162107605W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 12-22 HZ 103 MARTEN 16-21-76-5"
+  },
+  "106122007605W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 12-22 HZ 106 MARTEN 12-20-76-5"
+  },
+  "107042007605W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 12-22 HZ 107 MARTEN 4-20-76-5"
+  },
+  "105041907501W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 105 HZ MARTENH 4-19-75-1"
+  },
+  "104041907501W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 104 HZ MARTENH 4-19-75-1"
+  },
+  "106031707501W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 106 HZ MARTENH 3-17-75-1"
+  },
+  "105141507501W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 105 HZ MARTENH 14-15-75-1"
+  },
+  "109152806404W403": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL CE C13L TUCKLK 15-28-64-4"
+  },
+  "111152806404W403": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL CE C15L TUCKLK 15-28-64-4"
+  },
+  "109102806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL CE C16L TUCKLK 10-28-64-4"
+  },
+  "110102806404W409": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL CE C18L TUCKLK 10-28-64-4"
+  },
+  "111102806404W400": {
+    "wellType": "Steam Injector",
+    "wellFluid": "Steam",
+    "name": "SRL CE C19L TUCKLK 10-28-64-4"
+  },
+  "103082307505W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 10-22 103 MARTEN 8-23-75-5"
+  },
+  "103093507505W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 10-22 103 MARTEN 9-35-75-5"
+  },
+  "100152807912W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "CLEAR NORTH 100 HZ GIFT 15-28-79-12"
+  },
+  "1S0042807912W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "CLEAR NORTH 100 HZ GIFT 4-28-79-12"
+  },
+  "100021607912W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "CLEAR NORTH 100 HZ GIFT 2-16-79-12"
+  },
+  "102122007912W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "CLEAR NORTH 102 HZ GIFT 12-20-79-12"
+  },
+  "100111607901W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 9-15 MISTAHAE 11-16-79-1"
+  },
+  "100131307901W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 9-15 MISTAHAE 13-13-79-1"
+  },
+  "103141607901W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 9-15 103 MISTAHAE 14-16-79-1"
+  },
+  "105091007901W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 9-15 105 MISTAHAE 9-10-79-1"
+  },
+  "102141507023W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 16-9 HZ 102 CANAL 14-15-70-23"
+  },
+  "102041408815W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-23 102 CADOTTE 4-14-88-15"
+  },
+  "102082108815W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-23 102 CADOTTE 8-21-88-15"
+  },
+  "102082408815W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-23 102 CADOTTE 8-24-88-15"
+  },
+  "103031408815W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-23 103 CADOTTE 3-14-88-15"
+  },
+  "104031408815W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-23 104 CADOTTE 3-14-88-15"
+  },
+  "103102608815W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 6-23 103 CADOTTE 10-26-88-15"
+  },
+  "105132307901W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "SPL 14-14 105 MISTAHAE 13-23-79-1"
+  },
+  "103130507524W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 103 HZ MARTENH 13-5-75-24"
+  },
+  "104011307608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 9-17 HZ 104 NIPISI 1-13-76-8"
+  },
+  "103081307608W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 9-17 HZ 103 NIPISI 8-13-76-8"
+  },
+  "100121907607W500": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "TVE 15-13 HZ NIPISI 12-19-76-7"
+  },
+  "105083107424W400": {
+    "wellType": "Injection",
+    "wellFluid": "Water",
+    "name": "HWX 105 HZ MARTENH 8-31-74-24"
+  },
+  "100073310101W600": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "LONG RUN BOYER 7-33-101-1"
+  },
+  "100060308409W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "GROC HANGSTN 6-3-84-9"
+  },
+  "100030707707W400": {
+    "wellType": "Disposal",
+    "wellFluid": "Water",
+    "name": "CVE LEISMER 3-7-77-7"
+  },
+  "100072008409W400": {
+    "wellType": "Observation",
+    "wellFluid": null,
+    "name": "GROC HANGSTN 7-20-84-9"
+  }
+}

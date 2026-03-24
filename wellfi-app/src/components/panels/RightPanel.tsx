@@ -36,6 +36,12 @@ interface RightPanelProps {
 type ProductionSnapshotState = WellEnriched & {
   latest_production_snapshot_month?: string | null;
   latest_production_snapshot_status?: 'present' | 'missing' | 'unknown' | null;
+  wellClassification?: {
+    wellType: string | null;
+    wellFluid: string | null;
+    name: string | null;
+    isService: boolean;
+  } | null;
 };
 
 function formatDate(dateStr: string | null): string {
@@ -93,6 +99,9 @@ export default function RightPanel({
   const productionSnapshotWell = well as ProductionSnapshotState;
   const latestSnapshotMonth = productionSnapshotWell.latest_production_snapshot_month;
   const latestSnapshotStatus = productionSnapshotWell.latest_production_snapshot_status;
+  const wellClassification = productionSnapshotWell.wellClassification ?? null;
+  const isServiceWell = wellClassification?.isService === true;
+  const displayName = well.name ?? wellClassification?.name ?? well.well_id;
   const asyncCardFallback = (label: string) => (
     <Card>
       <CardHeader className="pb-2 pt-3 px-4">
@@ -126,7 +135,7 @@ export default function RightPanel({
         <Card>
           <CardHeader className="pb-2 pt-3 px-4">
             <CardTitle className="text-lg font-bold leading-tight">
-              {well.name ?? well.well_id}
+              {displayName}
             </CardTitle>
             {well.formatted_id && (
               <p className="text-xs text-muted-foreground">{well.formatted_id}</p>
@@ -138,6 +147,11 @@ export default function RightPanel({
             )}
             {well.field && (
               <Badge variant="secondary">{well.field}</Badge>
+            )}
+            {wellClassification?.wellType && (
+              <Badge variant="outline" className="border-sky-500/40 text-sky-300">
+                {wellClassification.wellType}
+              </Badge>
             )}
             {well.well_status && (
               <Badge variant="outline">{well.well_status}</Badge>
@@ -178,23 +192,44 @@ export default function RightPanel({
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 px-4 pb-3">
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground">Risk:</span>
-              <RiskBadge risk={well.risk_level} />
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between text-xs mb-1">
-                <span className="text-muted-foreground">Months running</span>
-                <span className="font-semibold">{monthsRunning}/20</span>
+            {isServiceWell ? (
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-muted-foreground">Classification:</span>
+                  <Badge variant="outline" className="border-sky-500/40 text-sky-300">
+                    {wellClassification?.wellType ?? 'Service Well'}
+                  </Badge>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  This is a non-producing service well. Pump-life months and producer risk scoring do not apply.
+                </p>
+                {wellClassification?.wellFluid && (
+                  <p className="text-xs text-muted-foreground">
+                    Service fluid: {wellClassification.wellFluid}
+                  </p>
+                )}
               </div>
-              <MonthsBar months={monthsRunning} showLabel />
-            </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-muted-foreground">Risk:</span>
+                  <RiskBadge risk={well.risk_level} />
+                </div>
 
-            {well.last_production_date && (
-              <p className="text-xs text-muted-foreground">
-                Last production: {formatDate(well.last_production_date)}
-              </p>
+                <div>
+                  <div className="flex items-center justify-between text-xs mb-1">
+                    <span className="text-muted-foreground">Months running</span>
+                    <span className="font-semibold">{monthsRunning}/20</span>
+                  </div>
+                  <MonthsBar months={monthsRunning} showLabel />
+                </div>
+
+                {well.last_production_date && (
+                  <p className="text-xs text-muted-foreground">
+                    Last production: {formatDate(well.last_production_date)}
+                  </p>
+                )}
+              </>
             )}
           </CardContent>
         </Card>
@@ -207,6 +242,11 @@ export default function RightPanel({
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 px-4 pb-3">
+              {isServiceWell && (
+                <p className="text-xs italic text-muted-foreground">
+                  Production metrics are secondary here because this well is classified as {wellClassification?.wellType?.toLowerCase() ?? 'a service well'}.
+                </p>
+              )}
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <div>
                   <p className="text-xs text-muted-foreground">Latest oil rate</p>
@@ -359,7 +399,11 @@ export default function RightPanel({
             </CardTitle>
           </CardHeader>
           <CardContent className="px-4 pb-3">
-            {well.active_pump_change ? (
+            {isServiceWell ? (
+              <p className="text-sm text-muted-foreground">
+                Pump change workflow is disabled for non-producing service wells.
+              </p>
+            ) : well.active_pump_change ? (
               <PumpChecklist pumpChange={well.active_pump_change} canEdit={canEdit} />
             ) : monthsRunning >= 14 ? (
               <div className="space-y-2">

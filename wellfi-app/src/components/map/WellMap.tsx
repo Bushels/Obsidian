@@ -10,6 +10,7 @@ import {
   wellsToGeoJSON,
 } from '@/lib/mapUtils';
 import { generateDLSGrid } from '@/lib/dlsGrid';
+import { SERVICE_WELL_COLOR } from '@/lib/wellClassification';
 import {
   hasScheduledSupport,
   isWellDownNow,
@@ -91,6 +92,22 @@ const MONITORED_ALERT_RADIUS: mapboxgl.Expression = [
   ['==', ['get', 'pump_change_status'], 'scheduled'], 8,
   7,
 ];
+
+const BASE_WELL_LEGEND_ITEMS = [
+  { color: '#22C55E', label: 'Producer under 9 months' },
+  { color: '#EAB308', label: 'Producer 9-13 months' },
+  { color: '#F97316', label: 'Producer 14-16 months' },
+  { color: '#EF4444', label: 'Producer 17+ months' },
+  { color: '#A855F7', label: 'Upcoming pump change' },
+  { color: SERVICE_WELL_COLOR, label: 'Service well: disposal / injection / observation' },
+  { color: '#6B7280', label: 'No producer data' },
+] as const;
+
+const ALERT_LEGEND_ITEMS = [
+  { color: '#3B82F6', label: 'Watch' },
+  { color: '#EAB308', label: 'Warning' },
+  { color: '#EF4444', label: 'Well Down' },
+] as const;
 
 function buildBaseWellFilter(filters: DashboardFilters): mapboxgl.Expression | null {
   const conditions: mapboxgl.Expression[] = [];
@@ -585,9 +602,9 @@ export default function WellMap({
               'interpolate',
               ['linear'],
               ['zoom'],
-              11,
+              10,
               0,
-              13,
+              12,
               0.18,
             ] as unknown as number,
             'circle-blur': 0.7,
@@ -610,9 +627,9 @@ export default function WellMap({
               'interpolate',
               ['linear'],
               ['zoom'],
-              11,
-              0,
-              13,
+              10,
+              0.4,
+              12,
               0.9,
             ] as unknown as number,
             'circle-stroke-color': WELL_STROKE_EXPRESSION as unknown as string,
@@ -626,9 +643,9 @@ export default function WellMap({
               'interpolate',
               ['linear'],
               ['zoom'],
-              11,
-              0,
-              13,
+              10,
+              0.3,
+              12,
               1,
             ] as unknown as number,
           },
@@ -799,6 +816,33 @@ export default function WellMap({
       source.setData(geojsonData);
     }
   }, [geojsonData, mapLoaded]);
+
+  // Auto-zoom to well area on first data load so dots are visible and clickable
+  const hasFitBoundsRef = useRef(false);
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapLoaded || hasFitBoundsRef.current) return;
+    if (wells.length === 0) return;
+
+    hasFitBoundsRef.current = true;
+
+    const lngs = wells.map((w) => w.lon);
+    const lats = wells.map((w) => w.lat);
+    const sw: [number, number] = [Math.min(...lngs), Math.min(...lats)];
+    const ne: [number, number] = [Math.max(...lngs), Math.max(...lats)];
+
+    // First fit the bounds, then ensure zoom is high enough for dots to be visible
+    map.fitBounds([sw, ne], { padding: 60, maxZoom: 13, duration: 0 });
+
+    const currentZoom = map.getZoom();
+    const MIN_VISIBLE_ZOOM = 11.5;
+    if (currentZoom < MIN_VISIBLE_ZOOM) {
+      // Wells are too spread out — fly to centroid at a zoom where dots are visible
+      const centerLng = (sw[0] + ne[0]) / 2;
+      const centerLat = (sw[1] + ne[1]) / 2;
+      map.flyTo({ center: [centerLng, centerLat], zoom: MIN_VISIBLE_ZOOM, duration: 1200 });
+    }
+  }, [wells, mapLoaded]);
 
   // Apply filters when filters change
   useEffect(() => {
@@ -1090,10 +1134,15 @@ export default function WellMap({
             Base Wells
           </div>
           <div className="flex flex-col gap-1.5">
-            <div className="flex items-center gap-2">
-              <span className="inline-block w-2.5 h-2.5 rounded-full shrink-0 bg-amber-500" />
-              <span className="text-gray-400">Dots come from live WellFi well data</span>
-            </div>
+            {BASE_WELL_LEGEND_ITEMS.map((item) => (
+              <div key={item.label} className="flex items-center gap-2">
+                <span
+                  className="inline-block w-2.5 h-2.5 rounded-full shrink-0"
+                  style={{ background: item.color }}
+                />
+                <span className="text-gray-400">{item.label}</span>
+              </div>
+            ))}
             <div className="flex items-center gap-2">
               <span className="inline-block w-3 h-3 rounded-full shrink-0 border border-cyan-400/70" style={{ boxShadow: '0 0 8px rgba(0,212,255,0.35)' }} />
               <span className="text-gray-400">Cyan halo = active WellFi device</span>
@@ -1105,18 +1154,15 @@ export default function WellMap({
             Alert Overlay
           </div>
           <div className="flex flex-col gap-1.5">
-            <div className="flex items-center gap-2">
-              <span className="inline-block w-2.5 h-2.5 rounded-full shrink-0 border-2 border-blue-500" style={{ background: 'transparent' }} />
-              <span className="text-gray-400">Watch</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="inline-block w-2.5 h-2.5 rounded-full shrink-0 border-2 border-yellow-400" style={{ background: 'transparent' }} />
-              <span className="text-gray-400">Warning</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="inline-block w-2.5 h-2.5 rounded-full shrink-0 border-2 border-red-500" style={{ background: 'transparent' }} />
-              <span className="text-gray-400">Well Down</span>
-            </div>
+            {ALERT_LEGEND_ITEMS.map((item) => (
+              <div key={item.label} className="flex items-center gap-2">
+                <span
+                  className="inline-block w-2.5 h-2.5 rounded-full shrink-0 border-2"
+                  style={{ background: 'transparent', borderColor: item.color }}
+                />
+                <span className="text-gray-400">{item.label}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

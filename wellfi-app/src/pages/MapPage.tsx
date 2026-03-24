@@ -5,7 +5,13 @@ import wellfiLogo from '@/assets/wellfi-logo.png';
 import type { WellEnriched } from '@/types/operationalStatus';
 import { useWells } from '@/hooks/useWells';
 import { useProductionSnapshot } from '@/hooks/useProductionSnapshot';
+import { useWellClassificationOverrides } from '@/hooks/useWellClassificationOverrides';
 import { useAuth } from '@/lib/auth-context';
+import {
+  normalizeWellId,
+  toWellClassification,
+  type WellClassification,
+} from '@/lib/wellClassification';
 import {
   hasScheduledSupport,
   isWellDownNow,
@@ -32,6 +38,10 @@ type ScopedWell = WellEnriched & {
   operator_id?: string | null;
 };
 
+type ClassifiedWell = ScopedWell & {
+  wellClassification?: WellClassification | null;
+};
+
 interface ActiveOperator {
   id: string;
   slug: string;
@@ -45,6 +55,7 @@ function formatBasinScope(value: string | null | undefined): string {
 
 export default function MapPage() {
   const { data: wells = [], isLoading, error } = useWells();
+  const { data: wellClassificationById = new Map() } = useWellClassificationOverrides();
   const { user, isAdmin, signOut } = useAuth();
   const { data: operators = [] } = useQuery({
     queryKey: ['operators', isAdmin ? 'admin' : 'viewer'],
@@ -66,14 +77,24 @@ export default function MapPage() {
   });
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [selectedWell, setSelectedWell] = useState<WellEnriched | null>(null);
+  const [selectedWell, setSelectedWell] = useState<ClassifiedWell | null>(null);
   const [filters, setFilters] = useState<DashboardFilters>(DEFAULT_DASHBOARD_FILTERS);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [flyTarget, setFlyTarget] = useState<{ lng: number; lat: number } | null>(null);
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [adminOperatorSlug, setAdminOperatorSlug] = useState<string | null>(null);
   const effectiveOperatorSlug = isAdmin ? adminOperatorSlug : (user?.operatorSlug ?? null);
-  const allScopedWells = wells as ScopedWell[];
+  const allScopedWells = useMemo(
+    () =>
+      (wells as ScopedWell[]).map((well) => {
+        const override = wellClassificationById.get(normalizeWellId(well.well_id));
+        return {
+          ...well,
+          wellClassification: toWellClassification(override),
+        } satisfies ClassifiedWell;
+      }),
+    [wellClassificationById, wells],
+  );
   const selectedOperator = useMemo(
     () => operators.find((operator) => operator.slug === adminOperatorSlug) ?? null,
     [adminOperatorSlug, operators],
@@ -121,7 +142,7 @@ export default function MapPage() {
   );
 
   const updateSelectedWellParam = useCallback(
-    (well: WellEnriched | null) => {
+    (well: ClassifiedWell | null) => {
       setSearchParams((currentParams) => {
         const nextParams = new URLSearchParams(currentParams);
         if (well?.well_id) {
@@ -136,7 +157,7 @@ export default function MapPage() {
   );
 
   const selectWell = useCallback(
-    (well: WellEnriched, options?: { flyTo?: boolean }) => {
+    (well: ClassifiedWell, options?: { flyTo?: boolean }) => {
       setSelectedWell(well);
       setFlyTarget(options?.flyTo ? { lng: well.lon, lat: well.lat } : null);
       updateSelectedWellParam(well);
@@ -150,7 +171,7 @@ export default function MapPage() {
   }, [navigate, signOut]);
 
   const handleWellClick = useCallback((well: WellEnriched) => {
-    selectWell(well);
+    selectWell(well as ClassifiedWell);
   }, [selectWell]);
 
   const handleUpcomingWellClick = useCallback(
@@ -170,7 +191,7 @@ export default function MapPage() {
   }, [updateSelectedWellParam]);
 
   const handleCommandPaletteSelect = useCallback((well: WellEnriched) => {
-    selectWell(well, { flyTo: true });
+    selectWell(well as ClassifiedWell, { flyTo: true });
   }, [selectWell]);
 
   const rightPanelPlaceholder = (

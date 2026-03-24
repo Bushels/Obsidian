@@ -1,4 +1,5 @@
 import { riskColor } from '@/lib/mapUtils';
+import { SERVICE_WELL_COLOR } from '@/lib/wellClassification';
 
 interface WellPopupOptions {
   showViewDetails?: boolean;
@@ -44,6 +45,9 @@ export function wellPopupHTML(
   const riskLevel = asString(properties.risk_level, 'UNKNOWN');
   const formation = asString(properties.formation, '-');
   const field = asString(properties.field, '-');
+  const wellType = asNullableString(properties.well_type);
+  const wellFluid = asNullableString(properties.well_fluid);
+  const isServiceWell = properties.is_service_well === true;
   const operatingDays = asNumber(properties.operating_days_12mo);
   const annualUptime = asNumber(properties.annual_uptime_pct);
   const decRate = asNumber(properties.dec_rate_bbl_d);
@@ -78,6 +82,8 @@ export function wellPopupHTML(
           ? 'Unknown'
           : null;
   const detailRows = [
+    wellType ? renderDetailRow('Well type', wellType) : '',
+    wellFluid ? renderDetailRow('Fluid', wellFluid) : '',
     latestSnapshotMonth ? renderDetailRow('Snapshot month', formatMonth(latestSnapshotMonth)) : '',
     snapshotStatusLabel ? renderDetailRow('Snapshot status', snapshotStatusLabel) : '',
     renderDetailRow('Stage', monitorStage?.label ?? '-'),
@@ -110,6 +116,9 @@ export function wellPopupHTML(
 
   <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;">
     ${renderBadge(riskLevel, riskBadgeColor)}
+    ${isServiceWell && wellType
+      ? renderBadge(wellType, SERVICE_WELL_COLOR, '#07293A', '#7DD3FC')
+      : ''}
     ${monitorStage ? renderBadge(monitorStage.label, monitorStage.color) : ''}
     ${fulfillmentStage ? renderBadge(fulfillmentStage.label, fulfillmentStage.color, `${fulfillmentStage.color}20`, fulfillmentStage.color) : ''}
     ${pumpChangeStage ? renderBadge(pumpChangeStage.label, pumpChangeStage.color) : ''}
@@ -119,8 +128,8 @@ export function wellPopupHTML(
   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; font-size: 12px; margin-bottom: 12px;">
     ${renderMetric('Formation', formation)}
     ${renderMetric('Field', field)}
-    ${renderMetric('Days Operating (12mo)', operatingDays != null ? formatInteger(operatingDays) : 'N/A')}
-    ${renderMetric('Uptime', annualUptime != null ? `${formatNumber(annualUptime, 1)}%` : 'N/A')}
+    ${renderMetric('Days Operating (12mo)', isServiceWell ? 'Service well' : operatingDays != null ? formatInteger(operatingDays) : 'N/A')}
+    ${renderMetric('Uptime', isServiceWell ? 'N/A' : annualUptime != null ? `${formatNumber(annualUptime, 1)}%` : 'N/A')}
     ${renderMetric('Latest Oil Rate', decRate != null ? `${formatNumber(decRate, 1)} bbl/d` : 'N/A')}
     ${renderMetric('Cumulative Oil', cumulativeOil != null ? `${formatInteger(cumulativeOil)} bbl` : 'N/A')}
   </div>

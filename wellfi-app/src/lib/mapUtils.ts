@@ -7,6 +7,7 @@ import {
   isWellDownNow,
   needsToolAssignment,
 } from '@/lib/wellEventSelectors';
+import { SERVICE_WELL_COLOR } from '@/lib/wellClassification';
 
 /** Mapbox GL expression type alias (avoids namespace import issues with verbatimModuleSyntax) */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -29,6 +30,7 @@ export const riskColor = (risk: string | null): string =>
 // Mapbox expressions for circle layer styling
 export const WELL_COLOR_EXPRESSION: MapExpression = [
   'case',
+  ['==', ['get', 'is_service_well'], true],    SERVICE_WELL_COLOR,
   ['==', ['get', 'has_upcoming_change'], true], '#A855F7',
   ['>=', ['get', 'months_running'], 17],         '#EF4444',
   ['>=', ['get', 'months_running'], 14],         '#F97316',
@@ -61,6 +63,9 @@ export interface WellFeatureProperties {
   months_running: number;
   dec_rate_bbl_d: number;
   cumulative_oil: number;
+  is_service_well: boolean;
+  well_type: string | null;
+  well_fluid: string | null;
   annual_uptime_pct: number | null;
   total_downtime_days: number | null;
   operating_days_12mo: number | null;
@@ -107,6 +112,12 @@ export const HEALTH_LEVEL_LABELS: { level: number; color: string; label: string 
 type MappableWell = WellEnriched & {
   latest_production_snapshot_month?: string | null;
   latest_production_snapshot_status?: 'present' | 'missing' | 'unknown' | null;
+  wellClassification?: {
+    wellType: string | null;
+    wellFluid: string | null;
+    name: string | null;
+    isService: boolean;
+  } | null;
 };
 
 function dedupeMappableWells(wells: MappableWell[]): MappableWell[] {
@@ -132,7 +143,7 @@ export function wellsToGeoJSON(wells: MappableWell[]): FeatureCollection<Point, 
       id: w.id,
       well_id: w.well_id,
       formatted_id: w.formatted_id,
-      name: w.name,
+      name: w.name ?? w.wellClassification?.name ?? null,
       formation: w.formation,
       field: w.field,
       well_status: w.well_status,
@@ -140,6 +151,9 @@ export function wellsToGeoJSON(wells: MappableWell[]): FeatureCollection<Point, 
       months_running: w.months_running ?? 0,
       dec_rate_bbl_d: w.dec_rate_bbl_d ?? 0,
       cumulative_oil: w.cumulative_oil ?? 0,
+      is_service_well: w.wellClassification?.isService ?? false,
+      well_type: w.wellClassification?.wellType ?? null,
+      well_fluid: w.wellClassification?.wellFluid ?? null,
       annual_uptime_pct: w.annual_uptime_pct ?? null,
       total_downtime_days: w.total_downtime_days ?? null,
       operating_days_12mo:
