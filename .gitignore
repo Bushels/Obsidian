@@ -45,3 +45,9 @@ wellfi-app/public/data/operators/harvest-operations-corp/
 wellfi-app/public/data/operators/nte-energy-canada-ltd/
 wellfi-app/public/data/operators/pavilion-energy-corp/
 wellfi-app/public/data/operators/petronas-energy-canada-ltd/
+
+# Local draft plans and packaged skill exports
+/WELLFI_AUTOMATION_PLAN.md
+/stackdx-well-sync.skill
+/well-data-ingest.skill
+/zi9W2Ifx
