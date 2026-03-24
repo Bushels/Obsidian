@@ -25,3 +25,23 @@ wellfi-app/node_modules/
 wellfi-app/dist/
 wellfi-app/.env
 nul
+
+# Local tooling scratch
+.playwright-cli/
+Data/.~lock.*
+wellfi-app/.codex/
+wellfi-app/.playwright-cli/
+wellfi-app/output/
+wellfi-app/supabase/.temp/
+/0
+/diff.txt
+/diff_output.txt
+/modified.txt
+
+# Generated operator folders not yet onboarded
+wellfi-app/public/data/operators/aitken-creek-gas-storage-ltd/
+wellfi-app/public/data/operators/bighorn-energy-corporation/
+wellfi-app/public/data/operators/harvest-operations-corp/
+wellfi-app/public/data/operators/nte-energy-canada-ltd/
+wellfi-app/public/data/operators/pavilion-energy-corp/
+wellfi-app/public/data/operators/petronas-energy-canada-ltd/
