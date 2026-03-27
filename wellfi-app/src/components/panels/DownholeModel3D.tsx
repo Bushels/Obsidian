@@ -16,7 +16,16 @@ import {
 } from '@/components/ui/dialog';
 import { FORMATION_POLYGONS } from '@/lib/formationData';
 import { SCHEMATIC_DEPTHS, type SchematicDepthEntry } from '@/lib/schematicDepths';
+import {
+  componentCenterM,
+  componentLengthM,
+  findCompletionComponent,
+  findWellGeometryAsset,
+  getCurrentCompletionSnapshot,
+  type WellGeometryAsset,
+} from '@/lib/wellGeometry';
 import { supabase } from '@/lib/supabase';
+import WellTrajectoryPlate from '@/components/panels/WellTrajectoryPlate';
 import type { Well } from '@/types';
 
 interface DownholeModel3DProps {
@@ -37,9 +46,10 @@ interface DownholePlacement {
   collarDepthM: number;
   collarLengthM: number;
   hasManualDepths: boolean;
+  hasGeometryDepths: boolean;
   hasSchematicDepths: boolean;
   hasDatabaseDepths: boolean;
-  depthSource: 'manual' | 'schematic' | 'estimated' | 'database';
+  depthSource: 'manual' | 'geometry' | 'schematic' | 'estimated' | 'database';
   sourceFile: string | null;
 }
 
@@ -80,7 +90,7 @@ interface SceneViewState {
   zoom: number;
 }
 
-type SceneMode = 'cutaway' | 'focused';
+type SceneMode = 'trajectory' | 'cutaway' | 'focused';
 
 const FALLBACK_FORMATION_DEPTH_M = 640;
 const FALLBACK_FORMATION_THICKNESS_M = 22;
@@ -177,8 +187,13 @@ function parseDepthTag(notes: string | null | undefined, key: string): number | 
   return parsed;
 }
 
-function resolveDownholePlacement(well: Well): DownholePlacement {
+function resolveDownholePlacement(well: Well, geometryAsset: WellGeometryAsset | null): DownholePlacement {
   const schematic = findSchematicEntry(well);
+  const geometrySnapshot = geometryAsset ? getCurrentCompletionSnapshot(geometryAsset) : null;
+  const geometryPump = findCompletionComponent(geometrySnapshot, 'pump');
+  const geometrySlottedTagBar = findCompletionComponent(geometrySnapshot, 'slotted_tag_bar');
+  const geometryNoTurn = findCompletionComponent(geometrySnapshot, 'no_turn_tool');
+  const geometryCollar = findCompletionComponent(geometrySnapshot, 'collar');
   const formationDepthM = Math.round(getFormationProfile(well.formation).depthM);
   const defaultPumpDepthM = Math.max(120, formationDepthM - 12);
   const defaultSlottedTagBarDepthM = defaultPumpDepthM + 1.3;
@@ -193,6 +208,12 @@ function resolveDownholePlacement(well: Well): DownholePlacement {
   const defaultCollarLengthM = 0.4;
 
   const notes = well.wellfi_device?.notes;
+
+  const geometryTotalDepthM = geometryAsset?.survey_points.at(-1)?.md_m ?? null;
+  const geometryPumpDepthM = geometryPump ? componentCenterM(geometryPump) : null;
+  const geometrySlottedTagBarDepthM = geometrySlottedTagBar ? componentCenterM(geometrySlottedTagBar) : null;
+  const geometryNoTurnDepthM = geometryNoTurn ? componentCenterM(geometryNoTurn) : null;
+  const geometryCollarDepthM = geometryCollar ? componentCenterM(geometryCollar) : null;
 
   const schematicTotalDepthM = schematic?.total_depth_m ?? null;
   const schematicPumpDepthM = schematic?.pump
@@ -260,23 +281,27 @@ function resolveDownholePlacement(well: Well): DownholePlacement {
       ? (well.collar_top_depth_m + well.collar_bottom_depth_m) / 2
       : null;
 
-  let totalDepthM = manualTotalDepthM ?? schematicTotalDepthM ?? defaultTotalDepthM;
-  let pumpDepthM = dbPumpDepthM ?? manualPumpDepthM ?? schematicPumpDepthM ?? defaultPumpDepthM;
+  let totalDepthM = manualTotalDepthM ?? geometryTotalDepthM ?? schematicTotalDepthM ?? defaultTotalDepthM;
+  let pumpDepthM = dbPumpDepthM ?? manualPumpDepthM ?? geometryPumpDepthM ?? schematicPumpDepthM ?? defaultPumpDepthM;
   let slottedTagBarDepthM =
-    dbSlottedTagBarDepthM ?? manualSlottedTagBarDepthM ?? schematicSlottedTagBarDepthM ?? defaultSlottedTagBarDepthM;
+    dbSlottedTagBarDepthM ?? manualSlottedTagBarDepthM ?? geometrySlottedTagBarDepthM ?? schematicSlottedTagBarDepthM ?? defaultSlottedTagBarDepthM;
   let wellFiDepthM = dbWellFiDepthM ?? manualWellFiDepthM ?? schematicWellFiDepthM ?? defaultWellFiDepthM;
-  let noTurnDepthM = dbNoTurnDepthM ?? manualNoTurnDepthM ?? schematicNoTurnDepthM ?? defaultNoTurnDepthM;
-  let collarDepthM = dbCollarDepthM ?? defaultCollarDepthM;
+  let noTurnDepthM = dbNoTurnDepthM ?? manualNoTurnDepthM ?? geometryNoTurnDepthM ?? schematicNoTurnDepthM ?? defaultNoTurnDepthM;
+  let collarDepthM = dbCollarDepthM ?? geometryCollarDepthM ?? defaultCollarDepthM;
 
   // Use database lengths if available implies using db depths
   const finalPumpLengthM =
     well.pump_top_depth_m && well.pump_bottom_depth_m
       ? Math.abs(well.pump_bottom_depth_m - well.pump_top_depth_m)
-      : pumpLengthM;
+      : geometryPump
+        ? componentLengthM(geometryPump)
+        : pumpLengthM;
   const finalSlottedTagBarLengthM =
     well.slotted_tag_bar_top_depth_m && well.slotted_tag_bar_bottom_depth_m
       ? Math.abs(well.slotted_tag_bar_bottom_depth_m - well.slotted_tag_bar_top_depth_m)
-      : slottedTagBarLengthM;
+      : geometrySlottedTagBar
+        ? componentLengthM(geometrySlottedTagBar)
+        : slottedTagBarLengthM;
   const finalWellFiLengthM =
     well.wellfi_tool_top_depth_m && well.wellfi_tool_bottom_depth_m
       ? Math.abs(well.wellfi_tool_bottom_depth_m - well.wellfi_tool_top_depth_m)
@@ -284,13 +309,17 @@ function resolveDownholePlacement(well: Well): DownholePlacement {
   const finalNoTurnLengthM =
     well.no_turn_tool_top_depth_m && well.no_turn_tool_bottom_depth_m
       ? Math.abs(well.no_turn_tool_bottom_depth_m - well.no_turn_tool_top_depth_m)
-      : noTurnLengthM;
+      : geometryNoTurn
+        ? componentLengthM(geometryNoTurn)
+        : noTurnLengthM;
   const finalCollarLengthM =
     well.collar_top_depth_m && well.collar_bottom_depth_m
       ? Math.abs(well.collar_bottom_depth_m - well.collar_top_depth_m)
-      : collarLengthM;
+      : geometryCollar
+        ? componentLengthM(geometryCollar)
+        : collarLengthM;
 
-  if (manualWellFiDepthM == null && schematicWellFiDepthM == null) {
+  if (manualWellFiDepthM == null && dbWellFiDepthM == null && schematicWellFiDepthM == null) {
     const gap = noTurnDepthM - slottedTagBarDepthM;
     if (gap > 0.35) {
       wellFiDepthM = slottedTagBarDepthM + gap * 0.55;
@@ -301,16 +330,16 @@ function resolveDownholePlacement(well: Well): DownholePlacement {
   pumpDepthM = clamp(pumpDepthM, 60, totalDepthM - 12);
 
   // If we don't have explicit DB or manual values, enforce spacing constraint
-  if (!dbSlottedTagBarDepthM && !manualSlottedTagBarDepthM) {
+  if (!dbSlottedTagBarDepthM && !manualSlottedTagBarDepthM && !geometrySlottedTagBarDepthM) {
     slottedTagBarDepthM = Math.max(slottedTagBarDepthM, pumpDepthM + minSpacing);
   }
   if (!dbWellFiDepthM && !manualWellFiDepthM) {
     wellFiDepthM = Math.max(wellFiDepthM, slottedTagBarDepthM + minSpacing);
   }
-  if (!dbNoTurnDepthM && !manualNoTurnDepthM) {
+  if (!dbNoTurnDepthM && !manualNoTurnDepthM && !geometryNoTurnDepthM) {
     noTurnDepthM = Math.max(noTurnDepthM, wellFiDepthM + minSpacing);
   }
-  if (!dbCollarDepthM) {
+  if (!dbCollarDepthM && !geometryCollarDepthM) {
     collarDepthM = Math.max(collarDepthM, noTurnDepthM + minSpacing);
   }
   
@@ -327,6 +356,14 @@ function resolveDownholePlacement(well: Well): DownholePlacement {
     manualWellFiDepthM != null ||
     manualNoTurnDepthM != null;
 
+  const hasGeometryDepths =
+    geometryAsset != null &&
+    (geometryTotalDepthM != null ||
+      geometryPumpDepthM != null ||
+      geometrySlottedTagBarDepthM != null ||
+      geometryNoTurnDepthM != null ||
+      geometryCollarDepthM != null);
+
   const hasSchematicDepths =
     schematic != null &&
     (schematicTotalDepthM != null ||
@@ -340,10 +377,18 @@ function resolveDownholePlacement(well: Well): DownholePlacement {
     dbSlottedTagBarDepthM != null ||
     dbWellFiDepthM != null ||
     dbNoTurnDepthM != null ||
-    dbCollarDepthM != null;
+      dbCollarDepthM != null;
 
   const depthSource: DownholePlacement['depthSource'] =
-    hasDatabaseDepths ? 'database' : hasManualDepths ? 'manual' : hasSchematicDepths ? 'schematic' : 'estimated';
+    hasDatabaseDepths
+      ? 'database'
+      : hasManualDepths
+        ? 'manual'
+        : hasGeometryDepths
+          ? 'geometry'
+          : hasSchematicDepths
+            ? 'schematic'
+            : 'estimated';
 
   return {
     totalDepthM,
@@ -358,10 +403,11 @@ function resolveDownholePlacement(well: Well): DownholePlacement {
     collarDepthM,
     collarLengthM: finalCollarLengthM,
     hasManualDepths,
+    hasGeometryDepths,
     hasSchematicDepths,
     hasDatabaseDepths,
     depthSource,
-    sourceFile: schematic?.source_file ?? null,
+    sourceFile: depthSource === 'geometry' ? geometryAsset?.survey_name ?? null : schematic?.source_file ?? null,
   };
 }
 
@@ -541,10 +587,14 @@ function buildToolStack(placement: DownholePlacement, hasInstalledWellFi: boolea
 }
 
 function DownholeModel3DComponent({ well, canEdit = false }: DownholeModel3DProps) {
+  const geometryAsset = useMemo(
+    () => findWellGeometryAsset(well),
+    [well],
+  );
   const [expandedOpen, setExpandedOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [view, setView] = useState<SceneViewState>(DEFAULT_VIEW);
-  const [sceneMode, setSceneMode] = useState<SceneMode>('cutaway');
+  const [sceneMode, setSceneMode] = useState<SceneMode>(() => (geometryAsset ? 'trajectory' : 'cutaway'));
   const [isSaving, setIsSaving] = useState(false);
   
   // Local state for the edit form
@@ -565,7 +615,12 @@ function DownholeModel3DComponent({ well, canEdit = false }: DownholeModel3DProp
     injectSceneStyleTag();
   }, []);
 
-  const placement = useMemo(() => resolveDownholePlacement(well), [well]);
+  useEffect(() => {
+    setSceneMode(geometryAsset ? 'trajectory' : 'cutaway');
+    setView(DEFAULT_VIEW);
+  }, [geometryAsset, well.id]);
+
+  const placement = useMemo(() => resolveDownholePlacement(well, geometryAsset), [geometryAsset, well]);
 
   useEffect(() => {
     // Determine the current "best" values to populate the form initially
@@ -1338,7 +1393,7 @@ function DownholeModel3DComponent({ well, canEdit = false }: DownholeModel3DProp
       <CardHeader className="pb-2 pt-3 px-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <CardTitle className="text-sm font-semibold uppercase tracking-wide text-muted-foreground flex items-center gap-2">
-            Downhole 3D View
+            Downhole View
             {canEdit && (
               <Button
                 variant="outline"
@@ -1353,6 +1408,20 @@ function DownholeModel3DComponent({ well, canEdit = false }: DownholeModel3DProp
           </CardTitle>
           <div className="flex items-center gap-2">
             <div className="inline-flex h-8 items-center rounded-md border border-slate-700/70 bg-slate-900/70 p-0.5">
+              {geometryAsset && (
+                <button
+                  type="button"
+                  onClick={() => setSceneMode('trajectory')}
+                  className={`rounded px-2 py-1 text-[10px] font-semibold uppercase tracking-wide transition-colors ${
+                    sceneMode === 'trajectory'
+                      ? 'bg-cyan-400/30 text-cyan-100'
+                      : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                  aria-pressed={sceneMode === 'trajectory'}
+                >
+                  Trajectory
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => setSceneMode('cutaway')}
@@ -1378,15 +1447,19 @@ function DownholeModel3DComponent({ well, canEdit = false }: DownholeModel3DProp
                 Technical
               </button>
             </div>
-            <Button type="button" variant="ghost" size="sm" className="h-8 px-2" onClick={() => nudgeZoom(-ZOOM_STEP)}>
-              <ZoomOut className="h-3.5 w-3.5" />
-            </Button>
-            <Button type="button" variant="ghost" size="sm" className="h-8 px-2" onClick={() => nudgeZoom(ZOOM_STEP)}>
-              <ZoomIn className="h-3.5 w-3.5" />
-            </Button>
-            <Button type="button" variant="ghost" size="sm" className="h-8 px-2" onClick={resetView}>
-              <RotateCcw className="h-3.5 w-3.5" />
-            </Button>
+            {sceneMode !== 'trajectory' && (
+              <>
+                <Button type="button" variant="ghost" size="sm" className="h-8 px-2" onClick={() => nudgeZoom(-ZOOM_STEP)}>
+                  <ZoomOut className="h-3.5 w-3.5" />
+                </Button>
+                <Button type="button" variant="ghost" size="sm" className="h-8 px-2" onClick={() => nudgeZoom(ZOOM_STEP)}>
+                  <ZoomIn className="h-3.5 w-3.5" />
+                </Button>
+                <Button type="button" variant="ghost" size="sm" className="h-8 px-2" onClick={resetView}>
+                  <RotateCcw className="h-3.5 w-3.5" />
+                </Button>
+              </>
+            )}
             <Button type="button" variant="ghost" size="sm" className="h-8 px-2" onClick={() => setExpandedOpen(true)}>
               <Maximize2 className="h-3.5 w-3.5" />
             </Button>
@@ -1394,7 +1467,11 @@ function DownholeModel3DComponent({ well, canEdit = false }: DownholeModel3DProp
         </div>
       </CardHeader>
       <CardContent className="space-y-3 px-4 pb-3">
-        {sceneMode === 'cutaway' ? renderCutawayScene('h-80') : renderFocusedScene('h-80')}
+        {sceneMode === 'trajectory' && geometryAsset
+          ? <WellTrajectoryPlate well={well} asset={geometryAsset} heightClassName="h-[34rem]" />
+          : sceneMode === 'cutaway'
+            ? renderCutawayScene('h-80')
+            : renderFocusedScene('h-80')}
 
         <div className="space-y-1.5">
           {tools.map((tool) => (
@@ -1422,6 +1499,8 @@ function DownholeModel3DComponent({ well, canEdit = false }: DownholeModel3DProp
         <p className="text-[11px] text-slate-400">
           {placement.depthSource === 'manual'
             ? 'Depths sourced from WellFi install notes.'
+            : placement.depthSource === 'geometry'
+              ? `Trajectory and tool positions sourced from survey geometry: ${placement.sourceFile ?? 'well geometry asset'}.`
             : placement.depthSource === 'schematic'
               ? `Depths sourced from schematic: ${placement.sourceFile ?? 'Well profile PDF'}.`
               : placement.depthSource === 'database'
@@ -1433,15 +1512,21 @@ function DownholeModel3DComponent({ well, canEdit = false }: DownholeModel3DProp
       <Dialog open={expandedOpen} onOpenChange={setExpandedOpen}>
         <DialogContent className="max-w-5xl border-slate-700 bg-slate-950 text-slate-100">
           <DialogHeader>
-            <DialogTitle>Downhole 3D View - {well.name ?? well.well_id}</DialogTitle>
+            <DialogTitle>Downhole View - {well.name ?? well.well_id}</DialogTitle>
             <DialogDescription>
-              {sceneMode === 'cutaway'
+              {sceneMode === 'trajectory'
+                ? 'Survey-driven engineering plate showing actual well deviation and the highlighted completion anchor.'
+                : sceneMode === 'cutaway'
                 ? 'Cutaway realistic mode highlights hardware geometry and suppresses long tubing sections.'
                 : 'Technical mode shows exact depth relationships in a compressed focused interval.'}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
-            {sceneMode === 'cutaway' ? renderCutawayScene('h-[72vh]') : renderFocusedScene('h-[72vh]')}
+            {sceneMode === 'trajectory' && geometryAsset
+              ? <WellTrajectoryPlate well={well} asset={geometryAsset} heightClassName="h-[72vh]" />
+              : sceneMode === 'cutaway'
+                ? renderCutawayScene('h-[72vh]')
+                : renderFocusedScene('h-[72vh]')}
           </div>
         </DialogContent>
       </Dialog>

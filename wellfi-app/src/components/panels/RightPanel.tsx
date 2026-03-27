@@ -387,7 +387,7 @@ export default function RightPanel({
         )}
 
         {/* Section 5 -- Downhole View */}
-        <Suspense fallback={asyncCardFallback('Downhole 3D View')}>
+        <Suspense fallback={asyncCardFallback('Downhole View')}>
           <DownholeModel3D well={well} canEdit={canEdit} />
         </Suspense>
 
