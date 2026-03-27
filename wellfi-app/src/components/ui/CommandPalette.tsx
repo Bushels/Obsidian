@@ -79,19 +79,25 @@ export function CommandPalette({ wells, open, onClose, onSelect }: CommandPalett
   // Reset state when opened
   useEffect(() => {
     if (open) {
-      setQuery('');
-      setSelectedIndex(0);
-      // Focus the input after the animation frame
-      requestAnimationFrame(() => {
+      const frame = requestAnimationFrame(() => {
+        setQuery('');
+        setSelectedIndex(0);
         inputRef.current?.focus();
       });
+      return () => cancelAnimationFrame(frame);
     }
   }, [open]);
 
   // Reset selection index when results change
   useEffect(() => {
-    setSelectedIndex(0);
-  }, [results]);
+    if (selectedIndex === 0) return;
+
+    const frame = requestAnimationFrame(() => {
+      setSelectedIndex(0);
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [results, selectedIndex]);
 
   // Scroll selected item into view
   useEffect(() => {
@@ -186,7 +192,10 @@ export function CommandPalette({ wells, open, onClose, onSelect }: CommandPalett
             className="flex-1 bg-transparent text-white text-base placeholder:text-gray-500 outline-none"
             placeholder="Search wells by name, UWI, field, or formation..."
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setSelectedIndex(0);
+            }}
             autoComplete="off"
             spellCheck={false}
           />

@@ -21,8 +21,11 @@
 import fs from 'fs';
 import XLSX from 'xlsx';
 import { createClient } from '@supabase/supabase-js';
+import { loadScriptEnv } from './lib/load_script_env.js';
 
 // ---- Config ----
+loadScriptEnv();
+
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'https://opxptteradsvptjyxxfr.supabase.co';
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const JSON_PATH = 'c:/Users/kyle/MPS/Obsidian/obsidian_bluesky_clearwater_last2years.json';
@@ -80,12 +83,15 @@ interface MonthlyOilRow {
   totalOil: number;
 }
 
+type SheetCell = string | number | boolean | null | undefined;
+type SheetRow = SheetCell[];
+
 // ---- Parse monthly hours sheet ----
 // The sheet covers Jan–Dec 2025 (12 months)
 function parseMonthlyHours(workbook: XLSX.WorkBook): Map<string, MonthlyHoursRow> {
   const sheet = workbook.Sheets['Monthly Hours'];
   if (!sheet) return new Map();
-  const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as any[][];
+  const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as SheetRow[];
   const headerIdx = rows.findIndex(r => r[0] === 'Well Identifier');
   if (headerIdx < 0) return new Map();
   
@@ -95,7 +101,7 @@ function parseMonthlyHours(workbook: XLSX.WorkBook): Map<string, MonthlyHoursRow
     if (!row[0]) continue;
     const uwi = String(row[0]).trim();
     // Columns: WellId, Facility, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec, Total
-    const monthlyHours = row.slice(2, 14).map((v: any) => Number(v) || 0);
+    const monthlyHours = row.slice(2, 14).map((value) => Number(value) || 0);
     const totalHours = Number(row[14]) || 0;
     map.set(uwi, { wellIdentifier: uwi, facility: String(row[1] || ''), monthlyHours, totalHours });
   }
@@ -106,7 +112,7 @@ function parseMonthlyHours(workbook: XLSX.WorkBook): Map<string, MonthlyHoursRow
 function parseMonthlyOil(workbook: XLSX.WorkBook): Map<string, MonthlyOilRow> {
   const sheet = workbook.Sheets['Monthly bbl per day'];
   if (!sheet) return new Map();
-  const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as any[][];
+  const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as SheetRow[];
   const headerIdx = rows.findIndex(r => r[0] === 'Well Identifier');
   if (headerIdx < 0) return new Map();
   
@@ -115,7 +121,7 @@ function parseMonthlyOil(workbook: XLSX.WorkBook): Map<string, MonthlyOilRow> {
     const row = rows[i];
     if (!row[0]) continue;
     const uwi = String(row[0]).trim();
-    const monthlyOil = row.slice(2, 14).map((v: any) => Number(v) || 0);
+    const monthlyOil = row.slice(2, 14).map((value) => Number(value) || 0);
     const totalOil = Number(row[14]) || 0;
     map.set(uwi, { wellIdentifier: uwi, facility: String(row[1] || ''), monthlyOil, totalOil });
   }
@@ -125,7 +131,7 @@ function parseMonthlyOil(workbook: XLSX.WorkBook): Map<string, MonthlyOilRow> {
 // ---- Parse pump change risk sheet ----
 function parsePumpRisk(workbook: XLSX.WorkBook): Map<string, PumpRiskRow> {
   const sheet = workbook.Sheets['Pump Change Risk'];
-  const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as any[][];
+  const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as SheetRow[];
   const headerIdx = rows.findIndex(r => r[0] === 'Risk Level');
   if (headerIdx < 0) return new Map();
 
@@ -155,13 +161,15 @@ function parsePumpRisk(workbook: XLSX.WorkBook): Map<string, PumpRiskRow> {
 // Returns the index (0=Jan) of the last significant restart if found, else -1
 function detectLastRestart(monthlyHours: number[]): number {
   let lastRestartIdx = -1;
-  let inGap = false;
+  let gapLength = 0;
   for (let i = 0; i < monthlyHours.length; i++) {
     if (monthlyHours[i] === 0) {
-      inGap = true;
-    } else if (inGap && monthlyHours[i] > 0) {
-      lastRestartIdx = i; // came back up after a 0-hour month
-      inGap = false;
+      gapLength++;
+    } else if (gapLength >= SIGNIFICANT_GAP_MONTHS && monthlyHours[i] > 0) {
+      lastRestartIdx = i; // came back up after a significant 0-hour gap
+      gapLength = 0;
+    } else {
+      gapLength = 0;
     }
   }
   return lastRestartIdx;
@@ -184,15 +192,6 @@ function parseRestartMonth(restartStr: string): string | null {
   const match = restartStr.match(/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/);
   if (match) return `2025-${months[match[1]]}-01`;
   return null;
-}
-
-// ---- Normalize UWI for matching ---- 
-// JSON has formatted_well_id like "100/08-08-082-15W5/00"  
-// Excel has "100080808215W500" style
-function normalizeUwiFromJson(formatted: string): string {
-  // "100/08-08-082-15W5/00" → remove slashes and dashes → "100080808215W500"?
-  // Actually the well_id in JSON IS already "100080808215W500"
-  return formatted.replace(/[\/\-]/g, '').replace(/W0$/, 'W500').toUpperCase();
 }
 
 // ---- Main ----
@@ -226,8 +225,8 @@ async function main() {
   console.log(`\n🔍 Active wells from JSON: ${activeWells.length}`);
 
   // ---- Process each well ----
-  const wellUpserts: any[] = [];
-  const pumpChangeUpserts: any[] = [];
+  const wellUpserts: Array<Record<string, unknown>> = [];
+  const pumpChangeUpserts: Array<Record<string, unknown>> = [];
   let recentlyChanged = 0, highRisk = 0, watchRisk = 0, downNow = 0, lowRisk = 0, unclassified = 0;
 
   for (const well of activeWells) {

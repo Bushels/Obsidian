@@ -1,0 +1,4 @@
+interface:
+  display_name: "Documentation Patrol"
+  short_description: "Audit WellFi docs for drift after code, workflow, or architecture changes."
+  default_prompt: "Run the documentation patrol workflow and flag any stale or misleading WellFi docs."

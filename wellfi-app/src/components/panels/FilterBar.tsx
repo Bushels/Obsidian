@@ -1,15 +1,23 @@
 import { useMemo } from 'react';
 import { RISK_COLORS } from '@/lib/mapUtils';
+import {
+  hasScheduledSupport,
+  isWellDownNow,
+  isWellFlagged,
+  needsToolAssignment,
+} from '@/lib/wellEventSelectors';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import type { Well, MapFilters, RiskLevel, Formation } from '@/types';
+import type { RiskLevel, Formation } from '@/types';
+import type { WellEnriched } from '@/types/operationalStatus';
+import { DEFAULT_DASHBOARD_FILTERS, type DashboardFilters } from '@/types/mapFilters';
 
 interface FilterBarProps {
-  filters: MapFilters;
-  onChange: (filters: MapFilters) => void;
-  wells: Well[];
+  filters: DashboardFilters;
+  onChange: (filters: DashboardFilters) => void;
+  wells: WellEnriched[];
 }
 
 const ALL_RISK_LEVELS: RiskLevel[] = [
@@ -24,24 +32,17 @@ const ALL_RISK_LEVELS: RiskLevel[] = [
 
 const ALL_FORMATIONS: (Formation | 'All')[] = ['All', 'Bluesky', 'Clearwater'];
 
-const DEFAULT_FILTERS: MapFilters = {
-  riskLevels: [],
-  formations: [],
-  fields: [],
-  showWellFiOnly: false,
-  showUpcomingOnly: false,
-  minRateBblD: 0,
-};
-
 export default function FilterBar({ filters, onChange, wells }: FilterBarProps) {
-  // Compute dynamic counts
-  const { riskCounts, uniqueFields, fieldCounts, wellfiCount, upcomingCount } =
+  const { riskCounts, uniqueFields, fieldCounts, wellfiCount, flaggedCount, needsToolCount, scheduledSupportCount, downNowCount } =
     useMemo(() => {
       const rc: Record<string, number> = {};
       const fc: Record<string, number> = {};
       const fieldsSet = new Set<string>();
       let wfi = 0;
-      let upcoming = 0;
+      let flagged = 0;
+      let needsTool = 0;
+      let scheduledSupport = 0;
+      let downNow = 0;
 
       for (const w of wells) {
         // Risk counts
@@ -55,17 +56,14 @@ export default function FilterBar({ filters, onChange, wells }: FilterBarProps) 
         }
 
         // WellFi counts
-        if (w.wellfi_device) {
+        if (w.wellfi_device?.is_active) {
           wfi++;
         }
 
-        // Upcoming changes
-        if (
-          w.active_pump_change &&
-          ['warning', 'scheduled', 'in_progress'].includes(w.active_pump_change.status)
-        ) {
-          upcoming++;
-        }
+        if (isWellFlagged(w)) flagged++;
+        if (needsToolAssignment(w)) needsTool++;
+        if (hasScheduledSupport(w)) scheduledSupport++;
+        if (isWellDownNow(w)) downNow++;
       }
 
       return {
@@ -73,7 +71,10 @@ export default function FilterBar({ filters, onChange, wells }: FilterBarProps) 
         uniqueFields: Array.from(fieldsSet).sort(),
         fieldCounts: fc,
         wellfiCount: wfi,
-        upcomingCount: upcoming,
+        flaggedCount: flagged,
+        needsToolCount: needsTool,
+        scheduledSupportCount: scheduledSupport,
+        downNowCount: downNow,
       };
     }, [wells]);
 
@@ -113,7 +114,7 @@ export default function FilterBar({ filters, onChange, wells }: FilterBarProps) 
   };
 
   const resetFilters = () => {
-    onChange({ ...DEFAULT_FILTERS });
+    onChange({ ...DEFAULT_DASHBOARD_FILTERS });
   };
 
   const hasActiveFilters =
@@ -121,7 +122,10 @@ export default function FilterBar({ filters, onChange, wells }: FilterBarProps) 
     filters.formations.length > 0 ||
     filters.fields.length > 0 ||
     filters.showWellFiOnly ||
-    filters.showUpcomingOnly ||
+    filters.showFlaggedOnly ||
+    filters.showNeedsToolOnly ||
+    filters.showScheduledSupportOnly ||
+    filters.showDownNowOnly ||
     filters.minRateBblD > 0;
 
   return (
@@ -265,22 +269,64 @@ export default function FilterBar({ filters, onChange, wells }: FilterBarProps) 
           </div>
         </div>
 
-        {/* Upcoming Changes Toggle */}
+        {/* Well Event Workflow Filters */}
         <div>
-          <label className="flex cursor-pointer items-center gap-2">
-            <input
-              type="checkbox"
-              checked={filters.showUpcomingOnly}
-              onChange={(e) => onChange({ ...filters, showUpcomingOnly: e.target.checked })}
-              className="h-4 w-4 rounded border-input accent-wellfi-cyan"
-            />
-            <span className="text-sm">
-              Upcoming changes only
-            </span>
-            <Badge variant="secondary" className="text-xs px-1.5 py-0">
-              {upcomingCount}
-            </Badge>
-          </label>
+          <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            Well Event Workflow
+          </Label>
+          <div className="mt-2 space-y-2">
+            <label className="flex cursor-pointer items-center gap-2">
+              <input
+                type="checkbox"
+                checked={filters.showFlaggedOnly}
+                onChange={(event) => onChange({ ...filters, showFlaggedOnly: event.target.checked })}
+                className="h-4 w-4 rounded border-input accent-wellfi-cyan"
+              />
+              <span className="text-sm">Flagged only</span>
+              <Badge variant="secondary" className="text-xs px-1.5 py-0">
+                {flaggedCount}
+              </Badge>
+            </label>
+
+            <label className="flex cursor-pointer items-center gap-2">
+              <input
+                type="checkbox"
+                checked={filters.showNeedsToolOnly}
+                onChange={(event) => onChange({ ...filters, showNeedsToolOnly: event.target.checked })}
+                className="h-4 w-4 rounded border-input accent-wellfi-cyan"
+              />
+              <span className="text-sm">Needs tool</span>
+              <Badge variant="secondary" className="text-xs px-1.5 py-0">
+                {needsToolCount}
+              </Badge>
+            </label>
+
+            <label className="flex cursor-pointer items-center gap-2">
+              <input
+                type="checkbox"
+                checked={filters.showScheduledSupportOnly}
+                onChange={(event) => onChange({ ...filters, showScheduledSupportOnly: event.target.checked })}
+                className="h-4 w-4 rounded border-input accent-wellfi-cyan"
+              />
+              <span className="text-sm">Scheduled support</span>
+              <Badge variant="secondary" className="text-xs px-1.5 py-0">
+                {scheduledSupportCount}
+              </Badge>
+            </label>
+
+            <label className="flex cursor-pointer items-center gap-2">
+              <input
+                type="checkbox"
+                checked={filters.showDownNowOnly}
+                onChange={(event) => onChange({ ...filters, showDownNowOnly: event.target.checked })}
+                className="h-4 w-4 rounded border-input accent-wellfi-cyan"
+              />
+              <span className="text-sm">Down now</span>
+              <Badge variant="secondary" className="text-xs px-1.5 py-0">
+                {downNowCount}
+              </Badge>
+            </label>
+          </div>
         </div>
 
         {/* Rate Slider */}

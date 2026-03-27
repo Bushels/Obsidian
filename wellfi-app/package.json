@@ -7,7 +7,17 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "operators:audit": "tsx scripts/build_operator_inventory.ts",
+    "operators:provision": "tsx scripts/provision_operator_users.ts",
+    "operators:import": "tsx scripts/import_operator_basin_wells.ts",
+    "production:normalize-imperial": "tsx scripts/normalize_imperial_monthly_snapshot.ts",
+    "build:operator-geojson": "npx tsx scripts/build_operator_geojson.ts",
+    "production:refresh": "tsx scripts/refresh_monthly_production.ts",
+    "production:sync": "tsx scripts/sync_monthly_production.ts",
+    "production:verify": "tsx scripts/verify_monthly_production_sync.ts",
+    "stackdx:refresh": "tsx scripts/stackdx_refresh.ts",
+    "stackdx:install-browser": "playwright install chromium"
   },
   "dependencies": {
     "@deck.gl/core": "^9.2.8",
@@ -52,6 +62,7 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "playwright": "^1.56.1",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.19",
     "tsx": "^4.21.0",

@@ -1,0 +1,4 @@
+interface:
+  display_name: "WellFi Supabase Rollout"
+  short_description: "Apply and verify tenant migrations and RLS for WellFi."
+  default_prompt: "Apply WellFi tenant schema changes safely and verify RLS plus access behavior."

@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
@@ -78,10 +78,10 @@ export default function PumpChangeForm({ well, onSuccess, onCancel }: PumpChange
   const createPumpChange = useCreatePumpChange();
 
   const {
+    control,
     register,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm<PumpChangeFormValues>({
     resolver: zodResolver(pumpChangeSchema),
@@ -92,7 +92,10 @@ export default function PumpChangeForm({ well, onSuccess, onCancel }: PumpChange
     },
   });
 
-  const selectedDate = watch('scheduled_date');
+  const selectedDate = useWatch({
+    control,
+    name: 'scheduled_date',
+  });
 
   function onSubmit(data: PumpChangeFormValues) {
     // Save engineer name for next time

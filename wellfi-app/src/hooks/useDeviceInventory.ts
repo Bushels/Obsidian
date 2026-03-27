@@ -8,16 +8,19 @@
 import { useEffect, useMemo } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
-import type { DeviceInventoryItem, DeviceStatus, InventoryCounts } from '@/types/deviceInventory';
+import { useAuth } from '@/lib/auth-context';
+import type { DeviceInventoryItem, InventoryCounts } from '@/types/deviceInventory';
 import { toast } from 'sonner';
 
 // ─── Query: Fetch all inventory items ────────────────────────
 
 export function useDeviceInventory() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const query = useQuery({
-    queryKey: ['device_inventory'],
+    queryKey: ['device_inventory', user?.id ?? 'anonymous', user?.operatorSlug ?? 'global'],
+    enabled: !!user,
     queryFn: async (): Promise<DeviceInventoryItem[]> => {
       const { data, error } = await supabase
         .from('device_inventory' as never)

@@ -22,7 +22,9 @@ async function applyBatch(batchFile: string) {
   
   let ok = 0, fail = 0;
   for (const stmt of statements) {
-    const { error } = await supabase.rpc('exec_sql', { sql: stmt }).single() as any;
+    const { error } = await supabase
+      .rpc('exec_sql' as never, { sql: stmt } as never)
+      .single();
     if (error) {
       // Try direct execute via REST admin
       const resp = await fetch(`${SUPABASE_URL}/rest/v1/rpc/exec_sql`, {

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Operator Smoke Test"
+  short_description: "Verify operator-scoped login and map visibility in WellFi."
+  default_prompt: "Run an operator viewer smoke test and confirm tenant scoping plus basic dashboard behavior."

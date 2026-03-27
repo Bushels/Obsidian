@@ -1,0 +1,4 @@
+interface:
+  display_name: "Operator Inventory Audit"
+  short_description: "Audit Clearwater and Bluesky operators plus rollout outputs."
+  default_prompt: "Validate the basin dataset, regenerate operator inventory outputs, and highlight rollout risks."

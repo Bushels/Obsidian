@@ -4,25 +4,27 @@ import { toast } from 'sonner';
 import type { WellEnriched, OperationalStatusType } from '@/types/operationalStatus';
 import { OP_STATUS_OPTIONS, OP_STATUS_CONFIG } from '@/types/operationalStatus';
 import { useSetOperationalStatus, useClearOperationalStatus } from '@/hooks/useOperationalStatuses';
-import { useAuth } from '@/lib/auth';
-
-// ─── Props ────────────────────────────────────────────────────
+import { useAuth } from '@/lib/auth-context';
 
 interface OperationalStatusFormProps {
   well: WellEnriched;
   onStatusChange?: () => void;
+  canEdit?: boolean;
 }
 
-// ─── Component ────────────────────────────────────────────────
+function formatDateLabel(value: string | null | undefined): string {
+  if (!value) return 'Not set';
+  return new Date(value).toLocaleDateString('en-CA', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+}
 
-/**
- * OperationalStatusForm — lets engineers set Watch / Warning / Well Down
- * status on a well. Three toggle buttons + optional notes + date range.
- * Glassmorphic dark theme.
- */
 export default function OperationalStatusForm({
   well,
   onStatusChange,
+  canEdit = true,
 }: OperationalStatusFormProps) {
   const { user } = useAuth();
   const setStatus = useSetOperationalStatus();
@@ -31,10 +33,9 @@ export default function OperationalStatusForm({
   const currentStatus = well.operational_status?.is_active
     ? well.operational_status.status
     : null;
+  const currentConfig = currentStatus ? OP_STATUS_CONFIG[currentStatus] : null;
 
-  const [selected, setSelected] = useState<OperationalStatusType | null>(
-    currentStatus,
-  );
+  const [selected, setSelected] = useState<OperationalStatusType | null>(currentStatus);
   const [notes, setNotes] = useState(well.operational_status?.notes ?? '');
   const [showNotes, setShowNotes] = useState(!!well.operational_status?.notes);
   const [pumpChangeStart, setPumpChangeStart] = useState(
@@ -48,8 +49,7 @@ export default function OperationalStatusForm({
   );
 
   const wellDisplayName = well.name ?? well.well_id;
-
-  // ─── Handlers ─────────────────────────────────────────────
+  const isPending = setStatus.isPending || clearStatus.isPending;
 
   function handleSave() {
     if (!selected) return;
@@ -70,8 +70,7 @@ export default function OperationalStatusForm({
       },
       {
         onSuccess: () => {
-          const label = OP_STATUS_CONFIG[selected].label;
-          toast.success(`Status set to ${label} for ${wellDisplayName}`);
+          toast.success(`Status set to ${OP_STATUS_CONFIG[selected].label} for ${wellDisplayName}`);
           onStatusChange?.();
         },
       },
@@ -91,13 +90,90 @@ export default function OperationalStatusForm({
     });
   }
 
-  const isPending = setStatus.isPending || clearStatus.isPending;
+  if (!canEdit) {
+    return (
+      <div className="bg-[#080D16]/80 backdrop-blur-xl border border-white/[0.06] rounded-lg p-4 space-y-4">
+        <div>
+          <h3 className="text-[10px] font-semibold tracking-[0.12em] text-white/40 uppercase mb-0.5">
+            Operational Status
+          </h3>
+          <p className="text-xs text-white/50 leading-snug">
+            Manual status flags are visible here, but only MPS admins can change them.
+          </p>
+        </div>
 
-  // ─── Render ───────────────────────────────────────────────
+        {currentStatus && currentConfig ? (
+          <div className="space-y-3">
+            <div
+              className="rounded-lg border px-3 py-2.5"
+              style={{
+                backgroundColor: `${currentConfig.color}12`,
+                borderColor: `${currentConfig.color}40`,
+                boxShadow: `inset 0 0 12px ${currentConfig.color}10`,
+              }}
+            >
+              <div className="flex items-center gap-2">
+                <span
+                  className="h-2.5 w-2.5 rounded-full"
+                  style={{
+                    backgroundColor: currentConfig.color,
+                    boxShadow: `0 0 8px ${currentConfig.color}80`,
+                  }}
+                />
+                <span className="text-sm font-semibold" style={{ color: currentConfig.color }}>
+                  {currentConfig.label}
+                </span>
+              </div>
+              {well.operational_status?.set_by && (
+                <p className="mt-2 text-[11px] text-white/45">
+                  Set by {well.operational_status.set_by}
+                </p>
+              )}
+            </div>
+
+            {well.operational_status?.notes && (
+              <div className="space-y-1">
+                <span className="text-[10px] font-medium text-white/40 uppercase tracking-wide">
+                  Notes
+                </span>
+                <p className="text-xs text-white/70 leading-relaxed">
+                  {well.operational_status.notes}
+                </p>
+              </div>
+            )}
+
+            {(well.operational_status?.pump_change_start || well.operational_status?.pump_change_end) && (
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <span className="text-[10px] font-medium text-white/40 uppercase tracking-wide">
+                    Earliest
+                  </span>
+                  <p className="mt-1 text-xs text-white/70">
+                    {formatDateLabel(well.operational_status?.pump_change_start)}
+                  </p>
+                </div>
+                <div>
+                  <span className="text-[10px] font-medium text-white/40 uppercase tracking-wide">
+                    Latest
+                  </span>
+                  <p className="mt-1 text-xs text-white/70">
+                    {formatDateLabel(well.operational_status?.pump_change_end)}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <p className="text-xs text-white/45">
+            No manual operational status has been set for {wellDisplayName}.
+          </p>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="bg-[#080D16]/80 backdrop-blur-xl border border-white/[0.06] rounded-lg p-4 space-y-4">
-      {/* Header */}
       <div>
         <h3 className="text-[10px] font-semibold tracking-[0.12em] text-white/40 uppercase mb-0.5">
           Operational Status
@@ -107,7 +183,6 @@ export default function OperationalStatusForm({
         </p>
       </div>
 
-      {/* Toggle buttons row */}
       <div className="flex gap-2">
         {OP_STATUS_OPTIONS.map((option) => {
           const isSelected = selected === option.value;
@@ -118,9 +193,7 @@ export default function OperationalStatusForm({
               key={option.value}
               type="button"
               disabled={isPending}
-              onClick={() =>
-                setSelected(isSelected ? null : option.value)
-              }
+              onClick={() => setSelected(isSelected ? null : option.value)}
               className="flex-1 relative rounded-lg px-3 py-2.5 text-xs font-medium border transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               style={
                 isSelected
@@ -138,7 +211,6 @@ export default function OperationalStatusForm({
               }
               title={option.description}
             >
-              {/* Glow dot */}
               <span
                 className="block h-2 w-2 rounded-full mx-auto mb-1.5"
                 style={{
@@ -152,14 +224,12 @@ export default function OperationalStatusForm({
         })}
       </div>
 
-      {/* Description for selected status */}
       {selected && (
         <p className="text-[11px] text-white/35 leading-relaxed px-1">
-          {OP_STATUS_OPTIONS.find((o) => o.value === selected)?.description}
+          {OP_STATUS_OPTIONS.find((option) => option.value === selected)?.description}
         </p>
       )}
 
-      {/* Optional: Notes section */}
       <div>
         {!showNotes ? (
           <button
@@ -176,7 +246,7 @@ export default function OperationalStatusForm({
             </label>
             <textarea
               value={notes}
-              onChange={(e) => setNotes(e.target.value)}
+              onChange={(event) => setNotes(event.target.value)}
               rows={2}
               placeholder="Optional notes..."
               disabled={isPending}
@@ -186,7 +256,6 @@ export default function OperationalStatusForm({
         )}
       </div>
 
-      {/* Optional: Pump change date range */}
       <div>
         {!showDates ? (
           <button
@@ -207,7 +276,7 @@ export default function OperationalStatusForm({
                 <input
                   type="date"
                   value={pumpChangeStart}
-                  onChange={(e) => setPumpChangeStart(e.target.value)}
+                  onChange={(event) => setPumpChangeStart(event.target.value)}
                   disabled={isPending}
                   className="w-full bg-white/[0.03] border border-white/[0.06] rounded-md px-2.5 py-1.5 text-xs text-white/80 focus:outline-none focus:border-[#00D4FF]/30 focus:ring-1 focus:ring-[#00D4FF]/20 transition-all duration-200 disabled:opacity-50 [color-scheme:dark]"
                 />
@@ -217,7 +286,7 @@ export default function OperationalStatusForm({
                 <input
                   type="date"
                   value={pumpChangeEnd}
-                  onChange={(e) => setPumpChangeEnd(e.target.value)}
+                  onChange={(event) => setPumpChangeEnd(event.target.value)}
                   disabled={isPending}
                   className="w-full bg-white/[0.03] border border-white/[0.06] rounded-md px-2.5 py-1.5 text-xs text-white/80 focus:outline-none focus:border-[#00D4FF]/30 focus:ring-1 focus:ring-[#00D4FF]/20 transition-all duration-200 disabled:opacity-50 [color-scheme:dark]"
                 />
@@ -227,7 +296,6 @@ export default function OperationalStatusForm({
         )}
       </div>
 
-      {/* Action buttons */}
       <div className="flex gap-2 pt-1">
         {currentStatus && (
           <button

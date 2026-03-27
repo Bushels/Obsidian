@@ -16,11 +16,22 @@ import {
 } from '@/components/ui/dialog';
 import { FORMATION_POLYGONS } from '@/lib/formationData';
 import { SCHEMATIC_DEPTHS, type SchematicDepthEntry } from '@/lib/schematicDepths';
+import {
+  componentCenterM,
+  componentLengthM,
+  findCompletionComponent,
+  findWellGeometryAsset,
+  getCurrentCompletionSnapshot,
+  getHighlightAnchorPoint,
+  type WellGeometryAsset,
+} from '@/lib/wellGeometry';
 import { supabase } from '@/lib/supabase';
+import WellTrajectoryPlate from '@/components/panels/WellTrajectoryPlate';
 import type { Well } from '@/types';
 
 interface DownholeModel3DProps {
   well: Well;
+  canEdit?: boolean;
 }
 
 interface DownholePlacement {
@@ -36,9 +47,10 @@ interface DownholePlacement {
   collarDepthM: number;
   collarLengthM: number;
   hasManualDepths: boolean;
+  hasGeometryDepths: boolean;
   hasSchematicDepths: boolean;
   hasDatabaseDepths: boolean;
-  depthSource: 'manual' | 'schematic' | 'estimated' | 'database';
+  depthSource: 'manual' | 'geometry' | 'schematic' | 'estimated' | 'database';
   sourceFile: string | null;
 }
 
@@ -79,7 +91,7 @@ interface SceneViewState {
   zoom: number;
 }
 
-type SceneMode = 'cutaway' | 'focused';
+type SceneMode = 'trajectory' | 'cutaway' | 'focused';
 
 const FALLBACK_FORMATION_DEPTH_M = 640;
 const FALLBACK_FORMATION_THICKNESS_M = 22;
@@ -176,8 +188,14 @@ function parseDepthTag(notes: string | null | undefined, key: string): number | 
   return parsed;
 }
 
-function resolveDownholePlacement(well: Well): DownholePlacement {
+function resolveDownholePlacement(well: Well, geometryAsset: WellGeometryAsset | null): DownholePlacement {
   const schematic = findSchematicEntry(well);
+  const geometrySnapshot = geometryAsset ? getCurrentCompletionSnapshot(geometryAsset) : null;
+  const geometryPump = findCompletionComponent(geometrySnapshot, 'pump');
+  const geometrySlottedTagBar = findCompletionComponent(geometrySnapshot, 'slotted_tag_bar');
+  const geometryWellFi = findCompletionComponent(geometrySnapshot, 'wellfi_tool');
+  const geometryNoTurn = findCompletionComponent(geometrySnapshot, 'no_turn_tool');
+  const geometryCollar = findCompletionComponent(geometrySnapshot, 'collar');
   const formationDepthM = Math.round(getFormationProfile(well.formation).depthM);
   const defaultPumpDepthM = Math.max(120, formationDepthM - 12);
   const defaultSlottedTagBarDepthM = defaultPumpDepthM + 1.3;
@@ -187,11 +205,18 @@ function resolveDownholePlacement(well: Well): DownholePlacement {
   const defaultTotalDepthM = Math.max(formationDepthM + 120, defaultCollarDepthM + 24);
   const defaultPumpLengthM = 8.0;
   const defaultSlottedTagBarLengthM = 0.9;
-  const defaultWellFiLengthM = 6.30;
+  const defaultWellFiLengthM = 3.66;
   const defaultNoTurnLengthM = 0.6;
   const defaultCollarLengthM = 0.4;
 
   const notes = well.wellfi_device?.notes;
+
+  const geometryTotalDepthM = geometryAsset?.survey_points.at(-1)?.md_m ?? null;
+  const geometryPumpDepthM = geometryPump ? componentCenterM(geometryPump) : null;
+  const geometrySlottedTagBarDepthM = geometrySlottedTagBar ? componentCenterM(geometrySlottedTagBar) : null;
+  const geometryWellFiDepthM = geometryWellFi ? componentCenterM(geometryWellFi) : null;
+  const geometryNoTurnDepthM = geometryNoTurn ? componentCenterM(geometryNoTurn) : null;
+  const geometryCollarDepthM = geometryCollar ? componentCenterM(geometryCollar) : null;
 
   const schematicTotalDepthM = schematic?.total_depth_m ?? null;
   const schematicPumpDepthM = schematic?.pump
@@ -259,37 +284,47 @@ function resolveDownholePlacement(well: Well): DownholePlacement {
       ? (well.collar_top_depth_m + well.collar_bottom_depth_m) / 2
       : null;
 
-  let totalDepthM = manualTotalDepthM ?? schematicTotalDepthM ?? defaultTotalDepthM;
-  let pumpDepthM = dbPumpDepthM ?? manualPumpDepthM ?? schematicPumpDepthM ?? defaultPumpDepthM;
+  let totalDepthM = manualTotalDepthM ?? geometryTotalDepthM ?? schematicTotalDepthM ?? defaultTotalDepthM;
+  let pumpDepthM = dbPumpDepthM ?? manualPumpDepthM ?? geometryPumpDepthM ?? schematicPumpDepthM ?? defaultPumpDepthM;
   let slottedTagBarDepthM =
-    dbSlottedTagBarDepthM ?? manualSlottedTagBarDepthM ?? schematicSlottedTagBarDepthM ?? defaultSlottedTagBarDepthM;
-  let wellFiDepthM = dbWellFiDepthM ?? manualWellFiDepthM ?? schematicWellFiDepthM ?? defaultWellFiDepthM;
-  let noTurnDepthM = dbNoTurnDepthM ?? manualNoTurnDepthM ?? schematicNoTurnDepthM ?? defaultNoTurnDepthM;
-  let collarDepthM = dbCollarDepthM ?? defaultCollarDepthM;
+    dbSlottedTagBarDepthM ?? manualSlottedTagBarDepthM ?? geometrySlottedTagBarDepthM ?? schematicSlottedTagBarDepthM ?? defaultSlottedTagBarDepthM;
+  let wellFiDepthM = dbWellFiDepthM ?? manualWellFiDepthM ?? geometryWellFiDepthM ?? schematicWellFiDepthM ?? defaultWellFiDepthM;
+  let noTurnDepthM = dbNoTurnDepthM ?? manualNoTurnDepthM ?? geometryNoTurnDepthM ?? schematicNoTurnDepthM ?? defaultNoTurnDepthM;
+  let collarDepthM = dbCollarDepthM ?? geometryCollarDepthM ?? defaultCollarDepthM;
 
   // Use database lengths if available implies using db depths
   const finalPumpLengthM =
     well.pump_top_depth_m && well.pump_bottom_depth_m
       ? Math.abs(well.pump_bottom_depth_m - well.pump_top_depth_m)
-      : pumpLengthM;
+      : geometryPump
+        ? componentLengthM(geometryPump)
+        : pumpLengthM;
   const finalSlottedTagBarLengthM =
     well.slotted_tag_bar_top_depth_m && well.slotted_tag_bar_bottom_depth_m
       ? Math.abs(well.slotted_tag_bar_bottom_depth_m - well.slotted_tag_bar_top_depth_m)
-      : slottedTagBarLengthM;
+      : geometrySlottedTagBar
+        ? componentLengthM(geometrySlottedTagBar)
+        : slottedTagBarLengthM;
   const finalWellFiLengthM =
     well.wellfi_tool_top_depth_m && well.wellfi_tool_bottom_depth_m
       ? Math.abs(well.wellfi_tool_bottom_depth_m - well.wellfi_tool_top_depth_m)
-      : wellFiLengthM;
+      : geometryWellFi
+        ? componentLengthM(geometryWellFi)
+        : wellFiLengthM;
   const finalNoTurnLengthM =
     well.no_turn_tool_top_depth_m && well.no_turn_tool_bottom_depth_m
       ? Math.abs(well.no_turn_tool_bottom_depth_m - well.no_turn_tool_top_depth_m)
-      : noTurnLengthM;
+      : geometryNoTurn
+        ? componentLengthM(geometryNoTurn)
+        : noTurnLengthM;
   const finalCollarLengthM =
     well.collar_top_depth_m && well.collar_bottom_depth_m
       ? Math.abs(well.collar_bottom_depth_m - well.collar_top_depth_m)
-      : collarLengthM;
+      : geometryCollar
+        ? componentLengthM(geometryCollar)
+        : collarLengthM;
 
-  if (manualWellFiDepthM == null && schematicWellFiDepthM == null) {
+  if (manualWellFiDepthM == null && dbWellFiDepthM == null && geometryWellFiDepthM == null && schematicWellFiDepthM == null) {
     const gap = noTurnDepthM - slottedTagBarDepthM;
     if (gap > 0.35) {
       wellFiDepthM = slottedTagBarDepthM + gap * 0.55;
@@ -300,16 +335,16 @@ function resolveDownholePlacement(well: Well): DownholePlacement {
   pumpDepthM = clamp(pumpDepthM, 60, totalDepthM - 12);
 
   // If we don't have explicit DB or manual values, enforce spacing constraint
-  if (!dbSlottedTagBarDepthM && !manualSlottedTagBarDepthM) {
+  if (!dbSlottedTagBarDepthM && !manualSlottedTagBarDepthM && !geometrySlottedTagBarDepthM) {
     slottedTagBarDepthM = Math.max(slottedTagBarDepthM, pumpDepthM + minSpacing);
   }
-  if (!dbWellFiDepthM && !manualWellFiDepthM) {
+  if (!dbWellFiDepthM && !manualWellFiDepthM && !geometryWellFiDepthM) {
     wellFiDepthM = Math.max(wellFiDepthM, slottedTagBarDepthM + minSpacing);
   }
-  if (!dbNoTurnDepthM && !manualNoTurnDepthM) {
+  if (!dbNoTurnDepthM && !manualNoTurnDepthM && !geometryNoTurnDepthM) {
     noTurnDepthM = Math.max(noTurnDepthM, wellFiDepthM + minSpacing);
   }
-  if (!dbCollarDepthM) {
+  if (!dbCollarDepthM && !geometryCollarDepthM) {
     collarDepthM = Math.max(collarDepthM, noTurnDepthM + minSpacing);
   }
   
@@ -326,6 +361,15 @@ function resolveDownholePlacement(well: Well): DownholePlacement {
     manualWellFiDepthM != null ||
     manualNoTurnDepthM != null;
 
+  const hasGeometryDepths =
+    geometryAsset != null &&
+    (geometryTotalDepthM != null ||
+      geometryPumpDepthM != null ||
+      geometrySlottedTagBarDepthM != null ||
+      geometryWellFiDepthM != null ||
+      geometryNoTurnDepthM != null ||
+      geometryCollarDepthM != null);
+
   const hasSchematicDepths =
     schematic != null &&
     (schematicTotalDepthM != null ||
@@ -339,10 +383,18 @@ function resolveDownholePlacement(well: Well): DownholePlacement {
     dbSlottedTagBarDepthM != null ||
     dbWellFiDepthM != null ||
     dbNoTurnDepthM != null ||
-    dbCollarDepthM != null;
+      dbCollarDepthM != null;
 
   const depthSource: DownholePlacement['depthSource'] =
-    hasDatabaseDepths ? 'database' : hasManualDepths ? 'manual' : hasSchematicDepths ? 'schematic' : 'estimated';
+    hasDatabaseDepths
+      ? 'database'
+      : hasManualDepths
+        ? 'manual'
+        : hasGeometryDepths
+          ? 'geometry'
+          : hasSchematicDepths
+            ? 'schematic'
+            : 'estimated';
 
   return {
     totalDepthM,
@@ -357,15 +409,12 @@ function resolveDownholePlacement(well: Well): DownholePlacement {
     collarDepthM,
     collarLengthM: finalCollarLengthM,
     hasManualDepths,
+    hasGeometryDepths,
     hasSchematicDepths,
     hasDatabaseDepths,
     depthSource,
-    sourceFile: schematic?.source_file ?? null,
+    sourceFile: depthSource === 'geometry' ? geometryAsset?.survey_name ?? null : schematic?.source_file ?? null,
   };
-}
-
-function formatDepth(depthM: number): string {
-  return `${depthM.toFixed(1)} m`;
 }
 
 function toolTopDepth(tool: Pick<ToolSegment, 'depthM' | 'lengthM'>): number {
@@ -409,6 +458,68 @@ function shortToolLabel(toolId: ToolSegment['id']): string {
       return 'Collar';
     default:
       return 'Pump';
+  }
+}
+
+function toolRowToneClassName(toolId: ToolSegment['id']): string {
+  switch (toolId) {
+    case 'pump':
+      return 'border-amber-300/20 bg-amber-300/10';
+    case 'slotted_tag_bar':
+      return 'border-sky-300/20 bg-sky-300/10';
+    case 'wellfi_tool':
+      return 'border-cyan-300/20 bg-cyan-300/10';
+    case 'no_turn_tool':
+      return 'border-indigo-300/20 bg-indigo-300/10';
+    case 'collar':
+      return 'border-slate-300/15 bg-slate-300/10';
+    default:
+      return 'border-slate-300/15 bg-slate-300/10';
+  }
+}
+
+function depthSourceBadgeClassName(source: DownholePlacement['depthSource']): string {
+  switch (source) {
+    case 'database':
+      return 'border-emerald-300/25 bg-emerald-300/10 text-emerald-100';
+    case 'manual':
+      return 'border-amber-300/25 bg-amber-300/10 text-amber-100';
+    case 'geometry':
+      return 'border-cyan-300/25 bg-cyan-300/10 text-cyan-100';
+    case 'schematic':
+      return 'border-sky-300/25 bg-sky-300/10 text-sky-100';
+    default:
+      return 'border-slate-300/20 bg-slate-300/10 text-slate-200';
+  }
+}
+
+function depthSourceLabel(source: DownholePlacement['depthSource']): string {
+  switch (source) {
+    case 'database':
+      return 'Database depths';
+    case 'manual':
+      return 'Manual depths';
+    case 'geometry':
+      return 'Survey geometry';
+    case 'schematic':
+      return 'Schematic depths';
+    default:
+      return 'Estimated depths';
+  }
+}
+
+function depthSourceDescription(placement: DownholePlacement): string {
+  switch (placement.depthSource) {
+    case 'manual':
+      return 'Depths sourced from WellFi install notes.';
+    case 'geometry':
+      return `Trajectory and tool positions sourced from survey geometry: ${placement.sourceFile ?? 'well geometry asset'}.`;
+    case 'schematic':
+      return `Depths sourced from schematic: ${placement.sourceFile ?? 'Well profile PDF'}.`;
+    case 'database':
+      return 'Depths explicitly configured in the database.';
+    default:
+      return 'Depths estimated from formation profile. Add exact install depths or a schematic to tighten placement.';
   }
 }
 
@@ -539,11 +650,15 @@ function buildToolStack(placement: DownholePlacement, hasInstalledWellFi: boolea
   ];
 }
 
-function DownholeModel3DComponent({ well }: DownholeModel3DProps) {
+function DownholeModel3DComponent({ well, canEdit = false }: DownholeModel3DProps) {
+  const geometryAsset = useMemo(
+    () => findWellGeometryAsset(well),
+    [well],
+  );
   const [expandedOpen, setExpandedOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [view, setView] = useState<SceneViewState>(DEFAULT_VIEW);
-  const [sceneMode, setSceneMode] = useState<SceneMode>('cutaway');
+  const [sceneMode, setSceneMode] = useState<SceneMode>(() => (geometryAsset ? 'trajectory' : 'cutaway'));
   const [isSaving, setIsSaving] = useState(false);
   
   // Local state for the edit form
@@ -564,7 +679,12 @@ function DownholeModel3DComponent({ well }: DownholeModel3DProps) {
     injectSceneStyleTag();
   }, []);
 
-  const placement = useMemo(() => resolveDownholePlacement(well), [well]);
+  useEffect(() => {
+    setSceneMode(geometryAsset ? 'trajectory' : 'cutaway');
+    setView(DEFAULT_VIEW);
+  }, [geometryAsset, well.id]);
+
+  const placement = useMemo(() => resolveDownholePlacement(well, geometryAsset), [geometryAsset, well]);
 
   useEffect(() => {
     // Determine the current "best" values to populate the form initially
@@ -635,10 +755,36 @@ function DownholeModel3DComponent({ well }: DownholeModel3DProps) {
   }
   const formation = useMemo(() => getFormationProfile(well.formation), [well.formation]);
   const hasInstalledWellFi = !!well.wellfi_device;
+  const highlightAnchor = useMemo(
+    () => (geometryAsset ? getHighlightAnchorPoint(geometryAsset) : null),
+    [geometryAsset],
+  );
+  const avgPumpRuntimeMetric = geometryAsset?.summary_metrics?.find(
+    (metric) => metric.id === 'avg_pump_runtime_pre_wellfi',
+  ) ?? null;
 
   const tools = useMemo(
     () => buildToolStack(placement, hasInstalledWellFi),
     [placement, hasInstalledWellFi],
+  );
+  const compactTools = useMemo(
+    () => tools.filter((tool) => tool.id !== 'collar'),
+    [tools],
+  );
+  const compactFocus = useMemo(
+    () => buildFocusRange(compactTools, placement.totalDepthM),
+    [compactTools, placement.totalDepthM],
+  );
+  const compactRenderedTools = useMemo(
+    () => toRenderedTools(compactTools, compactFocus),
+    [compactTools, compactFocus],
+  );
+  const compactTicks = useMemo(
+    () =>
+      Array.from({ length: 5 }, (_, idx) => (
+        compactFocus.topM + (compactFocus.spanM * idx) / 4
+      )),
+    [compactFocus],
   );
   const focus = useMemo(
     () => buildFocusRange(tools, placement.totalDepthM),
@@ -712,6 +858,208 @@ function DownholeModel3DComponent({ well }: DownholeModel3DProps) {
   }
 
   const sceneTransform = `translateX(-50%) perspective(1100px) rotateX(${view.rotateX}deg) rotateY(${view.rotateY}deg) scale(${view.zoom})`;
+
+  function renderCompactScene() {
+    const viewBoxWidth = 320;
+    const viewBoxHeight = 360;
+    const trackTop = 28;
+    const trackBottom = 324;
+    const trackHeight = trackBottom - trackTop;
+    const trackCenterX = 162;
+    const tubingWidth = 28;
+    const depthToY = (depthM: number) => trackTop + (toFocusPct(depthM, compactFocus) / 100) * trackHeight;
+    const anchorY = highlightAnchor ? depthToY(highlightAnchor.anchor_md_m) : null;
+
+    return (
+      <div className="rounded-xl border border-slate-700/70 overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.16),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(250,204,21,0.12),transparent_32%),linear-gradient(180deg,#0b1324_0%,#020617_100%)]">
+        <div className="flex flex-wrap items-start justify-between gap-3 border-b border-slate-700/70 px-3 py-3">
+          <div>
+            <div className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+              Completion Schematic
+            </div>
+            <div className="mt-1 text-sm font-semibold text-slate-100">
+              Pump, slotted tag bar, WellFi, and no-turn tool
+            </div>
+          </div>
+          <div className="flex flex-wrap justify-end gap-2">
+            <span className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] ${depthSourceBadgeClassName(placement.depthSource)}`}>
+              {depthSourceLabel(placement.depthSource)}
+            </span>
+            {highlightAnchor ? (
+              <span className="rounded-full border border-cyan-300/25 bg-cyan-300/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-cyan-100">
+                STB bottom {highlightAnchor.anchor_md_m.toFixed(2)} mKB
+              </span>
+            ) : null}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2 px-3 py-3">
+          {avgPumpRuntimeMetric ? (
+            <div className="rounded-lg border border-amber-300/20 bg-slate-950/60 p-3">
+              <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-200/80">
+                {avgPumpRuntimeMetric.label}
+              </div>
+              <div className="mt-1 text-xl font-semibold text-amber-100">
+                {avgPumpRuntimeMetric.value.toFixed(1)}{' '}
+                <span className="text-xs font-medium text-amber-200/75">{avgPumpRuntimeMetric.unit}</span>
+              </div>
+              <div className="mt-1 text-[11px] text-slate-400">Pre-WellFi benchmark</div>
+            </div>
+          ) : (
+            <div className="rounded-lg border border-slate-700/70 bg-slate-950/60 p-3">
+              <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">Stack order</div>
+              <div className="mt-1 text-sm font-semibold text-slate-100">{'Pump -> STB -> WellFi -> NTT'}</div>
+            </div>
+          )}
+
+          <div className="rounded-lg border border-cyan-300/20 bg-slate-950/60 p-3">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-cyan-200/80">Deviation anchor</div>
+            <div className="mt-1 text-xl font-semibold text-cyan-100">
+              {highlightAnchor ? highlightAnchor.anchor_md_m.toFixed(2) : '--'}{' '}
+              <span className="text-xs font-medium text-cyan-200/75">mKB</span>
+            </div>
+            <div className="mt-1 text-[11px] text-slate-400">
+              {highlightAnchor?.label ?? 'Awaiting geometry anchor'}
+            </div>
+          </div>
+        </div>
+
+        <div className="px-3 pb-3">
+          <div className="rounded-xl border border-slate-700/70 bg-slate-950/60 p-3">
+            <div className="mb-2 flex items-center justify-between gap-3">
+              <div className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                Current tool stack
+              </div>
+              <div className="text-[10px] tabular-nums text-slate-400">
+                {compactFocus.topM.toFixed(2)} - {compactFocus.bottomM.toFixed(2)} mKB
+              </div>
+            </div>
+
+            <svg viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`} className="w-full">
+              <rect
+                x="112"
+                y={trackTop}
+                width={tubingWidth}
+                height={trackHeight}
+                rx="14"
+                fill="rgba(15,23,42,0.95)"
+                stroke="rgba(148,163,184,0.35)"
+              />
+              <rect
+                x="118"
+                y={trackTop}
+                width={16}
+                height={trackHeight}
+                rx="8"
+                fill="rgba(255,255,255,0.05)"
+              />
+
+              {compactTicks.map((depthM) => {
+                const y = depthToY(depthM);
+                return (
+                  <g key={`compact-tick-${depthM.toFixed(2)}`}>
+                    <line
+                      x1="20"
+                      x2="276"
+                      y1={y}
+                      y2={y}
+                      stroke="rgba(148,163,184,0.14)"
+                      strokeDasharray="4 6"
+                    />
+                    <text x="18" y={y + 4} textAnchor="start" fill="#94a3b8" fontSize="10">
+                      {depthM.toFixed(1)}
+                    </text>
+                  </g>
+                );
+              })}
+
+              {anchorY != null ? (
+                <g>
+                  <line
+                    x1="56"
+                    x2="298"
+                    y1={anchorY}
+                    y2={anchorY}
+                    stroke="rgba(34,211,238,0.9)"
+                    strokeDasharray="5 6"
+                  />
+                  <circle cx="126" cy={anchorY} r="6" fill="rgba(34,211,238,0.18)" />
+                  <circle cx="126" cy={anchorY} r="3.5" fill="#22d3ee" />
+                  <text x="302" y={anchorY + 4} textAnchor="end" fill="#67e8f9" fontSize="10" fontWeight="700">
+                    {highlightAnchor?.anchor_md_m.toFixed(2)} mKB
+                  </text>
+                </g>
+              ) : null}
+
+              {compactRenderedTools.map((tool) => {
+                const y = trackTop + (tool.topPct / 100) * trackHeight;
+                const height = (tool.heightPct / 100) * trackHeight;
+                const isWellFi = tool.id === 'wellfi_tool';
+                const x = isWellFi ? trackCenterX - 18 : trackCenterX - 21;
+                const width = isWellFi ? 36 : 42;
+                const centerY = y + height / 2;
+                return (
+                  <g key={tool.id}>
+                    <rect
+                      x={x}
+                      y={y}
+                      width={width}
+                      height={height}
+                      rx={isWellFi ? 12 : 10}
+                      fill={toolAccentColor(tool.id)}
+                      opacity={isWellFi ? 0.96 : 0.88}
+                    />
+                    <text x={x + width / 2} y={centerY + 4} textAnchor="middle" fill="#020617" fontSize="10" fontWeight="700">
+                      {shortToolLabel(tool.id)}
+                    </text>
+                  </g>
+                );
+              })}
+
+              <text x="126" y="16" textAnchor="middle" fill="#cbd5e1" fontSize="10" letterSpacing="2">
+                TUBING
+              </text>
+            </svg>
+          </div>
+        </div>
+
+        <div className="space-y-2 px-3 pb-3">
+          {compactTools.map((tool) => (
+            <div
+              key={tool.id}
+              className={`rounded-lg border px-3 py-2 ${toolRowToneClassName(tool.id)}`}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className={`inline-block h-2.5 w-2.5 rounded-full ${tool.dotClassName}`} />
+                    <span className={`text-sm font-semibold ${tool.labelClassName}`}>{tool.label}</span>
+                    {tool.status ? (
+                      <span className="rounded bg-slate-900/70 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-slate-300">
+                        {tool.status}
+                      </span>
+                    ) : null}
+                  </div>
+                  <div className="mt-1 text-xs tabular-nums text-slate-200">{formatDepthRange(tool)}</div>
+                </div>
+                <div className="text-right">
+                  <div className="text-[10px] uppercase tracking-[0.18em] text-slate-400">Length</div>
+                  <div className="text-sm font-medium tabular-nums text-slate-100">{tool.lengthM.toFixed(2)} m</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="border-t border-slate-700/70 px-3 py-2 text-[11px] text-slate-400">
+          <div>{depthSourceDescription(placement)}</div>
+          {geometryAsset ? (
+            <div className="mt-1 text-cyan-200/80">Open the expanded view for the full deviation plate.</div>
+          ) : null}
+        </div>
+      </div>
+    );
+  }
 
   function renderCutawayScene(heightClassName: string) {
     const casingPatternId = `${patternIdBase}-casing-lines`;
@@ -1337,243 +1685,252 @@ function DownholeModel3DComponent({ well }: DownholeModel3DProps) {
       <CardHeader className="pb-2 pt-3 px-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <CardTitle className="text-sm font-semibold uppercase tracking-wide text-muted-foreground flex items-center gap-2">
-            Downhole 3D View
-            <Button
-              variant="outline"
-              size="icon"
-              className="h-6 w-6 text-slate-400 hover:text-slate-200 border-slate-700/50 hover:bg-slate-800"
-              onClick={() => setEditOpen(true)}
-              title="Edit Configuration"
-            >
-              <FileEdit className="h-3 w-3" />
-            </Button>
+            Downhole View
           </CardTitle>
           <div className="flex items-center gap-2">
-            <div className="inline-flex h-8 items-center rounded-md border border-slate-700/70 bg-slate-900/70 p-0.5">
-              <button
-                type="button"
-                onClick={() => setSceneMode('cutaway')}
-                className={`rounded px-2 py-1 text-[10px] font-semibold uppercase tracking-wide transition-colors ${
-                  sceneMode === 'cutaway'
-                    ? 'bg-cyan-400/30 text-cyan-100'
-                    : 'text-slate-400 hover:text-slate-200'
-                }`}
-                aria-pressed={sceneMode === 'cutaway'}
+            {canEdit && (
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8 text-slate-400 hover:text-slate-200 border-slate-700/50 hover:bg-slate-800"
+                onClick={() => setEditOpen(true)}
+                title="Edit Configuration"
               >
-                Cutaway
-              </button>
-              <button
-                type="button"
-                onClick={() => setSceneMode('focused')}
-                className={`rounded px-2 py-1 text-[10px] font-semibold uppercase tracking-wide transition-colors ${
-                  sceneMode === 'focused'
-                    ? 'bg-cyan-400/30 text-cyan-100'
-                    : 'text-slate-400 hover:text-slate-200'
-                }`}
-                aria-pressed={sceneMode === 'focused'}
-              >
-                Technical
-              </button>
-            </div>
-            <Button type="button" variant="ghost" size="sm" className="h-8 px-2" onClick={() => nudgeZoom(-ZOOM_STEP)}>
-              <ZoomOut className="h-3.5 w-3.5" />
-            </Button>
-            <Button type="button" variant="ghost" size="sm" className="h-8 px-2" onClick={() => nudgeZoom(ZOOM_STEP)}>
-              <ZoomIn className="h-3.5 w-3.5" />
-            </Button>
-            <Button type="button" variant="ghost" size="sm" className="h-8 px-2" onClick={resetView}>
-              <RotateCcw className="h-3.5 w-3.5" />
-            </Button>
-            <Button type="button" variant="ghost" size="sm" className="h-8 px-2" onClick={() => setExpandedOpen(true)}>
+                <FileEdit className="h-3.5 w-3.5" />
+              </Button>
+            )}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-8 gap-2 border-slate-700/70 bg-slate-900/60 text-slate-100 hover:bg-slate-800"
+              onClick={() => {
+                setSceneMode(geometryAsset ? 'trajectory' : 'cutaway');
+                setExpandedOpen(true);
+              }}
+            >
               <Maximize2 className="h-3.5 w-3.5" />
+              Full Plate
             </Button>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-3 px-4 pb-3">
-        {sceneMode === 'cutaway' ? renderCutawayScene('h-80') : renderFocusedScene('h-80')}
-
-        <div className="space-y-1.5">
-          {tools.map((tool) => (
-            <div
-              key={tool.id}
-              className="flex items-center justify-between rounded-md border border-slate-700/60 bg-slate-900/40 px-2.5 py-1.5"
-            >
-              <div className="flex items-center gap-2">
-                <span className={`inline-block h-2.5 w-2.5 rounded-full ${tool.dotClassName}`} />
-                <div>
-                  <div className="text-xs font-medium text-slate-100">{tool.label}</div>
-                  <div className="text-[10px] tabular-nums text-slate-400">{formatDepthRange(tool)} | L {tool.lengthM.toFixed(2)}m</div>
-                </div>
-                {tool.status && (
-                  <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-slate-300">
-                    {tool.status}
-                  </span>
-                )}
-              </div>
-              <span className="text-xs tabular-nums text-slate-300">{formatDepth(tool.depthM)}</span>
-            </div>
-          ))}
-        </div>
-
-        <p className="text-[11px] text-slate-400">
-          {placement.depthSource === 'manual'
-            ? 'Depths sourced from WellFi install notes.'
-            : placement.depthSource === 'schematic'
-              ? `Depths sourced from schematic: ${placement.sourceFile ?? 'Well profile PDF'}.`
-              : placement.depthSource === 'database'
-                ? 'Depths explicitly configured in database.'
-                : 'Depths estimated from formation profile. Add install depth tags, import schematic PDFs, or configure manually.'}
-        </p>
+      <CardContent className="px-4 pb-3">
+        {renderCompactScene()}
       </CardContent>
 
       <Dialog open={expandedOpen} onOpenChange={setExpandedOpen}>
         <DialogContent className="max-w-5xl border-slate-700 bg-slate-950 text-slate-100">
           <DialogHeader>
-            <DialogTitle>Downhole 3D View - {well.name ?? well.well_id}</DialogTitle>
+            <DialogTitle>Downhole View - {well.name ?? well.well_id}</DialogTitle>
             <DialogDescription>
-              {sceneMode === 'cutaway'
+              {sceneMode === 'trajectory'
+                ? 'Survey-driven engineering plate showing actual well deviation and the highlighted completion anchor.'
+                : sceneMode === 'cutaway'
                 ? 'Cutaway realistic mode highlights hardware geometry and suppresses long tubing sections.'
                 : 'Technical mode shows exact depth relationships in a compressed focused interval.'}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
-            {sceneMode === 'cutaway' ? renderCutawayScene('h-[72vh]') : renderFocusedScene('h-[72vh]')}
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={editOpen} onOpenChange={setEditOpen}>
-        <DialogContent className="max-w-2xl border-slate-700 bg-slate-950 text-slate-100">
-          <DialogHeader>
-            <DialogTitle>Edit Downhole Equipment</DialogTitle>
-            <DialogDescription>
-              Configure the exact top and bottom depths for each tool. These values will override schematic and estimated depths.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-6 py-4">
-            <div className="grid grid-cols-[1fr_120px_120px] gap-4 items-end">
-              <div className="text-sm font-medium text-slate-400 pb-2">Component</div>
-              <div className="text-sm font-medium text-slate-400 pb-2">Top Depth (m)</div>
-              <div className="text-sm font-medium text-slate-400 pb-2">Bottom Depth (m)</div>
-
-              <div className="flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full bg-amber-400" />
-                <Label htmlFor="pump-top" className="text-slate-200">Stator / Pump</Label>
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-800 bg-slate-900/60 px-3 py-2">
+              <div className="inline-flex h-9 items-center rounded-md border border-slate-700/70 bg-slate-950/70 p-0.5">
+                {geometryAsset && (
+                  <button
+                    type="button"
+                    onClick={() => setSceneMode('trajectory')}
+                    className={`rounded px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide transition-colors ${
+                      sceneMode === 'trajectory'
+                        ? 'bg-cyan-400/30 text-cyan-100'
+                        : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                    aria-pressed={sceneMode === 'trajectory'}
+                  >
+                    Trajectory
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setSceneMode('cutaway')}
+                  className={`rounded px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide transition-colors ${
+                    sceneMode === 'cutaway'
+                      ? 'bg-cyan-400/30 text-cyan-100'
+                      : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                  aria-pressed={sceneMode === 'cutaway'}
+                >
+                  Cutaway
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSceneMode('focused')}
+                  className={`rounded px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide transition-colors ${
+                    sceneMode === 'focused'
+                      ? 'bg-cyan-400/30 text-cyan-100'
+                      : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                  aria-pressed={sceneMode === 'focused'}
+                >
+                  Technical
+                </button>
               </div>
-              <Input
-                id="pump-top"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.pump_top_depth_m}
-                onChange={(e) => setFormData({ ...formData, pump_top_depth_m: e.target.value })}
-              />
-              <Input
-                id="pump-bottom"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.pump_bottom_depth_m}
-                onChange={(e) => setFormData({ ...formData, pump_bottom_depth_m: e.target.value })}
-              />
 
-              <div className="flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full bg-sky-300" />
-                <Label htmlFor="stb-top" className="text-slate-200">Slotted Tag Bar</Label>
-              </div>
-              <Input
-                id="stb-top"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.slotted_tag_bar_top_depth_m}
-                onChange={(e) => setFormData({ ...formData, slotted_tag_bar_top_depth_m: e.target.value })}
-              />
-              <Input
-                id="stb-bottom"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.slotted_tag_bar_bottom_depth_m}
-                onChange={(e) => setFormData({ ...formData, slotted_tag_bar_bottom_depth_m: e.target.value })}
-              />
-
-              <div className="flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full bg-gray-400" />
-                <Label htmlFor="wellfi-top" className="text-slate-200">WellFi Tool</Label>
-              </div>
-              <Input
-                id="wellfi-top"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.wellfi_tool_top_depth_m}
-                onChange={(e) => setFormData({ ...formData, wellfi_tool_top_depth_m: e.target.value })}
-              />
-              <Input
-                id="wellfi-bottom"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.wellfi_tool_bottom_depth_m}
-                onChange={(e) => setFormData({ ...formData, wellfi_tool_bottom_depth_m: e.target.value })}
-              />
-
-              <div className="flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full bg-indigo-300" />
-                <Label htmlFor="noturn-top" className="text-slate-200">No Turn Tool</Label>
-              </div>
-              <Input
-                id="noturn-top"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.no_turn_tool_top_depth_m}
-                onChange={(e) => setFormData({ ...formData, no_turn_tool_top_depth_m: e.target.value })}
-              />
-              <Input
-                id="noturn-bottom"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.no_turn_tool_bottom_depth_m}
-                onChange={(e) => setFormData({ ...formData, no_turn_tool_bottom_depth_m: e.target.value })}
-              />
-
-              <div className="flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full bg-slate-300" />
-                <Label htmlFor="collar-top" className="text-slate-200">Collar</Label>
-              </div>
-              <Input
-                id="collar-top"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.collar_top_depth_m}
-                onChange={(e) => setFormData({ ...formData, collar_top_depth_m: e.target.value })}
-              />
-              <Input
-                id="collar-bottom"
-                type="number"
-                step="0.01"
-                className="h-8 bg-slate-900 border-slate-700"
-                value={formData.collar_bottom_depth_m}
-                onChange={(e) => setFormData({ ...formData, collar_bottom_depth_m: e.target.value })}
-              />
+              {sceneMode !== 'trajectory' ? (
+                <div className="flex items-center gap-2">
+                  <Button type="button" variant="ghost" size="sm" className="h-8 px-2" onClick={() => nudgeZoom(-ZOOM_STEP)}>
+                    <ZoomOut className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button type="button" variant="ghost" size="sm" className="h-8 px-2" onClick={() => nudgeZoom(ZOOM_STEP)}>
+                    <ZoomIn className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button type="button" variant="ghost" size="sm" className="h-8 px-2" onClick={resetView}>
+                    <RotateCcw className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              ) : null}
             </div>
+
+            {sceneMode === 'trajectory' && geometryAsset
+              ? <WellTrajectoryPlate well={well} asset={geometryAsset} heightClassName="h-[72vh]" />
+              : sceneMode === 'cutaway'
+                ? renderCutawayScene('h-[72vh]')
+                : renderFocusedScene('h-[72vh]')}
           </div>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="ghost">Cancel</Button>
-            </DialogClose>
-            <Button onClick={handleSaveConfiguration} disabled={isSaving}>
-              {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Save Changes
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {canEdit && (
+        <Dialog open={editOpen} onOpenChange={setEditOpen}>
+          <DialogContent className="max-w-2xl border-slate-700 bg-slate-950 text-slate-100">
+            <DialogHeader>
+              <DialogTitle>Edit Downhole Equipment</DialogTitle>
+              <DialogDescription>
+                Configure the exact top and bottom depths for each tool. These values will override schematic and estimated depths.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-6 py-4">
+              <div className="grid grid-cols-[1fr_120px_120px] gap-4 items-end">
+                <div className="text-sm font-medium text-slate-400 pb-2">Component</div>
+                <div className="text-sm font-medium text-slate-400 pb-2">Top Depth (m)</div>
+                <div className="text-sm font-medium text-slate-400 pb-2">Bottom Depth (m)</div>
+
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 rounded-full bg-amber-400" />
+                  <Label htmlFor="pump-top" className="text-slate-200">Stator / Pump</Label>
+                </div>
+                <Input
+                  id="pump-top"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.pump_top_depth_m}
+                  onChange={(e) => setFormData({ ...formData, pump_top_depth_m: e.target.value })}
+                />
+                <Input
+                  id="pump-bottom"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.pump_bottom_depth_m}
+                  onChange={(e) => setFormData({ ...formData, pump_bottom_depth_m: e.target.value })}
+                />
+
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 rounded-full bg-sky-300" />
+                  <Label htmlFor="stb-top" className="text-slate-200">Slotted Tag Bar</Label>
+                </div>
+                <Input
+                  id="stb-top"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.slotted_tag_bar_top_depth_m}
+                  onChange={(e) => setFormData({ ...formData, slotted_tag_bar_top_depth_m: e.target.value })}
+                />
+                <Input
+                  id="stb-bottom"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.slotted_tag_bar_bottom_depth_m}
+                  onChange={(e) => setFormData({ ...formData, slotted_tag_bar_bottom_depth_m: e.target.value })}
+                />
+
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 rounded-full bg-gray-400" />
+                  <Label htmlFor="wellfi-top" className="text-slate-200">WellFi Tool</Label>
+                </div>
+                <Input
+                  id="wellfi-top"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.wellfi_tool_top_depth_m}
+                  onChange={(e) => setFormData({ ...formData, wellfi_tool_top_depth_m: e.target.value })}
+                />
+                <Input
+                  id="wellfi-bottom"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.wellfi_tool_bottom_depth_m}
+                  onChange={(e) => setFormData({ ...formData, wellfi_tool_bottom_depth_m: e.target.value })}
+                />
+
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 rounded-full bg-indigo-300" />
+                  <Label htmlFor="noturn-top" className="text-slate-200">No Turn Tool</Label>
+                </div>
+                <Input
+                  id="noturn-top"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.no_turn_tool_top_depth_m}
+                  onChange={(e) => setFormData({ ...formData, no_turn_tool_top_depth_m: e.target.value })}
+                />
+                <Input
+                  id="noturn-bottom"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.no_turn_tool_bottom_depth_m}
+                  onChange={(e) => setFormData({ ...formData, no_turn_tool_bottom_depth_m: e.target.value })}
+                />
+
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 rounded-full bg-slate-300" />
+                  <Label htmlFor="collar-top" className="text-slate-200">Collar</Label>
+                </div>
+                <Input
+                  id="collar-top"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.collar_top_depth_m}
+                  onChange={(e) => setFormData({ ...formData, collar_top_depth_m: e.target.value })}
+                />
+                <Input
+                  id="collar-bottom"
+                  type="number"
+                  step="0.01"
+                  className="h-8 bg-slate-900 border-slate-700"
+                  value={formData.collar_bottom_depth_m}
+                  onChange={(e) => setFormData({ ...formData, collar_bottom_depth_m: e.target.value })}
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="ghost">Cancel</Button>
+              </DialogClose>
+              <Button onClick={handleSaveConfiguration} disabled={isSaving}>
+                {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Save Changes
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </Card>
   );
 }

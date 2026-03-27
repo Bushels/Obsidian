@@ -1,42 +1,70 @@
 # WellFi App User Walkthrough
 
-Welcome to the WellFi App! This walkthrough will guide you through the core features of the platform, from logging in to managing your well inventory and submitting service requests.
+This guide explains the main parts of the WellFi portal in plain language so engineers and operations staff can move through the system quickly.
 
-## 1. Login
+The current system supports both:
 
-To get started, navigate to the login screen and enter your credentials:
+- **MPS admin access** across provisioned operators
+- **operator viewer access** limited to that company's wells
 
-- **Username:** `Obsidian`
-- **Password:** `blue sky`
+## 1. Logging In
 
-Click the login button to proceed to the main dashboard.
+Access is issued separately to approved customers. Enter your assigned username and password on the login page to open the operations dashboard.
 
-## 2. Left-Hand Navigation Menu
+## 2. Left Sidebar
 
-Once logged in, you will see a navigation menu on the left-hand side.
-Here, you can find a quick overview of your well inventory. Notice the section highlighting wells that are approaching their **15 to 16-month run life**, which require closer monitoring or upcoming maintenance.
+The left side of the dashboard is the summary and navigation area.
 
-## 3. Map Overview
+### MPS Admin View
 
-The central focus of your dashboard is the **interactive map** displaying your land and well locations.
+- **Dashboard Overview:** Shows the current scope, well counts, formation split, flagged wells, and upcoming work.
+- **Production Deck:** Shows the latest monthly production snapshot for the current admin scope, with operator or formation breakdown, oil or gas toggle, and a WellFi cohort filter.
+- **Action Items:** Lists flagged wells and active pump-change work so MPS can jump directly to the right well.
+- **Risk Overview:** Summarizes the filtered risk and operational-status mix.
+- **Inventory Overview:** Summarizes available WellFi equipment.
+- **Filters:** Narrow the dashboard by risk, formation, field, WellFi installs, upcoming work, or production rate.
 
-- **Run Life Indicators:** Look for the green-colored indicators on the map. The varying shades of green represent the current run life of your active wells.
+### Operator Viewer View
 
-## 4. Viewing Specific Wells
+- **Operator Overview:** Shows the company scope, well counts, formation split, flagged wells, and upcoming work.
+- **Action Items:** Lists the wells that need attention inside that company account.
+- **No Production Analytics:** Operator viewers do not see MPS-only production charts or production heatmap controls.
+- **Filters:** Narrow the dashboard without leaving the company scope.
 
-You can interact with the map to get more detailed information:
+## 3. Main Map
 
-- **Zoom In:** Zoom in on the map to see individual well clusters. The map will display exactly how many wells are located at each site.
-- **Well Breakdown:** Click on a specific well or cluster to view its detailed breakdown. This information will appear in a dedicated panel on the left-hand side, showing relevant operational data.
+The center map is the operating view of the field.
 
-## 5. Submitting a Request
+- Click a well to inspect it.
+- Zoom in to separate clusters and review individual locations.
+- Use the search button or `Ctrl+K` / `Cmd+K` to jump directly to a well by name or identifier.
+- Base well dots come from the live WellFi well list.
+- Production heatmap/cloud comes from the latest monthly production snapshot.
+- In MPS admin view, the operator selector scopes the dashboard and map to one operator when needed.
+- In operator viewer view, the production heatmap controls are hidden so the map stays simpler.
 
-If you need to log an issue or request an action for a specific well:
+## 4. Well Details Panel
 
-- In the well's detail panel on the left-hand side, locate the request section.
-- You can categorize your request by selecting one of the following statuses:
-  - **Watch** (Requires monitoring)
-  - **Warning** (Potential issue identified)
-  - **Well Down** (Urgent attention needed)
-- Add any relevant **notes** detailing the issue or required action.
-- Submit the request. This action will automatically save your device inventory directly towards that specific well, ensuring all resources and equipment are properly tracked and allocated.
+When you select a well, the detail panel opens on the right side on desktop and as a bottom sheet on mobile.
+
+This panel includes:
+
+- well identity and operating context
+- current engineer-assigned operational status
+- assigned WellFi device information
+- production and comparables views for MPS admin
+- pump change planning and scheduling information
+
+## 5. Recording a Well Status
+
+If an engineer decides a pump should be monitored, scheduled, or taken offline:
+
+1. Open the well.
+2. Choose the appropriate status:
+   - **Watch**
+   - **Warning**
+   - **Well Down**
+3. Add notes and any pump change timing details.
+4. Save the update.
+
+The status is stored against that well and can trigger Slack notifications. Email notifications can also be enabled if configured by the administrator.

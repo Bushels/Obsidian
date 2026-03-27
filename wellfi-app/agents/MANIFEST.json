@@ -190,11 +190,11 @@
     },
     "agent-notifications": {
       "id": "agent-notifications",
-      "label": "Notifications Edge Function",
+      "label": "Operational Status Notifications",
       "session": 4,
       "precedence": 1,
       "owns": [
-        "supabase/functions/notify-pump-change/**",
+        "supabase/functions/notify-operational-status/**",
         "supabase/functions/_shared/**"
       ],
       "reads": [
@@ -242,12 +242,35 @@
     "frozen_file_protocol": "Files marked frozen cannot be written after their session. Any needed change must be filed as a proposal in agents/proposals/ and reviewed by the coordinator before the next session begins.",
     "proposal_format": "agents/proposals/{agent-id}-{change-type}-{filename}.md — describe the change needed and why. Coordinator applies it manually."
   },
-  "8": {
-      "label": "Engineer Experience & Operational Status",
-      "gate": ["1", "2", "3", "4"],
-      "run_mode": "phased",
-      "agents": ["agent-db-s8", "agent-data-s8", "agent-ui-s8", "agent-map-s8", "agent-search-s8", "agent-integrator-s8", "agent-critic-s8", "agent-tester-s8", "agent-recorder-s8"]
-    }
+  "session_8": {
+    "label": "Engineer Experience & Operational Status",
+    "gate": ["1", "2", "3", "4"],
+    "run_mode": "phased",
+    "agents": [
+      "agent-db-s8",
+      "agent-data-s8",
+      "agent-ui-s8",
+      "agent-map-s8",
+      "agent-search-s8",
+      "agent-integrator-s8",
+      "agent-critic-s8",
+      "agent-tester-s8",
+      "agent-recorder-s8"
+    ]
+  },
+  "session_9": {
+    "label": "Device Inventory & Assignment",
+    "gate": ["1", "2", "3", "4", "8"],
+    "run_mode": "phased",
+    "agents": ["agent-db-s9", "agent-hooks-s9", "agent-ui-s9", "agent-admin-s9"],
+    "features": ["device_inventory table", "lifecycle: incoming→in_stock→assigned→installed", "admin-only RLS", "InventoryOverview widget", "DeviceAssignment panel", "InventoryManagement admin dialog"]
+  },
+  "session_10": {
+    "label": "Production Glow Visualization",
+    "gate": ["1", "2", "3", "4", "8"],
+    "run_mode": "phased",
+    "agents": ["agent-build-s10", "agent-map-s10", "agent-popup-s10"],
+    "features": ["CSV→GeoJSON build pipeline", "5 heatmap layers (CW/BS oil+gas)", "well dots with zoom crossfade", "formation toggle buttons", "gas/oil popup badges", "HTML-escaped popup fields"]
   },
   "precedence_per_session": {
     "session_1": { "1st": "agent-db", "2nd": "agent-scaffold" },
