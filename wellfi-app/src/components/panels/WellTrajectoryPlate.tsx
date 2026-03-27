@@ -103,6 +103,7 @@ function buildSvgPath(
 export function WellTrajectoryPlate({ well, asset, heightClassName }: WellTrajectoryPlateProps) {
   const snapshot = getCurrentCompletionSnapshot(asset);
   const highlight = getHighlightAnchorPoint(asset);
+  const avgPumpRuntime = asset.summary_metrics?.find((metric) => metric.id === 'avg_pump_runtime_pre_wellfi') ?? null;
 
   const sectionPadding = { left: 64, right: 28, top: 32, bottom: 54 };
   const planPadding = { left: 36, right: 18, top: 22, bottom: 38 };
@@ -236,6 +237,23 @@ export function WellTrajectoryPlate({ well, asset, heightClassName }: WellTrajec
             Snapshot {formatDate(snapshot.run_date)}
           </span>
         </div>
+
+        {avgPumpRuntime ? (
+          <div className="grid gap-3 rounded-xl border border-amber-300/20 bg-slate-950/45 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] md:grid-cols-[220px_minmax(0,1fr)]">
+            <div>
+              <div className="text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-200/80">
+                {avgPumpRuntime.label}
+              </div>
+              <div className="mt-1 text-2xl font-semibold text-amber-100">
+                {avgPumpRuntime.value.toFixed(1)}{' '}
+                <span className="text-sm font-medium text-amber-200/75">{avgPumpRuntime.unit}</span>
+              </div>
+            </div>
+            <div className="flex items-center text-sm text-slate-300">
+              {avgPumpRuntime.context}
+            </div>
+          </div>
+        ) : null}
 
         <div className="grid min-h-0 flex-1 gap-4 xl:grid-cols-[minmax(0,1fr)_280px]">
           <div className="min-h-0 rounded-xl border border-slate-700/70 bg-slate-950/45 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
@@ -453,7 +471,6 @@ export function WellTrajectoryPlate({ well, asset, heightClassName }: WellTrajec
             </div>
             <div className="text-right text-[11px] text-slate-400">
               <div>{stripMetrics.focusMin.toFixed(2)} - {stripMetrics.focusMax.toFixed(2)} mKB</div>
-              <div>{snapshot.source_note}</div>
             </div>
           </div>
 
@@ -538,6 +555,7 @@ export function WellTrajectoryPlate({ well, asset, heightClassName }: WellTrajec
               {highlight.anchor_md_m.toFixed(2)} mKB
             </text>
           </svg>
+          <div className="mt-3 text-[11px] text-slate-400">{snapshot.source_note}</div>
         </div>
       </div>
     </div>

@@ -36,6 +36,14 @@ export interface HighlightAnchor {
   label: string;
 }
 
+export interface WellSummaryMetric {
+  id: 'avg_pump_runtime_pre_wellfi';
+  label: string;
+  value: number;
+  unit: string;
+  context: string;
+}
+
 export interface WellGeometryAsset {
   source_uwi: string;
   licence: string;
@@ -46,6 +54,7 @@ export interface WellGeometryAsset {
   completion_snapshots: CompletionSnapshot[];
   current_snapshot_id: string;
   highlight_anchor: HighlightAnchor;
+  summary_metrics?: WellSummaryMetric[];
   note?: string;
 }
 
@@ -160,8 +169,8 @@ const OBE_102_HZ_GEOMETRY: WellGeometryAsset = {
       id: '2025-09-01-production-string',
       run_date: '2025-09-01',
       label: 'Current production string',
-      tubing_set_depth_mkb: 833.50,
-      source_note: 'Updated with WellFi 60.3 mm section between tag bar and NTT. Original WellView set depth was 828.62 mKB; WellFi section adds 4.877 m.',
+      tubing_set_depth_mkb: 832.28,
+      source_note: 'Updated with a 12 ft WellFi section below the slotted tag bar and above the no-turn tool.',
       components: [
         {
           id: 'pump',
@@ -177,29 +186,29 @@ const OBE_102_HZ_GEOMETRY: WellGeometryAsset = {
           top_mkb: 826.83,
           bottom_mkb: 827.87,
           od_mm: 88.9,
-          note: 'Current 88.9 mm tag bar',
+          note: '88.9 mm OD tag bar; deviation anchor at the bottom',
         },
         {
           id: 'wellfi_tool',
-          label: 'WellFi (60.3 mm)',
+          label: 'WellFi (60.3 mm / 12 ft)',
           top_mkb: 827.87,
-          bottom_mkb: 832.75,
+          bottom_mkb: 831.53,
           od_mm: 60.3,
-          note: '16 ft section, sensor port at 829.39 mKB (5 ft below tag bar)',
+          note: '12 ft WellFi body installed directly below the slotted tag bar',
         },
         {
           id: 'no_turn_tool',
           label: 'No-Turn Tool',
-          top_mkb: 832.75,
-          bottom_mkb: 833.35,
+          top_mkb: 831.53,
+          bottom_mkb: 832.13,
           od_mm: 203.6,
           note: 'DTA XB 8 5/8"',
         },
         {
           id: 'collar',
           label: 'Collar',
-          top_mkb: 833.35,
-          bottom_mkb: 833.50,
+          top_mkb: 832.13,
+          bottom_mkb: 832.28,
           od_mm: 88.9,
         },
       ],
@@ -208,11 +217,20 @@ const OBE_102_HZ_GEOMETRY: WellGeometryAsset = {
   current_snapshot_id: '2025-09-01-production-string',
   highlight_anchor: {
     snapshot_id: '2025-09-01-production-string',
-    component_id: 'wellfi_tool',
-    edge: 'center',
-    label: 'WellFi sensor port (829.39 mKB)',
+    component_id: 'slotted_tag_bar',
+    edge: 'bottom',
+    label: 'Bottom of slotted tag bar',
   },
-  note: 'Uses the final survey CSV for trajectory and the current WellView production string for completion placement.',
+  summary_metrics: [
+    {
+      id: 'avg_pump_runtime_pre_wellfi',
+      label: 'Avg pump run time',
+      value: 21.6,
+      unit: 'months',
+      context: 'Average pump run time for this well before WellFi installation.',
+    },
+  ],
+  note: 'Uses the final survey CSV for trajectory and the current production string for completion placement.',
 };
 
 export const WELL_GEOMETRY_ASSETS: WellGeometryAsset[] = [OBE_102_HZ_GEOMETRY];
